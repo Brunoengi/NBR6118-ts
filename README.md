@@ -1,4 +1,4 @@
-# Project to calculate concrete properties based on NBR 6118/2023
+## Project to calculate concrete properties based on NBR 6118/2023
 
 All properties:
 
@@ -23,7 +23,7 @@ All properties:
 | Parameter depending on the type of aggregate that influences the modulus of elasticity | α<sub>E</sub>         | -       |
 
 
-#### Example:
+### Example:
 
 ```
 const aggregate = new AgregateConcrete("granite")
