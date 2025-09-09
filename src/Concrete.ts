@@ -44,7 +44,7 @@ class Concrete {
     calculate_Ec(fck: number, alpha_e: number): {value: number, unit: string} {
         let Ec: number
         if(fck <=50) {
-            Ec = alpha_e * 5600 * (fck** 0.5)
+            Ec = alpha_e * 5600 * (fck ** 0.5)
         }
         else if (fck > 50){
             Ec = alpha_e * 21500 * ((this.fcm.value / 10) ** (1/3))
@@ -54,7 +54,7 @@ class Concrete {
         }
         return {
             value: Ec,
-            unit: "GPa"
+            unit: "MPa"
         }
     }
 
@@ -71,7 +71,7 @@ class Concrete {
         
         return {
             value: alpha_i * Ec,
-            unit: "GPa"
+            unit: "MPa"
         }
 
     }
