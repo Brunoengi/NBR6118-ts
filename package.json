@@ -1,0 +1,17 @@
+{
+  "name": "nbr6118-ts",
+  "version": "1.0.0",
+  "description": "A software package to computationally implementing NBR6118/2023 ",
+  "license": "ISC",
+  "author": "Bruno Santos",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.1.3",
+    "ts-jest": "^29.4.1"
+  }
+}
