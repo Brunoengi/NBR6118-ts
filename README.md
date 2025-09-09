@@ -1,4 +1,4 @@
-## Project to calculate concrete properties based on NBR 6118/2023
+## Project for calculating properties of steel, concrete and others based on NBR 6118/2023
 
 All properties:
 
