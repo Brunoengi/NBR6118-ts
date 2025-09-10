@@ -1,4 +1,4 @@
-import AgregateConcrete, { IAgregateConcrete } from "./Agregate" 
+import AgregateConcrete, { IAgregateConcrete } from "./Agregate.js" 
 
 interface IUnitValue {
     value: number
