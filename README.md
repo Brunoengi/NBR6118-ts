@@ -26,8 +26,7 @@ All properties:
 ### Example:
 
 ```
-const aggregate = new AgregateConcrete("granite")
-const concrete = new Concrete(30, aggregate)
+const concrete = new Concrete({fck:30 , aggregate: "granite"})
 
 console.log("Concrete properties:")
 console.log(`fck: ${concrete.fck.value} MPa`)
