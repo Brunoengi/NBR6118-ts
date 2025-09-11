@@ -1,5 +1,5 @@
 import ELSF from "../../src/LimitStates/ELS-F.js";
-import Concrete from "../../src/Concrete.js";
+import Concrete from "../../src/BuildingElements/Concrete.js";
 
 describe('ELS-F cases', () => {
     

@@ -1,4 +1,4 @@
-import Concrete, {ConcreteSectionType, ValueUnit } from "Concrete.js";
+import Concrete, {ConcreteSectionType, ValueUnit } from "BuildingElements/Concrete.js";
 
 
 interface ESSFParams {
