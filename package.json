@@ -22,8 +22,8 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "test-c": "jest --coverage",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

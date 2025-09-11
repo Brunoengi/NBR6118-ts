@@ -1,151 +1,132 @@
-import AgregateConcrete, { IAgregateConcrete } from "./Agregate.js" 
+import AggregateConcrete, { AggregateType } from "./Aggregate.js";
 
-interface IUnitValue {
-    value: number
-    unit: string
+export interface ValueUnit {
+  value: number;
+  unit: string;
 }
 
+export type ConcreteSectionType = 'T' | 'doubleT' | 'I' | 'invertedT' | 'rectangular'
+
+interface ConcreteOptions {
+  fck: number;
+  aggregate?: AggregateType;
+}
 
 class Concrete {
+  public fck: ValueUnit;
+  public fcm: ValueUnit;
+  public Ec: ValueUnit;
+  public Ecs: ValueUnit;
+  public e0: ValueUnit;
+  public eu: ValueUnit;
+  public fctm: ValueUnit;
+  public fctk_inf: ValueUnit;
+  public fctk_sup: ValueUnit;
+  public aggregate?: AggregateConcrete;
 
-    fck: IUnitValue
-    agregate: IAgregateConcrete
-    fcm: IUnitValue
-    Ec: IUnitValue
-    e0: IUnitValue
-    eu: IUnitValue
-    fctm: IUnitValue
-    Ecs: IUnitValue
-    fctk_inf: IUnitValue
-    fctk_sup: IUnitValue
+  constructor(options: ConcreteOptions) {
+    this.fck = { value: options.fck, unit: "MPa" };
+    this.fcm = this.calculate_fcm(options.fck);
 
-
-
-    constructor(fck: number, agregate: IAgregateConcrete) {
-        this.fck = this.calculate_fck(fck)
-        this.agregate = agregate
-        this.fcm = this.calculate_fcm(fck)
-        this.Ec = this.calculate_Ec(fck, agregate.alpha_e)
-        this.Ecs = this.calculate_Ecs(fck, this.Ec.value)
-        this.e0 = this.calculate_e0(fck)
-        this.eu = this.calculate_eu(fck)
-        this.fctm = this.calculate_fctm(fck)
-        this.fctk_inf = this.calculate_fctk_inf(this.fctm.value)
-        this.fctk_sup = this.calculate_fctk_sup(this.fctm.value)
+    if (options.aggregate) {
+      this.aggregate = new AggregateConcrete(options.aggregate);
+      this.Ec = this.calculate_Ec(options.fck, this.aggregate.alpha_e);
+      this.Ecs = this.calculate_Ecs(options.fck, this.Ec.value);
+    } else {
+      this.Ec = { value: undefined, unit: "MPa" };
+      this.Ecs = { value: undefined, unit: "MPa" };
     }
 
-    calculate_fck(fck: number): {value: number, unit: string} {
-        return {
-            value: fck,
-            unit: "MPa"
-        }
+    this.e0 = this.calculate_e0(options.fck);
+    this.eu = this.calculate_eu(options.fck);
+    this.fctm = this.calculate_fctm(options.fck);
+    this.fctk_inf = this.calculate_fctk_inf(this.fctm.value);
+    this.fctk_sup = this.calculate_fctk_sup(this.fctm.value);
+  }
+
+  private calculate_fcm(fck: number): ValueUnit {
+    return { value: fck + 12.5, unit: "MPa" };
+  }
+
+  private calculate_Ec(fck: number, alpha_e: number): ValueUnit {
+    let Ec: number;
+    if (fck <= 50) {
+      Ec = alpha_e * 5600 * Math.sqrt(fck);
+    } else {
+      const fcm = fck + 12.5;
+      Ec = alpha_e * 21500 * Math.pow(fcm / 10, 1 / 3);
     }
+    return { value: Ec, unit: "MPa" };
+  }
 
-    calculate_Ec(fck: number, alpha_e: number): {value: number, unit: string} {
-        let Ec: number
-        if(fck <=50) {
-            Ec = alpha_e * 5600 * (fck ** 0.5)
-        }
-        else if (fck > 50){
-            Ec = alpha_e * 21500 * ((this.fcm.value / 10) ** (1/3))
-        }
-        else {
-            throw new Error("Invalid fck value")
-        }
-        return {
-            value: Ec,
-            unit: "MPa"
-        }
+  private calculate_Ecs(fck: number, Ec: number): ValueUnit {
+    let alpha_i = 0.8 + 0.2 * fck / 80;
+    alpha_i = alpha_i > 1 ? 1 : alpha_i;
+    return { value: alpha_i * Ec, unit: "MPa" };
+  }
+
+  private calculate_e0(fck: number): ValueUnit {
+    let e0: number;
+    if (fck <= 50) {
+      e0 = 2;
+    } else {
+      e0 = 2 + 0.085 * Math.pow(fck - 50, 0.53);
     }
+    return { value: e0, unit: "‰" };
+  }
 
-    calculate_fcm(fck: number): {value: number, unit: string} {
-        return {
-            value: fck + 12.5,
-            unit: "MPa"
-        }
+  private calculate_eu(fck: number): ValueUnit {
+    let eu: number;
+    if (fck <= 50) {
+      eu = 3.5;
+    } else {
+      eu = 2.6 + 35 * Math.pow((90 - fck) / 100, 4);
     }
+    return { value: eu, unit: "‰" };
+  }
 
-    calculate_Ecs(fck: number, Ec: number): {value: number, unit: string} {
-        let alpha_i = 0.8 + 0.2 * fck / 80
-        alpha_i = alpha_i > 1 ? 1 : alpha_i
-        
-        return {
-            value: alpha_i * Ec,
-            unit: "MPa"
-        }
-
+  private calculate_fctm(fck: number): ValueUnit {
+    let fctm: number;
+    if (fck <= 50) {
+      fctm = 0.3 * Math.pow(fck, 2 / 3);
+    } else {
+      fctm = 2.12 * Math.log(1 + 0.1 * (fck + 8));
     }
+    return { value: fctm, unit: "MPa" };
+  }
 
-    calculate_e0(fck: number): {value: number, unit: string} {
-        let e0: number
+  private calculate_fctk_inf(fctm: number): ValueUnit {
+    return { value: 0.7 * fctm, unit: "MPa" };
+  }
 
-        if (fck <= 50) {
-            e0 = 2
-        }
-        else if (fck > 50) {
-            e0 = 2 + 0.085 * ((fck - 50) ** 0.53)
-        }
-        else {
-            throw new Error("Invalid fck value")
-        }
-
-        return {
-            value: e0,
-            unit: "1/1000"
-        }
-    }
-
-    calculate_eu(fck: number): {value: number, unit: string} {
-        let eu: number
-
-        if (fck <= 50) {
-            eu = 3.5
-        }
-        else if (fck > 50) {
-            eu = 2.6 + 35 * ((90 - fck)/100) ** 4
-        }
-        else {
-            throw new Error("Invalid fck value")
-        }
-
-        return {
-            value: eu,
-            unit: "1/1000"
-        }
-    }
-
-    calculate_fctm(fck: number): {value: number, unit: string} {
-        let fctm: number
-
-        if (fck <= 50) {
-            fctm = 0.3 * (fck) ** (2/3)
-        }
-        else if (fck > 50) {
-            fctm = 2.12 * Math.log((1 + 0.1 * (fck + 8)))
-        }
-        else {
-            throw new Error("Invalid fck value")
-        }
-
-        return {
-            value: fctm,
-            unit: "MPa"
-        }
-    }
-
-    calculate_fctk_inf(fctm: number): {value: number, unit: string} {
-        return {
-            value: 0.7 * fctm,
-            unit: "MPa"
-        }
-    }
-
-    calculate_fctk_sup(fctm: number): {value: number, unit: string} {
-        return {
-            value: 1.3 * fctm,
-            unit: "MPa"
-        }
-    }
+  private calculate_fctk_sup(fctm: number): ValueUnit {
+    return { value: 1.3 * fctm, unit: "MPa" };
+  }
 }
 
-export default Concrete
+class ConcreteSection {
+  public type: ConcreteSectionType;
+
+  constructor(type: ConcreteSectionType) {
+    this.type = type;
+  }
+
+  calculate_fctf(fctkinf: ValueUnit): ValueUnit {
+    switch (this.type) {
+      case 'T':
+        return { value: 1.2 * fctkinf.value, unit: "MPa" };
+      case 'doubleT':
+        return { value: 1.2 * fctkinf.value, unit: "MPa" };
+      case 'I':
+        return { value: 1.3 * fctkinf.value, unit: "MPa" }; 
+      case 'invertedT':
+        return { value: 1.3 * fctkinf.value, unit: "MPa" };
+      case 'rectangular':
+        return { value: 1.5 * fctkinf.value, unit: "MPa" };
+      default:
+        throw new Error("Invalid concrete section type");
+    }
+  }
+}
+
+export default Concrete;
