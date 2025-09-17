@@ -1,44 +1,23 @@
-interface IMg1 {
-    value: number
-    unit: string
-}
+import { ValueUnit } from "../types/index.js"
+import { IQsi1, IQsi2 } from "../types/combinationsType.js"
 
-interface IMg2 {
-    value: number
-    unit: string
-}
+class Qsi1 implements IQsi1 {
 
-interface IMq {
-    value: number
-    unit: string
-}
-
-interface Iqsi1 {
-    value: number
-    
-}
-
-interface Iqsi2 {
-    value: number
-}
-
-class qsi1 implements Iqsi1 {
-
-    value: number;
+    readonly value: number;
 
     constructor(value: number){
         if(value >= 1 || value <= 0){
             throw new Error(
-                `Invalid qsi1 value: ${value}. Must be in the range (0, 1).`
+                `Invalid Qsi1 value: ${value}. Must be in the range (0, 1).`
             );
         }
         this.value = value;
     }
 }
 
-class qsi2 implements Iqsi2 {
+class Qsi2 implements IQsi2 {
 
-    value: number;
+    readonly value: number;
 
     constructor(value: number){
         if(value >= 1 || value <= 0){
@@ -50,85 +29,111 @@ class qsi2 implements Iqsi2 {
     }
 }
 
-interface IQuasiPermanent {
-    mg1: IMg1;
-    mg2: IMg2;
-    mq: IMq
-    qsi2: Iqsi2;
+interface ICombinationLoads {
+    mg1: ValueUnit;
+    mg2: ValueUnit;
+    mq: ValueUnit;
 }
 
-interface IFrequent {
-    mg1: IMg1;
-    mg2: IMg2;
-    mq: IMq
-    qsi1: Iqsi1;
+interface IQuasiPermanent extends ICombinationLoads {
+    qsi2: Qsi2;
 }
 
-interface Irare {
-    mg1: IMg1;
-    mg2: IMg2;
-    mq: IMq
+interface IFrequent extends ICombinationLoads {
+    qsi1: Qsi1;
+}
+
+interface IRare extends ICombinationLoads {}
+
+
+interface ICombinations extends ICombinationLoads {
+    qsi1: Qsi1;
+    qsi2: Qsi2;
 }
 
 
 class QuasiPermanent {
-    mqp: {
-        value: number;
-        unit: string;
-    }
+    readonly mqp: ValueUnit;
 
     constructor({mg1, mg2, mq, qsi2}: IQuasiPermanent){
-        this.mqp = this.calculate_mqp({mg1, mg2, mq, qsi2})
+        this.mqp = this.calculateMqp({mg1, mg2, mq, qsi2})
     }
 
-   calculate_mqp({mg1, mg2, mq, qsi2}: IQuasiPermanent){
-    return {
-        value: mg1.value + mg2.value + mq.value * qsi2.value,
-        unit: 'kN * m'
-    }
+   private calculateMqp({mg1, mg2, mq, qsi2}: IQuasiPermanent): ValueUnit {
+        const unit = mg1.unit; // Assume all units are the same
+        return {
+            value: mg1.value + mg2.value + mq.value * qsi2.value,
+            unit: unit
+        }
    }
 }
 
 class Frequent {
-    mf: {
-        value: number;
-        unit: string;
-    }
+    readonly mf: ValueUnit;
 
     constructor({mg1, mg2, mq, qsi1}: IFrequent){
-        this.mf = this.calculate_mqp({mg1, mg2, mq, qsi1})
+        this.mf = this.calculateMf({mg1, mg2, mq, qsi1})
     }
 
-   calculate_mqp({mg1, mg2, mq, qsi1}: IFrequent){
-    return {
-        value: mg1.value + mg2.value + mq.value * qsi1.value,
-        unit: 'kN * m'
-    }
+   private calculateMf({mg1, mg2, mq, qsi1}: IFrequent): ValueUnit {
+        const unit = mg1.unit; // Assume all units are the same
+        return {
+            value: mg1.value + mg2.value + mq.value * qsi1.value,
+            unit: unit
+        }
    }
 }
 
 class Rare {
-    mr: {
-        value: number;
-        unit: string;
+    readonly mr: ValueUnit;
+
+    constructor({mg1, mg2, mq}: IRare){
+        this.mr = this.calculateMr({mg1, mg2, mq})
     }
 
-    constructor({mg1, mg2, mq}: Irare){
-        this.mr = this.calculate_mr({mg1, mg2, mq})
-    }
-
-   calculate_mr({mg1, mg2, mq}: Irare){
-    return {
-        value: mg1.value + mg2.value + mq.value,
-        unit: 'kN * m'
-    }
+   private calculateMr({mg1, mg2, mq}: IRare): ValueUnit {
+        const unit = mg1.unit; // Assume all units are the same
+        return {
+            value: mg1.value + mg2.value + mq.value,
+            unit: unit
+        }
    }
 
 }
 
-export {
-    QuasiPermanent,
-    Frequent,
-    Rare
+class Combinations {
+    public readonly quasiPermanent: QuasiPermanent;
+    public readonly frequent: Frequent;
+    public readonly rare: Rare;
+
+    constructor(inputs: ICombinations) {
+        this.quasiPermanent = new QuasiPermanent({
+            mg1: inputs.mg1,
+            mg2: inputs.mg2,
+            mq: inputs.mq,
+            qsi2: inputs.qsi2
+        });
+
+        this.frequent = new Frequent({
+            mg1: inputs.mg1,
+            mg2: inputs.mg2,
+            mq: inputs.mq,
+            qsi1: inputs.qsi1
+        });
+
+        this.rare = new Rare({
+            mg1: inputs.mg1,
+            mg2: inputs.mg2,
+            mq: inputs.mq
+        });
+    }
 }
 
+export {
+    Combinations,
+    QuasiPermanent,
+    Frequent,
+    Rare,
+    Qsi1,
+    Qsi2
+}

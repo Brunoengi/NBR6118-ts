@@ -1,15 +1,17 @@
-import AggregateConcrete, { AggregateType } from "./Aggregate.js";
+import AggregateConcrete from "../buildingElements/Aggregate.js";
+import { ValueUnit } from "../types/index.js";
+import { AggregateType } from "../types/elementsType.js";
+import { ConcreteSectionType } from "../types/elementsType.js";
 
-export interface ValueUnit {
-  value: number;
-  unit: string;
+
+interface ConcreteSectionOptions {
+  type: ConcreteSectionType;
 }
-
-export type ConcreteSectionType = 'T' | 'doubleT' | 'I' | 'invertedT' | 'rectangular'
 
 interface ConcreteOptions {
   fck: number;
   aggregate?: AggregateType;
+  section?: ConcreteSectionOptions;
 }
 
 class Concrete {
@@ -23,10 +25,19 @@ class Concrete {
   public fctk_inf: ValueUnit;
   public fctk_sup: ValueUnit;
   public aggregate?: AggregateConcrete;
+  public section?: ConcreteSection;
+  public fctf: ValueUnit;
+
+
 
   constructor(options: ConcreteOptions) {
     this.fck = { value: options.fck, unit: "MPa" };
     this.fcm = this.calculate_fcm(options.fck);
+    this.e0 = this.calculate_e0(options.fck);
+    this.eu = this.calculate_eu(options.fck);
+    this.fctm = this.calculate_fctm(options.fck);
+    this.fctk_inf = this.calculate_fctk_inf(this.fctm.value);
+    this.fctk_sup = this.calculate_fctk_sup(this.fctm.value);
 
     if (options.aggregate) {
       this.aggregate = new AggregateConcrete(options.aggregate);
@@ -37,11 +48,13 @@ class Concrete {
       this.Ecs = { value: undefined, unit: "MPa" };
     }
 
-    this.e0 = this.calculate_e0(options.fck);
-    this.eu = this.calculate_eu(options.fck);
-    this.fctm = this.calculate_fctm(options.fck);
-    this.fctk_inf = this.calculate_fctk_inf(this.fctm.value);
-    this.fctk_sup = this.calculate_fctk_sup(this.fctm.value);
+    if (options.section) {
+      this.section = new ConcreteSection(options.section.type);
+      this.fctf = this.section.calculate_fctf(this.fctk_inf);
+    } else {
+      this.section = undefined;
+      this.fctf = { value: undefined, unit: "MPa" }
+    }
   }
 
   private calculate_fcm(fck: number): ValueUnit {

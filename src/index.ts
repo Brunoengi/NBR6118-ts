@@ -1,4 +1,4 @@
-import AgregateConcrete from "./BuildingElements/Aggregate.js";
-import Concrete from "./BuildingElements/Concrete.js";
+import AgregateConcrete from "./buildingElements/Aggregate.js";
+import Concrete from "./buildingElements/Concrete.js";
 
 export {AgregateConcrete, Concrete}

@@ -1,10 +1,4 @@
-export type AggregateType =
-  | "basalt"
-  | "diabase"
-  | "granite"
-  | "gneiss"
-  | "limestone"
-  | "sandstone";
+import { AggregateType } from '../types/elementsType.js'
 
 export interface IAgregateConcrete {
   type: AggregateType;

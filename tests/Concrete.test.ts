@@ -1,4 +1,4 @@
-import Concrete from "../src/BuildingElements/Concrete";
+import Concrete from "../src/buildingElements/Concrete";
 
 
 describe('Concrete with granite aggregate', () => {

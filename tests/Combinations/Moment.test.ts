@@ -1,13 +1,13 @@
-import { QuasiPermanent, Frequent, Rare } from '../../src/Combinations/Load.js'
+import { QuasiPermanent, Frequent, Rare, Qsi1, Qsi2 } from '../../src/combinations/Load.js'
 
 
 describe('test combinations loads', () => {
     it('Quasi-Permanent Combination', () => {
         const QP = new QuasiPermanent({
-            mg1: {value: 100, unit: 'kN * m'},
-            mg2: {value: 200, unit: 'kN * m'},
-            mq: {value: 300, unit: 'kN * m'},
-            qsi2: {value: 0.6}
+            mg1: { value: 100, unit: 'kN * m' },
+            mg2: { value: 200, unit: 'kN * m' },
+            mq: { value: 300, unit: 'kN * m' },
+            qsi2: new Qsi2(0.6)
             
     })
 
@@ -17,10 +17,10 @@ describe('test combinations loads', () => {
 
     it('Frequent Combination', () => {
         const Freq = new Frequent({
-            mg1: {value: 100, unit: 'kN * m'},
-            mg2: {value: 200, unit: 'kN * m'},
-            mq: {value: 300, unit: 'kN * m'},
-            qsi1: {value: 0.7}
+            mg1: { value: 100, unit: 'kN * m' },
+            mg2: { value: 200, unit: 'kN * m' },
+            mq: { value: 300, unit: 'kN * m' },
+            qsi1: new Qsi1(0.7)
             
     })
 
