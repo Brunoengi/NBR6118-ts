@@ -9,7 +9,8 @@
     "outDir": "./dist",
     "declaration": true,
     "declarationDir": "./dist/types",
-    "emitDeclarationOnly": false
+    "emitDeclarationOnly": false,
+    "isolatedModules": true
   },
   "exclude": ["dist", "node_modules", "**/*.test.ts", "**/*.spec.ts"]
 }

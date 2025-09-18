@@ -1,4 +1,4 @@
-import Concrete from "../src/buildingElements/Concrete";
+import Concrete from "../../src/buildingElements/Concrete.js";
 
 
 describe('Concrete with granite aggregate', () => {
@@ -152,5 +152,3 @@ describe('Concrete with granite aggregate', () => {
     expect(concrete.Ecs.value).toBeCloseTo(45130, -1);
   });
 });
-
-

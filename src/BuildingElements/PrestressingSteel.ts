@@ -176,11 +176,15 @@ interface IPrestressingSteel {
     nominalDiameter: ValueUnit
     area_min_cordage: ValueUnit
     fptk: ValueUnit
+    fpyk: ValueUnit
+    sigma_pi: ValueUnit
 }
 
 class PrestressingSteel implements IPrestressingSteel {
     public label: PrestressingSteelLabel;
     public fptk: ValueUnit;
+    public fpyk: ValueUnit;
+    public sigma_pi: ValueUnit;
     public relaxation: RelaxationType;
     public nominalDiameter: ValueUnit;
     public area_min_cordage: ValueUnit;
@@ -197,12 +201,31 @@ class PrestressingSteel implements IPrestressingSteel {
         }
 
         this.fptk = steelData.fptk;
+        this.fpyk = {
+            value: 0.9 * this.fptk.value,
+            unit: 'MPa'
+        };
         this.area_min_cordage = steelData.area_min_cordage;
 
         // Extrai informações do label
         const parts = this.label.split(' ');
         this.relaxation = parts[2] as RelaxationType;
         this.nominalDiameter = { value: parseFloat(parts[3]), unit: 'mm' };
+
+        let sigma_pi_value: number;
+        if (this.relaxation === 'RB') {
+            sigma_pi_value = Math.min(0.74 * this.fptk.value, 0.82 * this.fpyk.value);
+        } else if (this.relaxation === 'RN') {
+            sigma_pi_value = Math.min(0.74 * this.fptk.value, 0.87 * this.fpyk.value);
+        } else {
+            // Este caminho não deve ser alcançável devido às restrições de tipo e validação, mas é uma salvaguarda.
+            throw new Error(`Tipo de relaxação desconhecido ou não implementado: ${this.relaxation}`);
+        }
+
+        this.sigma_pi = {
+            value: sigma_pi_value,
+            unit: 'MPa'
+        };
     }
 
     /**

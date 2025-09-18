@@ -1,13 +1,13 @@
-import PrestressingDesign from "../src/structuralDesign/PrestressingSteel.js";
-import Concrete from "../src/buildingElements/Concrete.js";
-import PrestressingSteel from "../src/buildingElements/PrestressingSteel.js";
-import { Combinations, Qsi1, Qsi2 } from "../src/combinations/Load.js";
+import PrestressingDesign from "../../src/structuralDesign/PrestressingSteel/PrestressingSteel.js";
+import Concrete from "../../src/buildingElements/Concrete.js";
+import PrestressingSteel from "../../src/buildingElements/PrestressingSteel.js";
+import { Combinations, Qsi1, Qsi2 } from "../../src/combinations/Load.js";
 
 describe('Prestressing Steel Design', () => {
 
     it('CA - 35, Section rectangular', () => {
 
-        const prestressingSteel = new PrestressingSteel({ label: 'CP 190 RB 9.5' });
+        const prestressingSteel = new PrestressingSteel({ label: 'CP 190 RB 12.7' });
 
         const geometricProperties = {
             Ac: {
@@ -53,19 +53,26 @@ describe('Prestressing Steel Design', () => {
             epmax,
             combinations,
             concrete,
-            type: prestressingType
+            type: prestressingType,
+            ncable: 3
         })
 
         expect(prestressingDesign.ELSD().value).toBeCloseTo(-1819.852, 1)
         expect(prestressingDesign.ELSF().value).toBeCloseTo(-1230.189, 1)
         expect(prestressingDesign.P_inf_calc.value).toBeCloseTo(-1819.852, 1)
         expect(prestressingDesign.P_initial_calc.value).toBeCloseTo(-1819.852/(1 - lossFactor), 1)
+        expect(prestressingDesign.Apestimated.value).toBeCloseTo(17.305, 2)
+        expect(prestressingDesign.ncordestimated).toBeCloseTo(17.48, 2)
+        expect(prestressingDesign.ncordagecable).toBe(6) // Math.ceil(17.48 / 3) = 6
+        expect(prestressingDesign.Ap_proj.value).toBeCloseTo(17.82, 2) // 3 * 6 * 0.99 = 17.82
+        expect(prestressingDesign.P_initial_proj.value).toBeCloseTo(-2498.72, 2) // -17.82 * 1402.2 / 10 = -2498.72
+        expect(prestressingDesign.P_inf_proj.value).toBeCloseTo(-1874.04, 2) // -2498.72 * (1 - 0.25) = -1874.04
         
     })
 
     it('CA - 35, Section T', () => {
 
-        const prestressingSteel = new PrestressingSteel({ label: 'CP 190 RB 9.5' });
+        const prestressingSteel = new PrestressingSteel({ label: 'CP 210 RB 9.5' });
 
         const geometricProperties = {
             Ac: {
@@ -110,16 +117,23 @@ describe('Prestressing Steel Design', () => {
             epmax,
             combinations,
             concrete,
-            type: prestressingType
+            type: prestressingType,
+            ncable: 4
         })
 
         expect(combinations.quasiPermanent.mqp.value).toBeCloseTo(756.738, 1)
         expect(combinations.frequent.mf.value).toBeCloseTo(812.988,1)
         expect(combinations.rare.mr.value).toBeCloseTo(925.488,1)
-
         expect(prestressingDesign.ELSD().value).toBeCloseTo(-1151.489, 1)
         expect(prestressingDesign.ELSF().value).toBeCloseTo(-968.511, 1)
         expect(prestressingDesign.P_inf_calc.value).toBeCloseTo(-1151.489, 1)
         expect(prestressingDesign.P_initial_calc.value).toBeCloseTo(-1151.489/(1 - lossFactor), 1)
+        expect(prestressingDesign.prestressingSteel.sigma_pi.value).toBeCloseTo(1549.8, 1)
+        expect(prestressingDesign.Apestimated.value).toBeCloseTo(9.907, 2)
+        expect(prestressingDesign.ncordestimated).toBeCloseTo(18.012, 2)
+        expect(prestressingDesign.ncordagecable).toBe(5) // Math.ceil(18.012 / 4) = 5
+        expect(prestressingDesign.Ap_proj.value).toBeCloseTo(11.0, 2) // 4 * 5 * 0.55 = 11.0
+        expect(prestressingDesign.P_initial_proj.value).toBeCloseTo(-1704.78, 2) // -11.0 * 1549.8 / 10 = -1704.78
+        expect(prestressingDesign.P_inf_proj.value).toBeCloseTo(-1278.585, 2) // -1704.78 * (1 - 0.25) = -1278.585
     })
 })

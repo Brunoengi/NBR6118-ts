@@ -21,8 +21,8 @@
     "url": "https://github.com/Brunoengi/NBR6118-ts.git"
   },
   "scripts": {
-    "test": "jest",
-    "test-c": "jest --coverage",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test-c": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "build": "tsc"
   },
   "devDependencies": {
