@@ -7,7 +7,7 @@ A TypeScript library for structural engineering calculations based on the Brazil
 ```bash
 npm install nbr6118-ts
 ```
-*(Note: This assumes the package is published to npm. For local development, clone the repository and install dependencies.)*
+
 
 ```bash
 git clone https://github.com/your-username/nbr6118-ts.git
