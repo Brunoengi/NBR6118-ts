@@ -1,5 +1,5 @@
-import PrestressingSteelLosses, {AnchoringType} from "../../src/structuralDesign/PrestressingSteel/Losses.js";
-import { ValueUnit } from "../../src/types/index.js";
+import PrestressingSteelLosses, {AnchoringType} from "../../../src/structuralDesign/PrestressingSteel/Losses.js";
+import { ValueUnit } from "../../../src/types/index.js";
 
 describe('Prestressing Steel Losses - Case 1', () => {
     let losses: PrestressingSteelLosses;
