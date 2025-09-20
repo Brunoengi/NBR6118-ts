@@ -85,7 +85,7 @@ describe('ElasticShorteningLoss', () => {
             const sigmacp = elasticLoss.calculateSigmacp();
 
             // Log the object to the console for inspection
-            console.log('Calculated values to sigmacp:', sigmacp);
+            //console.log('Calculated values to sigmacp:', sigmacp);
 
             // --- Manual Calculation for Verification ---
             // Formula: σ_cp(x) = Panc(x) * (1/Ac + ep(x)² / Ic)
@@ -116,7 +116,7 @@ describe('ElasticShorteningLoss', () => {
     describe('calculateSigmacg', () => {
         it('should calculate the stress in concrete due to self-weight correctly', () => {
             const sigmacg = elasticLoss.calculateSigmacg();
-            console.log(sigmacg)
+            //console.log(sigmacg)
 
             // --- Manual Calculation for Verification ---
             // Formula: σ_cg = Mg(x) * ep(x) / Ic
@@ -143,7 +143,7 @@ describe('ElasticShorteningLoss', () => {
     describe('calculateSigmac', () => {
         it('should calculate the total stress by summing sigmacp and sigmacg', () => {
             const sigmac = elasticLoss.calculateSigmac();
-            console.log(sigmac)
+            //console.log(sigmac)
 
             // --- Manual Calculation for Verification ---
             // Values are the sum of the expected values from sigmacp and sigmacg tests.
@@ -177,7 +177,7 @@ describe('ElasticShorteningLoss', () => {
             const expected_deltaSigmaP_0 = alphap * sigmac_0 * sequentialFactor;
             expect(deltaSigmaP.values[0]).toBeCloseTo(expected_deltaSigmaP_0, 4);
 
-            console.log(deltaSigmaP.values)
+            //console.log(deltaSigmaP.values)
             // At x = 750 cm (mid-span)
             const sigmac_mid = 0.63815; // From calculateSigmac test
             const expected_deltaSigmaP_mid = alphap * sigmac_mid * sequentialFactor;
@@ -193,7 +193,7 @@ describe('ElasticShorteningLoss', () => {
     describe('calculateP0', () => {
         it('should calculate the final prestressing force after elastic shortening loss', () => {
             const p0 = elasticLoss.calculateP0();
-            console.log(p0)
+            //console.log(p0)
             /*
             Expected values: [
               2156.1141784511788,

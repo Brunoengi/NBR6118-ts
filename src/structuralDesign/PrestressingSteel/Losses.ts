@@ -135,7 +135,6 @@ class PrestressingSteelLosses {
         // Fallback for unknown anchoring type, though TypeScript should prevent this.
         return this.Pi.value;
     }
-
 }
 
 export default PrestressingSteelLosses;

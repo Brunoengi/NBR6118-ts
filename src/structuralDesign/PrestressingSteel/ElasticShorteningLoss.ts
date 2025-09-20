@@ -1,9 +1,5 @@
-import { ValueUnit } from "types/index.js";
+import { ValueUnit, ValuesUnit } from "types/index.js";
 
-interface ValuesUnit {
-    values: number[]
-    unit: string
-}
 
 
 class ElasticShorteningLoss {
@@ -20,6 +16,8 @@ class ElasticShorteningLoss {
     public readonly Ic: ValueUnit
     public readonly Ap: ValueUnit;
     public readonly ncable: number;
+    public readonly alphap: number;
+
     
     constructor({Ecs, Ep, ep, g1, x, width, Panc, Ac, Ic, Ap, ncable}: {
         Ecs: ValueUnit,
@@ -45,7 +43,7 @@ class ElasticShorteningLoss {
         this.Ic = Ic;
         this.Ap = Ap;
         this.ncable = ncable;
-
+        this.alphap = this.calculateAlphap();
     }
 
     /**
