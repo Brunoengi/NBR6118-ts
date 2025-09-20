@@ -1,4 +1,4 @@
-import AnchorageLoss, { AnchoringType } from "../../../src/structuralDesign/PrestressingSteel/AnchorageLoss.js";
+import AnchorageLoss, { AnchoringType } from "../../../src/structuralDesign/PrestressingSteel/Losses/AnchorageLoss.js";
 import { ValueUnit } from "../../../src/types/index.js";
 
 describe('AnchorageLoss', () => {
