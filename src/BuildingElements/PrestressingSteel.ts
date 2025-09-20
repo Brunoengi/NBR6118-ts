@@ -171,7 +171,7 @@ const options = [{
 export type PrestressingSteelLabel = typeof options[number]['label'];
 export type RelaxationType = "RB" | "RN";
 
-interface IPrestressingSteel {
+export interface IPrestressingSteel {
     relaxation: RelaxationType
     nominalDiameter: ValueUnit
     area_min_cordage: ValueUnit
