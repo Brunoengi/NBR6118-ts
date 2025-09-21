@@ -15,20 +15,18 @@ interface ConcreteOptions {
 }
 
 class Concrete {
-  public fck: ValueUnit;
-  public fcm: ValueUnit;
-  public Ec: ValueUnit;
-  public Ecs: ValueUnit;
-  public e0: ValueUnit;
-  public eu: ValueUnit;
-  public fctm: ValueUnit;
-  public fctk_inf: ValueUnit;
-  public fctk_sup: ValueUnit;
-  public aggregate?: AggregateConcrete;
-  public section?: ConcreteSection;
-  public fctf: ValueUnit;
-
-
+  public readonly fck: ValueUnit;
+  public readonly fcm: ValueUnit;
+  public readonly Ec: ValueUnit;
+  public readonly Ecs: ValueUnit;
+  public readonly e0: ValueUnit;
+  public readonly eu: ValueUnit;
+  public readonly fctm: ValueUnit;
+  public readonly fctk_inf: ValueUnit;
+  public readonly fctk_sup: ValueUnit;
+  public readonly aggregate?: AggregateConcrete;
+  public readonly section?: ConcreteSection;
+  public readonly fctf: ValueUnit;
 
   constructor(options: ConcreteOptions) {
     this.fck = { value: options.fck, unit: "MPa" };
@@ -59,6 +57,20 @@ class Concrete {
 
   private calculate_fcm(fck: number): ValueUnit {
     return { value: fck + 12.5, unit: "MPa" };
+  }
+
+  calculate_fckj(j: number): ValueUnit {
+    const fck = this.fck.value;
+    const fckj = fck * (Math.E ** ((0.2) * (1 - Math.sqrt(28 / j))))
+    
+    return { value: fckj, unit: "MPa" }
+  }
+
+  calculate_fctj(j: number): ValueUnit {
+    const fckj = this.calculate_fckj(j).value
+    const fctmj = 0.3 * (fckj)**(2/3)
+    
+    return {value: fctmj, unit: "MPa"}
   }
 
   private calculate_Ec(fck: number, alpha_e: number): ValueUnit {
