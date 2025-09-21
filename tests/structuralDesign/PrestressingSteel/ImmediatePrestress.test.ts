@@ -76,6 +76,36 @@ describe('ImmediatePrestress - Case 1', () => {
             expect(sigma1.unit).toBe('kN/cm²');
         });
     });
+
+    describe('calculateSigma2P0_ELU', () => {
+        it('should calculate the stress in the bottom fiber correctly', () => {
+            const sigma2 = immediatePrestress.calculateSigma2P0_ELU();
+
+            // --- Verification for multiple points using a data-driven approach ---
+            const testCases = [
+                { index: 0, description: 'At x = 0 (start)', expected: -0.3294 },
+                { index: 1, description: 'At x = 1.5m', expected: -0.1717 },
+                { index: 2, description: 'At x = 3.0m', expected: -0.0456 },
+                { index: 3, description: 'At x = 4.5m', expected: 0.0472 },
+                { index: 4, description: 'At x = 6.0m', expected: 0.1055 },
+                { index: 5, description: 'At x = 7.5m (mid-span)', expected: 0.128 },
+            ];
+
+            testCases.forEach(testCase => {
+                // Formula: σ2 = 1.1 * P0 * (1/Ac + ep/W2) - (Mg*100)/W2
+                const P0_i = p0_full[testCase.index];
+                const ep_i = ep_values_cm[testCase.index];
+                const Mg_i = mg_full[testCase.index];
+
+                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W2.value) - (Mg_i * 100) / W2.value;
+
+                expect(sigma2.values[testCase.index]).toBeCloseTo(testCase.expected, 4);
+                expect(expected_sigma).toBeCloseTo(testCase.expected, 4);
+            });
+
+            expect(sigma2.unit).toBe('kN/cm²');
+        });
+    });
 });
 
 
@@ -150,6 +180,36 @@ describe('ImmediatePrestress - Case 2', () => {
             });
 
             expect(sigma1.unit).toBe('kN/cm²');
+        });
+    });
+
+    describe('calculateSigma2P0_ELU', () => {
+        it('should calculate the stress in the bottom fiber correctly', () => {
+            const sigma2 = immediatePrestress.calculateSigma2P0_ELU();
+
+            // --- Verification for multiple points using a data-driven approach ---
+            const testCases = [
+                { index: 0, description: 'At x = 0 (start)', expected: -0.5062 },
+                { index: 1, description: 'At x = 1.5m', expected: -0.3012 },
+                { index: 2, description: 'At x = 3.0m', expected: -0.1386 },
+                { index: 3, description: 'At x = 4.5m', expected: -0.0205 },
+                { index: 4, description: 'At x = 6.0m', expected: 0.0522 },
+                { index: 5, description: 'At x = 7.5m (mid-span)', expected: 0.0786},
+            ];
+
+            testCases.forEach(testCase => {
+                // Formula: σ2 = 1.1 * P0 * (1/Ac + ep/W2) - (Mg*100)/W2
+                const P0_i = p0_full[testCase.index];
+                const ep_i = ep_values_cm[testCase.index];
+                const Mg_i = mg_full[testCase.index];
+
+                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W2.value) - (Mg_i * 100) / W2.value;
+
+                expect(sigma2.values[testCase.index]).toBeCloseTo(testCase.expected, 4);
+                expect(expected_sigma).toBeCloseTo(testCase.expected, 4);
+            });
+
+            expect(sigma2.unit).toBe('kN/cm²');
         });
     });
 });

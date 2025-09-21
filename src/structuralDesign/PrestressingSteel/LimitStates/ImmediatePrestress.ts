@@ -39,7 +39,19 @@ class ImmediatePrestress {
             values: sigma1P0_ELU,
             unit: 'kN/cm²'
         }
-    
+    }
+
+    calculateSigma2P0_ELU(): ValuesUnit {
+        const sigma2P0_ELU = this.P0.values.map((P0_i, i) => {
+            const p_part = 1.1 * P0_i * ((1 / this.Ac.value) + (this.ep.values[i] / this.W2.value));
+            const mg_part = - (this.Mg.values[i] * 100) / this.W2.value
+            return p_part + mg_part;
+        })
+        
+        return {
+            values: sigma2P0_ELU,
+            unit: 'kN/cm²'
+        }
     }
 }
 
