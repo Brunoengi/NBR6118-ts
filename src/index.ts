@@ -17,7 +17,7 @@ export { default as PrestressingDesign } from './structuralDesign/PrestressingSt
 export { default as AnchorageLoss } from './structuralDesign/PrestressingSteel/Losses/AnchorageLoss.js'
 export { default as ElasticShorteningLoss } from './structuralDesign/PrestressingSteel/Losses/ElasticShorteningLoss.js'
 export { default as FrictionLoss, type AnchoringType } from './structuralDesign/PrestressingSteel/Losses/FrictionLoss.js'
-export { default as timeDependentLoss } from './structuralDesign/PrestressingSteel/timeDependentLoss.js'
+export { default as timeDependentLoss } from './structuralDesign/PrestressingSteel/Losses/timeDependentLoss.js'
 
 // types
 export type { ValueUnit, ValuesUnit } from './types/index.js'
