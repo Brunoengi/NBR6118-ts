@@ -3,13 +3,14 @@ import { IGeometricProperties } from "types/combinationsType.js";
 import { ValueUnit } from "types/index.js"; 
 import { Combinations } from "combinations/Load.js";
 import Concrete from "buildingElements/Concrete.js";
+import { PrestressingDesignType } from "types/prestressSteel.js";
 
 
 interface IPrestressingSteelDesign {
     prestressingSteel: PrestressingSteel
     geometricProperties: IGeometricProperties
     lossFactor: number
-    type: 'Complete' | 'Limited'
+    type: PrestressingDesignType
     epmax: ValueUnit
     combinations: Combinations
     concrete: Concrete
@@ -24,7 +25,7 @@ abstract class AbstractPrestressingSteelDesign implements IPrestressingSteelDesi
     public combinations: Combinations
     public concrete: Concrete
     public ncable: number;
-    abstract readonly type: 'Complete' | 'Limited';
+    abstract readonly type: PrestressingDesignType
     
 
     constructor(options: IPrestressingSteelDesign) {
@@ -171,7 +172,7 @@ class LimitedPrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const { Ac, W1 } = this.geometricProperties;
         const epmax = this.epmax;
 
-        const numerator = this.combinations.quasiPermanent.mqp.value; // kN * m
+        const numerator = this.combinations.quasiPermanent.moment.value; // kN * m
 
         const denominator = ((1 / Ac.value) + (epmax.value / W1.value)) * W1.value;
         const denominatorSI = denominator / 100
@@ -187,7 +188,7 @@ class LimitedPrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const epmax = this.epmax;
 
         // --- Convert all units to a consistent system (kN, m) ---
-        const mf_kNm = this.combinations.frequent.mf.value;
+        const mf_kNm = this.combinations.frequent.moment.value;
         const fctf_kPa = this.concrete.fctf.value * 1000; // MPa to kPa (kN/m²)
         const W1_m3 = W1.value / 1e6; // cm³ to m³
         const Ac_m2 = Ac.value / 1e4; // cm² to m²
@@ -214,7 +215,7 @@ class CompletePrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const { Ac, W1 } = this.geometricProperties;
         const epmax = this.epmax;
 
-        const numerator = this.combinations.frequent.mf.value // kN * m
+        const numerator = this.combinations.frequent.moment.value // kN * m
         const denominator = ((1 / Ac.value) + (epmax.value / W1.value)) * W1.value
         const denominatorSI = denominator / 100
 
@@ -229,7 +230,7 @@ class CompletePrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const epmax = this.epmax;
         
         // --- Convert all units to a consistent system (kN, m) ---
-        const mr_kNm = this.combinations.rare.mr.value;
+        const mr_kNm = this.combinations.rare.moment.value;
         const fctf_kPa = this.concrete.fctf.value * 1000; // MPa to kPa (kN/m²)
         const W1_m3 = W1.value / 1e6; // cm³ to m³
         const Ac_m2 = Ac.value / 1e4; // cm² to m²

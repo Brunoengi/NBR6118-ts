@@ -34,7 +34,7 @@ describe('Prestressing Steel Design', () => {
             mq: { value: 421.875, unit: 'kN * m' },
             qsi1: new Qsi1(0.60),
             qsi2: new Qsi2(0.40)
-        });
+        }, );
 
         const concrete = new Concrete({
             fck: 35,
@@ -121,9 +121,9 @@ describe('Prestressing Steel Design', () => {
             ncable: 4
         })
 
-        expect(combinations.quasiPermanent.mqp.value).toBeCloseTo(756.738, 1)
-        expect(combinations.frequent.mf.value).toBeCloseTo(812.988,1)
-        expect(combinations.rare.mr.value).toBeCloseTo(925.488,1)
+        expect(combinations.quasiPermanent.moment.value).toBeCloseTo(756.738, 1)
+        expect(combinations.frequent.moment.value).toBeCloseTo(812.988,1)
+        expect(combinations.rare.moment.value).toBeCloseTo(925.488,1)
         expect(prestressingDesign.ELSD().value).toBeCloseTo(-1151.489, 1)
         expect(prestressingDesign.ELSF().value).toBeCloseTo(-968.511, 1)
         expect(prestressingDesign.P_inf_calc.value).toBeCloseTo(-1151.489, 1)

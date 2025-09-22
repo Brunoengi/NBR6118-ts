@@ -1,9 +1,10 @@
-import ImmediatePrestress from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ImmediatePrestress.js";
+import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
+import Concrete from "../../../src/buildingElements/Concrete.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
 
-describe('ImmediatePrestress - Case 1', () => {
-    let immediatePrestress: ImmediatePrestress;
+describe('ELU - Case 1', () => {
+    let elu: ELU;
 
     // --- Input Data based on user request ---
     const p0_half = [-2156.12, -2174.28, -2190.57, -2206.55, -2223.40, -2241.92];
@@ -26,28 +27,29 @@ describe('ImmediatePrestress - Case 1', () => {
     const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
 
     beforeAll(() => {
-        immediatePrestress = new ImmediatePrestress({
+        elu = new ELU({
             P0: { values: p0_full, unit: 'kN' },
             ep: { values: ep_values_cm, unit: 'cm' },
             Ac: Ac,
             W1: W1,
             W2: W2,
-            Mg: { values: mg_full, unit: 'kN*m' }
+            Mg: { values: mg_full, unit: 'kN*m' },
+            concrete: new Concrete({fck: 35, aggregate: 'granite'})
         });
     });
 
     it('should be instantiated correctly', () => {
-        expect(immediatePrestress).toBeInstanceOf(ImmediatePrestress);
-        expect(immediatePrestress.P0.values).toEqual(p0_full);
-        expect(immediatePrestress.Mg.values).toEqual(mg_full);
-        expect(immediatePrestress.Ac).toEqual(Ac);
-        expect(immediatePrestress.W1).toEqual(W1);
-        expect(immediatePrestress.W2).toEqual(W2);
+        expect(elu).toBeInstanceOf(ELU);
+        expect(elu.P0.values).toEqual(p0_full);
+        expect(elu.Mg.values).toEqual(mg_full);
+        expect(elu.Ac).toEqual(Ac);
+        expect(elu.W1).toEqual(W1);
+        expect(elu.W2).toEqual(W2);
     });
 
     describe('calculateSigma1P0_ELU', () => {
         it('should calculate the stress in the top fiber correctly', () => {
-            const sigma1 = immediatePrestress.sigma1P0_ELU;
+            const sigma1 = elu.sigma1P0_ELU;
 
             // --- Verification for multiple points using a data-driven approach ---
             const testCases = [
@@ -71,6 +73,7 @@ describe('ImmediatePrestress - Case 1', () => {
                 expect(expected_sigma).toBeCloseTo(testCase.expected, 4);
 
                 // Check if the class calculation matches the expected value
+                expect(sigma1.values[testCase.index]).toBeCloseTo(testCase.expected, 4);
             });
 
             expect(sigma1.unit).toBe('kN/cm²');
@@ -79,7 +82,7 @@ describe('ImmediatePrestress - Case 1', () => {
 
     describe('calculateSigma2P0_ELU', () => {
         it('should calculate the stress in the bottom fiber correctly', () => {
-            const sigma2 = immediatePrestress.calculateSigma2P0_ELU();
+            const sigma2 = elu.calculateSigma2P0();
 
             // --- Verification for multiple points using a data-driven approach ---
             const testCases = [
@@ -106,11 +109,45 @@ describe('ImmediatePrestress - Case 1', () => {
             expect(sigma2.unit).toBe('kN/cm²');
         });
     });
+
+    describe('Verifications with j=5', () => {
+        const j = 5;
+
+        it('should pass verification for sigma1 (compression limit)', () => {
+            const result = elu.verification_sigma1P0({ j });
+
+            console.log('Sigma1 Verification (Pass):', {
+                limit: result.limit,
+                values: result.values.values.map((v: number) => v.toFixed(4))
+            });
+
+            expect(result.passed).toBe(true);
+            result.values.values.forEach((stress: number) => {
+                // e.g., -0.81 (stress) >= -2.14 (limit) -> true
+                expect(stress).toBeGreaterThanOrEqual(result.limit.value);
+            });
+        });
+
+        it('should pass verification for sigma2 (tension limit)', () => {
+            const result = elu.verification_sigma2P0({ j });
+
+            console.log('Sigma2 Verification (Pass):', {
+                limit: result.limit,
+                values: result.values.values.map((v: number) => v.toFixed(4))
+            });
+
+            expect(result.passed).toBe(true);
+            result.values.values.forEach((stress: number) => {
+                // e.g., 0.128 (stress) <= 0.211 (limit) -> true
+                expect(stress).toBeLessThanOrEqual(result.limit.value);
+            });
+        });
+    });
 });
 
 
-describe('ImmediatePrestress - Case 2', () => {
-    let immediatePrestress: ImmediatePrestress;
+describe('ELU - Case 2', () => {
+    let elu: ELU;
 
     // --- Input Data based on user request ---
     const p0_half = [-1455.443, -1466.437, -1475.147, -1483.507, -1492.972, -1504.479];
@@ -133,28 +170,29 @@ describe('ImmediatePrestress - Case 2', () => {
     const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
 
     beforeAll(() => {
-        immediatePrestress = new ImmediatePrestress({
+        elu = new ELU({
             P0: { values: p0_full, unit: 'kN' },
             ep: { values: ep_values_cm, unit: 'cm' },
             Ac: Ac,
             W1: W1,
             W2: W2,
-            Mg: { values: mg_full, unit: 'kN*m' }
+            Mg: { values: mg_full, unit: 'kN*m' },
+            concrete: new Concrete({fck: 35, aggregate: 'granite'})
         });
     });
 
     it('should be instantiated correctly', () => {
-        expect(immediatePrestress).toBeInstanceOf(ImmediatePrestress);
-        expect(immediatePrestress.P0.values).toEqual(p0_full);
-        expect(immediatePrestress.Mg.values).toEqual(mg_full);
-        expect(immediatePrestress.Ac).toEqual(Ac);
-        expect(immediatePrestress.W1).toEqual(W1);
-        expect(immediatePrestress.W2).toEqual(W2);
+        expect(elu).toBeInstanceOf(ELU);
+        expect(elu.P0.values).toEqual(p0_full);
+        expect(elu.Mg.values).toEqual(mg_full);
+        expect(elu.Ac).toEqual(Ac);
+        expect(elu.W1).toEqual(W1);
+        expect(elu.W2).toEqual(W2);
     });
 
     describe('calculateSigma1P0_ELU', () => {
         it('should calculate the stress in the top fiber correctly', () => {
-            const sigma1 = immediatePrestress.sigma1P0_ELU;
+            const sigma1 = elu.sigma1P0_ELU;
 
             // --- Verification for multiple points using a data-driven approach ---
             const testCases = [
@@ -176,6 +214,7 @@ describe('ImmediatePrestress - Case 2', () => {
 
                 // Check if my manual calculation matches the test case expected value
                 expect(expected_sigma).toBeCloseTo(testCase.expected, 3);
+                expect(sigma1.values[testCase.index]).toBeCloseTo(testCase.expected, 3);
 
             });
 
@@ -185,7 +224,7 @@ describe('ImmediatePrestress - Case 2', () => {
 
     describe('calculateSigma2P0_ELU', () => {
         it('should calculate the stress in the bottom fiber correctly', () => {
-            const sigma2 = immediatePrestress.calculateSigma2P0_ELU();
+            const sigma2 = elu.calculateSigma2P0();
 
             // --- Verification for multiple points using a data-driven approach ---
             const testCases = [
@@ -213,3 +252,60 @@ describe('ImmediatePrestress - Case 2', () => {
         });
     });
 });
+
+describe('ELU - Verification Failure Cases', () => {
+    let eluWithLowFck: ELU;
+    const j = 5;
+
+    beforeAll(() => {
+        // Re-using data from 'Case 1' but with a very low fck to force verification failure.
+        const p0_half = [-2156.12, -2174.28, -2190.57, -2206.55, -2223.40, -2241.92];
+        const p0_full = [...p0_half, ...p0_half.slice(0, -1).reverse()];
+        const mg_half = [0, 182.25, 324, 425.25, 486, 506.25];
+        const mg_full = [...mg_half, ...mg_half.slice(0, -1).reverse()];
+        const width: ValueUnit = { value: 1500, unit: 'cm' };
+        const cableGeo = new CableGeometry({ width, epmax: { value: -48, unit: 'cm' } });
+        const x_values_cm = cableGeo.subdivideSpan(width, 10).values;
+        const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
+
+        eluWithLowFck = new ELU({
+            P0: { values: p0_full, unit: 'kN' },
+            ep: { values: ep_values_cm, unit: 'cm' },
+            Ac: { value: 7200, unit: 'cm²' },
+            W1: { value: -144000, unit: 'cm³' },
+            W2: { value: 144000, unit: 'cm³' },
+            Mg: { values: mg_full, unit: 'kN*m' },
+            // Using a very low fck to make the limits smaller and cause the check to fail.
+            concrete: new Concrete({ fck: 1, aggregate: 'granite' })
+        });
+    });
+
+    it('should fail verification for sigma1 when compression stress is too high for the given fck', () => {
+        const result = eluWithLowFck.verification_sigma1P0({ j });
+
+        console.log('Sigma1 Verification (Fail):', {
+            limit: result.limit,
+            values: result.values.values.map((v: number) => v.toFixed(4))
+        });
+
+        // With fck=1, the compression limit will be very small (e.g., -0.06 kN/cm²).
+        // The calculated stresses (e.g., -0.81 kN/cm²) will be "less than" this limit, failing the check.
+        expect(result.passed).toBe(false);
+        expect(result.values.values.some((stress: number) => stress < result.limit.value)).toBe(true);
+    });
+
+    it('should fail verification for sigma2 when tension stress exceeds the limit', () => {
+        const result = eluWithLowFck.verification_sigma2P0({ j });
+
+        console.log('Sigma2 Verification (Fail):', {
+            limit: result.limit,
+            values: result.values.values.map((v: number) => v.toFixed(4))
+        });
+
+        // With fck=1, the tensile strength limit will be very low (e.g., 0.008 kN/cm²).
+        // The calculated sigma2 values (e.g., 0.128 kN/cm²) will exceed this low limit.
+        expect(result.passed).toBe(false);
+        expect(result.values.values.some((stress: number) => stress > result.limit.value)).toBe(true);
+    });
+});
+ 
