@@ -1,6 +1,7 @@
 import ELS from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELS.js";
 import { describe, it, expect, beforeAll, jest } from '@jest/globals';
 import { Combinations, Qsi1, Qsi2 } from "../../../src/combinations/Load.js";
+import Concrete from "../../../src/buildingElements/Concrete.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
 import timeDependentLoss from "../../../src/structuralDesign/PrestressingSteel/Losses/TimeDependentLoss.js";
@@ -11,6 +12,7 @@ describe('ELS - Limited Prestressing', () => {
     let frequent_moments: ValuesUnit;
     let qp_moments: ValuesUnit;
     let ep_values_cm: number[];
+    let concrete: Concrete;
 
     // --- Input Data based on other tests ---
     const Ac: ValueUnit = { value: 7200, unit: 'cm²' };
@@ -54,6 +56,14 @@ describe('ELS - Limited Prestressing', () => {
             qsi2: new Qsi2(0.4)
         });
 
+        concrete = new Concrete({
+            fck: 35,
+            aggregate: 'granite',
+            section: {
+                type: 'rectangular'
+            }
+        });
+
         // Mocking calculateMoments as its implementation is not provided
         jest.spyOn(combinations, 'calculateMoments').mockImplementation(({ moment }) => {
             const M_max = moment.value;
@@ -72,6 +82,7 @@ describe('ELS - Limited Prestressing', () => {
         els = new ELS({
             type: 'Limited',
             Ac,
+            concrete,
             ep: { values: ep_values_cm, unit: 'cm' },
             W1,
             W2,
@@ -120,9 +131,7 @@ describe('ELS - Limited Prestressing', () => {
             const P_inf_mid = p_inf_full[5];
             const ep_mid = ep_values_cm[5];
             const Mqp_mid = qp_moments.values[5]; // 1237.50
-            console.log(Mqp_mid)
             const expected_sigma1_mid = P_inf_mid * (1 / Ac.value + ep_mid / W1.value) - (Mqp_mid * 100) / W1.value; // ~ -0.0594
-            console.log(expected_sigma1_mid)
             expect(sigma1_elsd.values[5]).toBeCloseTo(expected_sigma1_mid, 3);
         });
 
@@ -136,6 +145,57 @@ describe('ELS - Limited Prestressing', () => {
 
             expect(sigma2_elsd.values[5]).toBeCloseTo(expected_sigma2_mid, 3);
             expect(sigma2_elsd.unit).toBe('kN/cm²');
+        });
+    });
+
+    describe('Stress Verifications', () => {
+        it('should perform verification for sigma1_ELSF correctly', () => {
+            const result = els.verification_sigma1_ELSF_result;
+            expect(result).toBeDefined();
+
+            const expectedLimit = concrete.fctf.value / 10;
+            expect(result?.limit.value).toBeCloseTo(expectedLimit);
+
+            expect(result?.passed).toBe(true);
+        });
+
+        it('should perform verification for sigma2_ELSF (excessive compression) correctly', () => {
+            const result = els.verification_sigma2_ELSF_result;
+            expect(result).toBeDefined();
+
+            // Limit for C35 is -0.6 * 35 MPa = -21 MPa = -2.1 kN/cm²
+            const expectedLimit = -0.6 * concrete.fck.value / 10;
+            expect(result?.limit.value).toBeCloseTo(expectedLimit);
+
+            // All sigma2 values (e.g., -0.54 kN/cm²) are greater than the limit (-2.45 kN/cm²),
+            // so the check should pass.
+            expect(result?.passed).toBe(true);
+        });
+
+        it('should perform verification for sigma1_ELSD (decompression) correctly', () => {
+            const result = els.verification_sigma1_ELSD_result;
+            expect(result).toBeDefined();
+
+            // Limit for decompression is 0 kN/cm²
+            expect(result?.limit.value).toBe(0);
+            expect(result?.limit.unit).toBe('kN/cm²');
+
+            // All sigma1 values under QP combination are negative (compression), so they are < 0.
+            // The check for decompression (no tension) should pass.
+            expect(result?.passed).toBe(true);
+        });
+
+        it('should perform verification for sigma2_ELSD (excessive compression) correctly', () => {
+            const result = els.verification_sigma2_ELSD_result;
+            expect(result).toBeDefined();
+
+            // Limit for C35 is -0.45 * 35 MPa = -15.75 MPa = -1.575 kN/cm²
+            const expectedLimit = -0.45 * concrete.fck.value / 10;
+            expect(result?.limit.value).toBeCloseTo(expectedLimit);
+
+            // All sigma2 values (e.g., -0.481 kN/cm²) are greater than the limit (-1.575 kN/cm²),
+            // so the check should pass.
+            expect(result?.passed).toBe(true);
         });
     });
 });

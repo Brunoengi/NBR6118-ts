@@ -1,6 +1,6 @@
 import Concrete from "buildingElements/Concrete.js";
 import { Combinations } from "combinations/Load.js";
-import { ValuesUnit, ValueUnit } from "types/index.js";
+import { ValuesUnit, ValueUnit, VerificationResult } from "types/index.js";
 import { PrestressingDesignType } from "types/prestressSteel.js";
 
 class ELS { 
@@ -12,13 +12,24 @@ class ELS {
     public readonly P_inf: ValuesUnit
     public readonly concrete: Concrete
     public readonly sigma1P_infinity_ELSF: ValuesUnit
-    public readonly sigma2P_infinity_ELSF: ValuesUnit
+    public readonly sigma2P_infinity_ELSF: ValuesUnit 
     public readonly sigma1P_infinity_ELSD: ValuesUnit
     public readonly sigma2P_infinity_ELSD: ValuesUnit
+    public readonly verification_sigma1_ELSF_result: VerificationResult
+    public readonly verification_sigma2_ELSF_result: VerificationResult
+    public readonly verification_sigma1_ELSD_result: VerificationResult
+    public readonly verification_sigma2_ELSD_result: VerificationResult
+    public readonly limit_tensions: {
+        ELSF1: ValueUnit
+        ELSF2: ValueUnit
+        ELSD1: ValueUnit
+        ELSD2: ValueUnit
+    }
     
-    constructor({type, Ac, ep, W1, W2, P_inf, combinations, x, width}: {
+    constructor({type, Ac, ep, W1, W2, P_inf, concrete, combinations, x, width}: {
         type: PrestressingDesignType
         Ac: ValueUnit
+        concrete: Concrete
         ep: ValuesUnit
         W1: ValueUnit
         W2: ValueUnit
@@ -26,6 +37,7 @@ class ELS {
         combinations: Combinations
         x: ValuesUnit
         width: ValueUnit
+
     }) {
         this.type = type
         this.Ac = Ac
@@ -33,14 +45,60 @@ class ELS {
         this.W1 = W1
         this.W2 = W2
         this.P_inf = P_inf
+        this.concrete = concrete
 
         if(type == 'Limited') {
+
             this.sigma1P_infinity_ELSF = this.sigma1P_infinity({combination: combinations.calculateMoments({moment: combinations.frequent.moment, x, width})})
             this.sigma2P_infinity_ELSF = this.sigma2P_infinity({combination: combinations.calculateMoments({moment: combinations.frequent.moment, x, width})})
-
             this.sigma1P_infinity_ELSD = this.sigma1P_infinity({combination: combinations.calculateMoments({moment: combinations.quasiPermanent.moment, x, width})})
             this.sigma2P_infinity_ELSD = this.sigma2P_infinity({combination: combinations.calculateMoments({moment: combinations.quasiPermanent.moment, x, width})})
+
+            this.limit_tensions = {
+                ELSF1: { value: concrete.fctf.value / 10, unit: 'kN/cm²' },
+                ELSF2: { value: - 0.6 * concrete.fck.value / 10, unit: 'kN/cm²'},
+                ELSD1: { value: 0, unit: 'kN/cm²' },
+                ELSD2: { value: - 0.45 * concrete.fck.value / 10, unit: 'kN/cm²' }
+            }
+
+            
+            
+        } else if(type == 'Complete') {
+            this.sigma1P_infinity_ELSF = this.sigma1P_infinity({combination: combinations.calculateMoments({moment: combinations.rare.moment, x, width})})
+            this.sigma2P_infinity_ELSF = this.sigma2P_infinity({combination: combinations.calculateMoments({moment: combinations.rare.moment, x, width})})
+            this.sigma1P_infinity_ELSD = this.sigma1P_infinity({combination: combinations.calculateMoments({moment: combinations.frequent.moment, x, width})})
+            this.sigma2P_infinity_ELSD = this.sigma2P_infinity({combination: combinations.calculateMoments({moment: combinations.frequent.moment, x, width})})
+
+            this.limit_tensions = {
+                ELSF1: { value: 0, unit: 'kN/cm²' },
+                ELSF2: { value: - 0.6 * concrete.fck.value / 10, unit: 'kN/cm²'},
+                ELSD1: { value: 0, unit: 'kN/cm²' },
+                ELSD2: { value: -0.6 * concrete.fck.value / 10, unit: 'kN/cm²' }
+            }
+        } else {
+            throw new Error ('Invalid type. Must be "Limited" or "Complete".')
         }
+        
+        this.verification_sigma1_ELSF_result = this.verification_sigma({
+            sigma: this.sigma1P_infinity_ELSF,
+            limit: this.limit_tensions.ELSF1,
+            operator: (stressValue, limitValue) => stressValue < limitValue
+        });
+        this.verification_sigma2_ELSF_result = this.verification_sigma({
+            sigma: this.sigma2P_infinity_ELSF,
+            limit: this.limit_tensions.ELSF2,
+            operator: (stressValue, limitValue) => stressValue > limitValue
+        });
+        this.verification_sigma1_ELSD_result = this.verification_sigma({
+            sigma: this.sigma1P_infinity_ELSD,
+            limit: this.limit_tensions.ELSD1,
+            operator: (stressValue, limitValue) => stressValue < limitValue
+        })
+        this.verification_sigma2_ELSD_result = this.verification_sigma({
+            sigma: this.sigma2P_infinity_ELSD,
+            limit: this.limit_tensions.ELSD2,
+            operator: (stressValue, limitValue) => stressValue > limitValue
+        })
     }
 
     sigma1P_infinity({combination}: {combination: ValuesUnit}): ValuesUnit {
@@ -67,6 +125,20 @@ class ELS {
             values: sigma2P_inf,
             unit: 'kN/cm²'
         }
+    }
+
+    verification_sigma({sigma, limit, operator}: {
+        sigma: ValuesUnit, 
+        limit: ValueUnit, 
+        operator: (value: number, limit: number) => boolean
+    }): VerificationResult {
+        const passed = sigma.values.every(value => operator(value, limit.value));
+
+        return {
+            passed,
+            limit,
+            values: sigma
+        };
     }
 }
 
