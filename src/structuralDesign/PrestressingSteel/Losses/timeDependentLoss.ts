@@ -91,7 +91,7 @@ class timeDependentLoss {
             const ep_i = this.ep.values[i];
             
             // Convert moments from kN*m to kN*cm for unit consistency
-            const total_Mg_kNcm = (Mg1_i + Mg2_i) * 100;
+            const total_Mg_kNcm = - (Mg1_i + Mg2_i) * 100;
 
             return total_Mg_kNcm * ep_i / this.Ic.value
         })
@@ -110,7 +110,7 @@ class timeDependentLoss {
         const sigmacpg_MPa = sigmacpg.map(sigmacpg_i => sigmacpg_i * 10)
 
         const deltasigmappercentuais = sigmacpg_MPa.map(sigmacpg_i => {
-            return 7.4 + (this.alphap/ 18.7) * (this.phi) ** 1.07 * (3 + sigmacpg_i)
+            return 7.4 + (this.alphap/ 18.7) * (this.phi) ** 1.07 * (3 - sigmacpg_i)
         })
 
         return deltasigmappercentuais

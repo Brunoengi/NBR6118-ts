@@ -20,7 +20,7 @@ describe('TimeDependentLoss', () => {
     });
 
     // P0 values (force after immediate losses)
-    const p0_half = [2156.11, 2174.28, 2190.57, 2206.55, 2223.40, 2241.92];
+    const p0_half = [-2156.11, -2174.28, -2190.57, -2206.55, -2223.40, -2241.92];
     const p0_full = [...p0_half, ...p0_half.slice(0, -1).reverse()];
     const alphap = 6.632; // Consistent with ElasticShorteningLoss.test.ts
 
@@ -63,17 +63,16 @@ describe('TimeDependentLoss', () => {
     it('should still calculate sigmacpg correctly as it does not depend on phi', () => {
         const sigmacpg = timeLoss.calculateSigmacpg();
         // Manual calculation from the other test case
-        const P0_mid = 2241.92;
+        const P0_mid = -2241.92;
         const ep_mid = -48;
         const Ac = 7200;
         const Ic = 8640000;
         const Mg1_mid = 506.25;
         const Mg2_mid = 562.5;
-        const part1 = P0_mid * (1 / Ac + ep_mid ** 2 / Ic);
-        const total_Mg_kNcm = (Mg1_mid + Mg2_mid) * 100;
+        const part1 = P0_mid * ((1 / Ac) + (ep_mid ** 2 / Ic));
+        const total_Mg_kNcm = - (Mg1_mid + Mg2_mid) * 100;
         const part2 = total_Mg_kNcm * ep_mid / Ic;
         const expected_sigmacpg_mid = part1 + part2; // ~0.31615
-
         expect(sigmacpg.values[5]).toBeCloseTo(expected_sigmacpg_mid, 4);
     });
 
@@ -90,10 +89,9 @@ describe('TimeDependentLoss', () => {
     describe('finalPrestressingForce', () => {
         it('should calculate the final prestressing force with the new phi value', () => {
             const finalForce = timeLoss.finalPrestressingForce();
-            // console.log(finalForce)
 
             // --- Manual Calculation for Verification at mid-span (index 5) ---
-            const p0_mid = 2241.92; // kN
+            const p0_mid = -2241.92; // kN
             const loss_percent_mid = 13.218; // From calculatedeltappercent test for phi=2.5
             const expected_final_force_mid = p0_mid * (1 - loss_percent_mid / 100); // ~1945.57 kN
 

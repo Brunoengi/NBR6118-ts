@@ -116,10 +116,10 @@ describe('ELU - Case 1', () => {
         it('should pass verification for sigma1 (compression limit)', () => {
             const result = elu.verification_sigma1P0({ j });
 
-            console.log('Sigma1 Verification (Pass):', {
-                limit: result.limit,
-                values: result.values.values.map((v: number) => v.toFixed(4))
-            });
+            // console.log('Sigma1 Verification (Pass):', {
+            //     limit: result.limit,
+            //     values: result.values.values.map((v: number) => v.toFixed(4))
+            // });
 
             expect(result.passed).toBe(true);
             result.values.values.forEach((stress: number) => {
@@ -131,10 +131,10 @@ describe('ELU - Case 1', () => {
         it('should pass verification for sigma2 (tension limit)', () => {
             const result = elu.verification_sigma2P0({ j });
 
-            console.log('Sigma2 Verification (Pass):', {
-                limit: result.limit,
-                values: result.values.values.map((v: number) => v.toFixed(4))
-            });
+            // console.log('Sigma2 Verification (Pass):', {
+            //     limit: result.limit,
+            //     values: result.values.values.map((v: number) => v.toFixed(4))
+            // });
 
             expect(result.passed).toBe(true);
             result.values.values.forEach((stress: number) => {
@@ -283,10 +283,10 @@ describe('ELU - Verification Failure Cases', () => {
     it('should fail verification for sigma1 when compression stress is too high for the given fck', () => {
         const result = eluWithLowFck.verification_sigma1P0({ j });
 
-        console.log('Sigma1 Verification (Fail):', {
-            limit: result.limit,
-            values: result.values.values.map((v: number) => v.toFixed(4))
-        });
+        // console.log('Sigma1 Verification (Fail):', {
+        //     limit: result.limit,
+        //     values: result.values.values.map((v: number) => v.toFixed(4))
+        // });
 
         // With fck=1, the compression limit will be very small (e.g., -0.06 kN/cm²).
         // The calculated stresses (e.g., -0.81 kN/cm²) will be "less than" this limit, failing the check.
@@ -297,10 +297,10 @@ describe('ELU - Verification Failure Cases', () => {
     it('should fail verification for sigma2 when tension stress exceeds the limit', () => {
         const result = eluWithLowFck.verification_sigma2P0({ j });
 
-        console.log('Sigma2 Verification (Fail):', {
-            limit: result.limit,
-            values: result.values.values.map((v: number) => v.toFixed(4))
-        });
+        // console.log('Sigma2 Verification (Fail):', {
+        //     limit: result.limit,
+        //     values: result.values.values.map((v: number) => v.toFixed(4))
+        // });
 
         // With fck=1, the tensile strength limit will be very low (e.g., 0.008 kN/cm²).
         // The calculated sigma2 values (e.g., 0.128 kN/cm²) will exceed this low limit.

@@ -11,6 +11,6 @@
     "emitDeclarationOnly": false,
     "isolatedModules": true
   },
-  "include": ["src/**/*", "tests/structuralDesign/PrestressingSteel/ImmediatePrestress.test.ts"],
+  "include": ["src/**/*", "tests/structuralDesign/PrestressingSteel/ELU.test.ts"],
   "exclude": ["dist", "node_modules", "**/*.test.ts", "**/*.spec.ts"]
 }
