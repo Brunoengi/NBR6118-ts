@@ -12,6 +12,8 @@ describe('ReinforcingSteel', () => {
         let elu: ELU;
         const b: ValueUnit = { value: 60, unit: 'cm' };
         const h: ValueUnit = { value: 120, unit: 'cm' };
+        const dl: ValueUnit = { value: 5, unit: 'cm' };
+        const dp: ValueUnit = { value: 12, unit: 'cm' };
 
         beforeAll(() => {
             // --- Setup based on ELU.test.ts Case 1 ---
@@ -20,9 +22,9 @@ describe('ReinforcingSteel', () => {
             const mg_half = [0, 182.25, 324, 425.25, 486, 506.25];
             const mg_full = [...mg_half, ...mg_half.slice(0, -1).reverse()];
             const width: ValueUnit = { value: 1500, unit: 'cm' };
-            const cableGeo = new CableGeometry({ width, epmax: { value: -48, unit: 'cm' } });
-            const x_values_cm = cableGeo.subdivideSpan(width, 10).values;
-            const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
+            const cableGeo = new CableGeometry({ width, epmax: { value: -48, unit: 'cm' }, numPoints: 11 });
+            const x_values_cm = cableGeo.subdivideSpan().values;
+            const ep_values_cm = x_values_cm.map((x: number) => cableGeo.cableY(x));
 
             elu = new ELU({
                 P0: { values: p0_full, unit: 'kN' },
@@ -40,7 +42,9 @@ describe('ReinforcingSteel', () => {
                     sigma2P0: elu.sigma2P0_ELU
                 },
                 h,
-                b
+                b,
+                dl,
+                dp
             });
         });
 
@@ -70,6 +74,8 @@ describe('ReinforcingSteel', () => {
         let elu: ELU;
         const b: ValueUnit = { value: 70, unit: 'cm' };
         const h: ValueUnit = { value: 100, unit: 'cm' };
+        const dl: ValueUnit = { value: 5, unit: 'cm' };
+        const dp: ValueUnit = { value: 12, unit: 'cm' };
 
         beforeAll(() => {
             // --- Setup based on ELU.test.ts Case 2 ---
@@ -78,9 +84,9 @@ describe('ReinforcingSteel', () => {
             const mg_half = [0, 80.051, 142.313, 186.785, 213.469, 222.363];
             const mg_full = [...mg_half, ...mg_half.slice(0, -1).reverse()];
             const width: ValueUnit = { value: 1500, unit: 'cm' };
-            const cableGeo = new CableGeometry({ width, epmax: { value: -45.02, unit: 'cm' } });
-            const x_values_cm = cableGeo.subdivideSpan(width, 10).values;
-            const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
+            const cableGeo = new CableGeometry({ width, epmax: { value: -45.02, unit: 'cm' }, numPoints: 11 });
+            const x_values_cm = cableGeo.subdivideSpan().values;
+            const ep_values_cm = x_values_cm.map((x: number) => cableGeo.cableY(x));
 
             elu = new ELU({
                 P0: { values: p0_full, unit: 'kN' },
@@ -98,7 +104,9 @@ describe('ReinforcingSteel', () => {
                     sigma2P0: elu.sigma2P0_ELU
                 },
                 h,
-                b
+                b,
+                dl,
+                dp
             });
         });
 

@@ -19,12 +19,12 @@ describe('ELU - Case 1', () => {
 
     // Generate parabolic eccentricity ep(x) using CableGeometry
     const width: ValueUnit = { value: 1500, unit: 'cm' };
-    const numSections = 10;
+    const numSections = 11;
     const epmax: ValueUnit = { value: -48, unit: 'cm' };
     
-    const cableGeo = new CableGeometry({ width, epmax });
-    const x_values_cm = cableGeo.subdivideSpan(width, numSections).values;
-    const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
+    const cableGeo = new CableGeometry({ width, epmax, numPoints: numSections });
+    const x_values_cm = cableGeo.subdivideSpan().values;
+    const ep_values_cm = x_values_cm.map((x:number) => cableGeo.cableY(x));
 
     beforeAll(() => {
         elu = new ELU({
@@ -145,7 +145,6 @@ describe('ELU - Case 1', () => {
     });
 });
 
-
 describe('ELU - Case 2', () => {
     let elu: ELU;
 
@@ -162,12 +161,12 @@ describe('ELU - Case 2', () => {
 
     // Generate parabolic eccentricity ep(x) using CableGeometry
     const width: ValueUnit = { value: 1500, unit: 'cm' };
-    const numSections = 10;
+    const numSections = 11;
     const epmax: ValueUnit = { value: -45.02, unit: 'cm' };
     
-    const cableGeo = new CableGeometry({ width, epmax });
-    const x_values_cm = cableGeo.subdivideSpan(width, numSections).values;
-    const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
+    const cableGeo = new CableGeometry({ width, epmax, numPoints: numSections });
+    const x_values_cm = cableGeo.subdivideSpan().values;
+    const ep_values_cm = x_values_cm.map((x:number) => cableGeo.cableY(x));
 
     beforeAll(() => {
         elu = new ELU({
@@ -264,9 +263,9 @@ describe('ELU - Verification Failure Cases', () => {
         const mg_half = [0, 182.25, 324, 425.25, 486, 506.25];
         const mg_full = [...mg_half, ...mg_half.slice(0, -1).reverse()];
         const width: ValueUnit = { value: 1500, unit: 'cm' };
-        const cableGeo = new CableGeometry({ width, epmax: { value: -48, unit: 'cm' } });
-        const x_values_cm = cableGeo.subdivideSpan(width, 10).values;
-        const ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
+        const cableGeo = new CableGeometry({ width, epmax: { value: -48, unit: 'cm' }, numPoints: 11 });
+        const x_values_cm = cableGeo.subdivideSpan().values;
+        const ep_values_cm = x_values_cm.map((x:number) => cableGeo.cableY(x));
 
         eluWithLowFck = new ELU({
             P0: { values: p0_full, unit: 'kN' },

@@ -24,9 +24,9 @@ describe('ELS - Limited Prestressing', () => {
 
     beforeAll(() => {
         // 1. Generate cable geometry and section points
-        const cableGeo = new CableGeometry({ width, epmax });
-        const x_values_cm = cableGeo.subdivideSpan(width, numSections).values;
-        ep_values_cm = x_values_cm.map(x => cableGeo.cableY(x));
+        const cableGeo = new CableGeometry({ width, epmax,numPoints:11 });
+        const x_values_cm = cableGeo.subdivideSpan().values;
+        ep_values_cm = x_values_cm.map((x: number) => cableGeo.cableY(x));
 
         // 2. Calculate P_inf (force after all losses) using TimeDependentLoss
         const p0_half = [-2156.11, -2174.28, -2190.57, -2206.55, -2223.40, -2241.92];
@@ -68,7 +68,7 @@ describe('ELS - Limited Prestressing', () => {
         jest.spyOn(combinations, 'calculateMoments').mockImplementation(({ moment }) => {
             const M_max = moment.value;
             const L_m = width.value / 100;
-            const moments_values = x_values_cm.map(x_cm => {
+            const moments_values = x_values_cm.map((x_cm: number) => {
                 const x_m = x_cm / 100;
                 return (4 * M_max / (L_m ** 2)) * (L_m * x_m - x_m ** 2);
             });

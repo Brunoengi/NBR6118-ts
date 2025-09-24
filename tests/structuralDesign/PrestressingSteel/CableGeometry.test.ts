@@ -1,80 +1,105 @@
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
-import { ValueUnit } from "../../../src/types/index.js";
+import { ValueUnit, Distance } from "../../../src/types/index.js";
+import { describe, it, expect } from '@jest/globals';
 
 describe('CableGeometry', () => {
-    let cableGeo: CableGeometry;
-    const width: ValueUnit = { value: 2500, unit: 'cm' }; // 25m
+    const width: Distance = { value: 1500, unit: 'cm' };
     const epmax: ValueUnit = { value: -48, unit: 'cm' };
+    const numPoints = 11; // Corresponds to 10 sections
 
-    beforeAll(() => {
-        cableGeo = new CableGeometry({ width, epmax });
-    });
+    const cableGeo = new CableGeometry({ width, epmax, numPoints });
 
     it('should be instantiated correctly', () => {
-        expect(cableGeo).toBeInstanceOf(CableGeometry);
         expect(cableGeo.width).toEqual(width);
         expect(cableGeo.epmax).toEqual(epmax);
+        expect(cableGeo.numPoints).toEqual(numPoints);
+        expect(cableGeo.c).toBe(0); // Default value
+        expect(cableGeo.x).toBeDefined();
+        expect(cableGeo.y).toBeDefined();
+        expect(cableGeo.slopes).toBeDefined();
+        expect(cableGeo.angles).toBeDefined();
+        expect(cableGeo.angleDeviations).toBeDefined();
+    });
+
+    it('should handle a custom "c" value in the constructor', () => {
+        const customC = 10;
+        const cableGeoWithC = new CableGeometry({ width, epmax, numPoints, c: customC });
+        expect(cableGeoWithC.c).toBe(customC);
+        // At x=0, y should be c
+        expect(cableGeoWithC.y.values[0]).toBe(customC);
     });
 
     describe('subdivideSpan', () => {
-        it('should subdivide the span into the correct number of points', () => {
-            const spanWidth: ValueUnit = { value: 20, unit: 'm' };
-            const result = cableGeo.subdivideSpan(spanWidth, 4);
-            expect(result.values).toEqual([0, 5, 10, 15, 20]);
-            expect(result.unit).toBe('m');
+        it('should subdivide the span based on the number of points', () => {
+            expect(cableGeo.x.values.length).toBe(11);
+            expect(cableGeo.x.values).toEqual([0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500]);
+            expect(cableGeo.x.unit).toBe('cm');
         });
 
-        it('should handle floating point steps', () => {
-            const spanWidth: ValueUnit = { value: 10, unit: 'm' };
-            const result = cableGeo.subdivideSpan(spanWidth, 3);
-            expect(result.values.length).toBe(4);
-            expect(result.values[0]).toBeCloseTo(0);
-            expect(result.values[1]).toBeCloseTo(3.333333);
-            expect(result.values[2]).toBeCloseTo(6.666667);
-            expect(result.values[3]).toBeCloseTo(10);
+        it('should create 3 points correctly (0, L/2, L)', () => {
+            const cableGeo3Points = new CableGeometry({ width, epmax, numPoints: 3 });
+            expect(cableGeo3Points.x.values).toEqual([0, 750, 1500]);
         });
 
-        it('should throw an error for zero or negative sections', () => {
-            const spanWidth: ValueUnit = { value: 10, unit: 'm' };
-            expect(() => cableGeo.subdivideSpan(spanWidth, 0)).toThrow("The number of sections must be greater than zero.");
-            expect(() => cableGeo.subdivideSpan(spanWidth, -1)).toThrow("The number of sections must be greater than zero.");
+        it('should throw an error for less than 2 points', () => {
+            expect(() => new CableGeometry({ width, epmax, numPoints: 1 })).toThrow("Number of points must be at least 2.");
+            expect(() => new CableGeometry({ width, epmax, numPoints: 0 })).toThrow("Number of points must be at least 2.");
         });
     });
 
-    describe('Geometric Calculations', () => {
-        // Using L = 2500 cm, e = -48 cm
-        it('should calculate cable path y(x) correctly', () => {
-            expect(cableGeo.cableY(0)).toBeCloseTo(0);
-            // y(1250) = -(4 * -48 / 2500^2) * 1250^2 + (4 * -48 / 2500) * 1250 = 48 - 96 = -48
-            expect(cableGeo.cableY(1250)).toBeCloseTo(-48);
-            // y(2500) = -(4 * -48 / 2500^2) * 2500^2 + (4 * -48 / 2500) * 2500 = 192 - 192 = 0
-            expect(cableGeo.cableY(2500)).toBeCloseTo(0);
+    describe('Parabolic Cable Properties Calculation', () => {
+        it('should have correct y (vertical position) values', () => {
+            // At start (x=0), y should be c (which is 0)
+            expect(cableGeo.y.values[0]).toBe(0);
+
+            // At mid-span (x=L/2), y should be epmax
+            // Let's test the mid-point calculation directly as it's the peak of the parabola
+            expect(cableGeo.cableY(750)).toBeCloseTo(epmax.value);
+
+            // At end (x=L), y should be c (which is 0)
+            const lastIndex = cableGeo.y.values.length - 1;
+            expect(cableGeo.y.values[lastIndex]).toBeCloseTo(0);
+
+            // Check a point in the array: x = 150
+            // y(150) = (-4*-48/1500^2)*150^2 + (4*-48/1500)*150 = 1.92 - 19.2 = -17.28
+            expect(cableGeo.y.values[1]).toBeCloseTo(-17.28);
         });
 
-        it('should calculate cable slope y\'(x) correctly', () => {
-            // y'(x) = -(8 * e / L^2) * x + (4 * e / L)
-            // y'(0) = 4 * -48 / 2500 = -0.0768
-            expect(cableGeo.cableSlope(0)).toBeCloseTo(-0.0768);
-            // y'(1250) = -(8 * -48 / 2500^2) * 1250 + (4 * -48 / 2500) = 0.0768 - 0.0768 = 0
-            expect(cableGeo.cableSlope(1250)).toBeCloseTo(0);
-            // y'(2500) = -(8 * -48 / 2500^2) * 2500 + (4 * -48 / 2500) = 0.1536 - 0.0768 = 0.0768
-            expect(cableGeo.cableSlope(2500)).toBeCloseTo(0.0768);
+        it('should have correct slope values', () => {
+            // At mid-span (x=L/2), slope should be 0
+            expect(cableGeo.cableSlope(750)).toBeCloseTo(0);
+
+            // At start (x=0), slope should be 4*(e-c)/L
+            // 4 * (-48) / 1500 = -0.128
+            expect(cableGeo.slopes.values[0]).toBeCloseTo(-0.128);
+
+            // At end (x=L), slope should be -4*(e-c)/L
+            // -4 * (-48) / 1500 = 0.128
+            const lastIndex = cableGeo.slopes.values.length - 1;
+            expect(cableGeo.slopes.values[lastIndex]).toBeCloseTo(0.128);
+            expect(cableGeo.slopes.unit).toBe('adimensional');
         });
 
-        it('should calculate cable angle α(x) correctly', () => {
-            // α(x) = -atan(y'(x))
-            // α(0) = -atan(-0.0768)
-            expect(cableGeo.cableAngle(0)).toBeCloseTo(0.07666);
-            // α(1250) = -atan(0)
-            expect(cableGeo.cableAngle(1250)).toBeCloseTo(0);
-            // α(2500) = -atan(0.0768)
-            expect(cableGeo.cableAngle(2500)).toBeCloseTo(-0.07666);
+        it('should have correct angle values in radians', () => {
+            // At mid-span (x=L/2), angle should be 0
+            expect(cableGeo.cableAngle(750)).toBeCloseTo(0);
+
+            // At start (x=0), angle should be -atan(slope) = -atan(-0.16)
+            expect(cableGeo.angles.values[0]).toBeCloseTo(-Math.atan(-0.128));
+            expect(cableGeo.angles.unit).toBe('radians');
         });
 
-        it('should calculate angle deviation Σα correctly', () => {
-            const alpha1 = 0.5;
-            const alphaI = 0.2;
-            expect(cableGeo.angleDeviation(alpha1, alphaI)).toBe(0.3);
+        it('should have correct angleDeviation values', () => {
+            const angles = cableGeo.angles.values;
+            const deviations = cableGeo.angleDeviations.values;
+
+            // Deviation at start is always 0
+            expect(deviations[0]).toBe(0);
+
+            // Deviation at end should be alpha_start - alpha_end
+            const lastIndex = deviations.length - 1;
+            expect(deviations[lastIndex]).toBeCloseTo(angles[0] - angles[lastIndex]);
+            expect(cableGeo.angleDeviations.unit).toBe('radians');
         });
     });
 });
