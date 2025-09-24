@@ -1,4 +1,4 @@
-import { QuasiPermanent, Frequent, Rare, Qsi1, Qsi2, Combinations } from '../../src/combinations/Load.js'
+import { QuasiPermanent, Frequent, Rare, Last, Qsi1, Qsi2, Combinations } from '../../src/combinations/Load.js'
 
 
 describe('test combinations loads', () => {
@@ -38,6 +38,21 @@ describe('test combinations loads', () => {
     expect(Raree.moment.value).toBe(100 + 200 + 300)
     expect(Raree.moment.unit).toBe('kN * m')
 })
+
+    it('Last Combination (ELU)', () => {
+        const lastCombination = new Last({
+            mg1: { value: 100, unit: 'kN*m' },
+            mg2: { value: 200, unit: 'kN*m' },
+            mq: { value: 300, unit: 'kN*m' },
+            gamma_g1: 1.4,
+            gamma_g2: 1.4,
+            gamma_q: 1.4
+        });
+
+        const expectedValue = 100 * 1.4 + 200 * 1.4 + 300 * 1.4;
+        expect(lastCombination.moment.value).toBe(expectedValue);
+        expect(lastCombination.moment.unit).toBe('kN*m');
+    });
 
 })
 

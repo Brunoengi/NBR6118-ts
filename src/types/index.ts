@@ -13,3 +13,23 @@ export interface VerificationResult {
   limit: ValueUnit;
   values: ValuesUnit;
 }
+
+export interface Distances {
+  values: number[]
+  unit: 'cm'
+}
+
+export interface Distance {
+  value: number
+  unit: 'cm'
+}
+
+export interface Angles {
+  values: number[]
+  unit: 'radians'
+}
+
+export interface Angle {
+  value: number
+  unit: 'radians'
+}

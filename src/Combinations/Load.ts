@@ -91,20 +91,34 @@ class Rare {
         this.moment = this.calculateMoment({mg1, mg2, mq})
     }
 
-   private calculateMoment({mg1, mg2, mq}: IRare): ValueUnit {
+   private calculateMoment({mg1, mg2, mq, }: IRare): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value,
             unit: unit
         }
    }
+}
 
+class Last {
+    readonly moment: ValueUnit;
+    constructor({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q}) {
+        this.moment = this.calculateMoment({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q})
+    }
+
+    calculateMoment({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q}): ValueUnit {
+        return {
+            value: mg1.value * gamma_g1 + mg2.value * gamma_g2 + mq.value * gamma_q,
+            unit: mg1.unit
+        }
+    }
 }
 
 class Combinations {
     public readonly quasiPermanent: QuasiPermanent;
     public readonly frequent: Frequent;
     public readonly rare: Rare;
+    public readonly last: Last;
     public readonly mg1: ValueUnit;
     public readonly mg2: ValueUnit;
     public readonly mq: ValueUnit;
@@ -160,6 +174,7 @@ export {
     QuasiPermanent,
     Frequent,
     Rare,
+    Last,
     Qsi1,
     Qsi2
 }

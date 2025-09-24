@@ -10,22 +10,31 @@ class ReinforcingSteel {
     neutralLine: ValueUnit
     Rct: ValueUnit
     Asl: ValueUnit
+    dl: ValueUnit
+    dp: ValueUnit
 
-    constructor({sigma, h, b}: {
+
+
+    constructor({sigma, h, b, dl, dp}: {
         sigma: {
             sigma1P0: ValuesUnit
             sigma2P0: ValuesUnit
         }
         h: ValueUnit
         b: ValueUnit
+        dl: ValueUnit
+        dp: ValueUnit
     }
     ) {
         this.sigma = sigma
         this.h = h
         this.b = b
+        this.dl = dl
+        this.dp = dp
         this.neutralLine = this.calculateNeutralLine()
         this.Rct = this.calculateRct()
         this.Asl = this.calculateAsl()
+    
     }
 
     calculateNeutralLine(): ValueUnit {
@@ -49,8 +58,31 @@ class ReinforcingSteel {
             value: this.Rct.value / 25,
             unit: 'cm²'
         }
-
     }
+
+    calculate_ds1(): ValueUnit {
+        return {
+            value: this.h.value - this.dl.value,
+            unit: 'cm' 
+        }
+    }
+
+    calculate_dp(): ValueUnit {
+        return {
+            value: this.h.value - this.dp.value,
+            unit: 'cm'
+        }
+    }
+
+    // calculate_As_rectangular(): ValueUnit {
+
+    //     const a = -0.32 * this.b.value * 
+
+    //     return {
+    //         value: this.h.value * this.b.value,
+    //         unit: 'cm²'
+    //     }}
+    
 }
 
 export default ReinforcingSteel;
