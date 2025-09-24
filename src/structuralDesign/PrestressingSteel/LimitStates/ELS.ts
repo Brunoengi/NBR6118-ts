@@ -60,8 +60,6 @@ class ELS {
                 ELSD1: { value: 0, unit: 'kN/cm²' },
                 ELSD2: { value: - 0.45 * concrete.fck.value / 10, unit: 'kN/cm²' }
             }
-
-            
             
         } else if(type == 'Complete') {
             this.sigma1P_infinity_ELSF = this.sigma1P_infinity({combination: combinations.calculateMoments({moment: combinations.rare.moment, x, width})})
