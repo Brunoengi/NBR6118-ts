@@ -1,4 +1,4 @@
-import PrestressingSteel from '../../src/buildingElements/PrestressingSteel.js'
+import PrestressingSteel from '../../src/structuralElements/PrestressingSteel.js'
 
 describe('PrestressingSteel', () => {
     it('should correctly initialize all properties for label "CP 190 RB 9.5"', () => {

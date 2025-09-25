@@ -3,9 +3,9 @@ import ShearSteel from "../../../src/structuralDesign/PrestressingSteel/ShearSte
 import CompressionStruts from "../../../src/structuralDesign/PrestressingSteel/CompressionStruts.js";
 import PrestressingSteelForce from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelForce.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
-import { Combinations, Qsi1, Qsi2 } from "../../../src/combinations/Load.js";
-import Concrete from "../../../src/buildingElements/Concrete.js";
-import Steel from "../../../src/buildingElements/Steel.js";
+import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
+import Concrete from "../../../src/structuralElements/Concrete.js";
+import Steel from "../../../src/structuralElements/Steel.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
 
 describe('ShearSteel', () => {

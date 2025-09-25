@@ -1,4 +1,4 @@
-import { QuasiPermanent, Frequent, Rare, Last, Qsi1, Qsi2, Combinations } from '../../src/combinations/Load.js'
+import { QuasiPermanent, Frequent, Rare, Last, Qsi1, Qsi2, Combinations } from '../../src/combinationLoads/Load.js'
 
 
 describe('test combinations loads', () => {

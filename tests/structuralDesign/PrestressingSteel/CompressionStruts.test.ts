@@ -1,10 +1,10 @@
 import { jest, describe, it, expect, beforeAll } from '@jest/globals';
 import Stirrups from "../../../src/structuralDesign/PrestressingSteel/CompressionStruts.js";
-import { Combinations, Qsi1, Qsi2 } from "../../../src/combinations/Load.js";
+import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import PrestressingSteelForce from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelForce.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
-import Concrete from "../../../src/buildingElements/Concrete.js";
+import Concrete from "../../../src/structuralElements/Concrete.js";
 
 
 describe('Stirrups', () => {

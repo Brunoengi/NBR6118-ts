@@ -1,4 +1,4 @@
-import Concrete from "../../src/buildingElements/Concrete.js";
+import Concrete from "../../src/structuralElements/Concrete.js";
 
 
 describe('Concrete with granite aggregate', () => {

@@ -1,6 +1,6 @@
 import ReinforcingSteel from "../../../src/structuralDesign/PrestressingSteel/ReinforcingSteel.js";
 import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
-import Concrete from "../../../src/buildingElements/Concrete.js";
+import Concrete from "../../../src/structuralElements/Concrete.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import { ValueUnit } from "../../../src/types/index.js";
 import { describe, it, expect, beforeAll } from '@jest/globals';

@@ -1,7 +1,7 @@
 import PrestressingDesign from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelEstimated.js";
-import Concrete from "../../../src/buildingElements/Concrete.js";
-import PrestressingSteel from "../../../src/buildingElements/PrestressingSteel.js";
-import { Combinations, Qsi1, Qsi2 } from "../../../src/combinations/Load.js";
+import Concrete from "../../../src/structuralElements/Concrete.js";
+import PrestressingSteel from "../../../src/structuralElements/PrestressingSteel.js";
+import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
 
 describe('Prestressing Steel Design', () => {
 

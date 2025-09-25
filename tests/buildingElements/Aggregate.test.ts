@@ -1,4 +1,4 @@
-import AggregateConcrete from "../../src/buildingElements/Aggregate.js"
+import AggregateConcrete from "../../src/structuralElements/Aggregate.js"
 
 
 describe('AggregateConcrete', () => {

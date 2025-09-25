@@ -1,7 +1,7 @@
 import ELS from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELS.js";
 import { describe, it, expect, beforeAll, jest } from '@jest/globals';
-import { Combinations, Qsi1, Qsi2 } from "../../../src/combinations/Load.js";
-import Concrete from "../../../src/buildingElements/Concrete.js";
+import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
+import Concrete from "../../../src/structuralElements/Concrete.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
 import timeDependentLoss from "../../../src/structuralDesign/PrestressingSteel/Losses/TimeDependentLoss.js";

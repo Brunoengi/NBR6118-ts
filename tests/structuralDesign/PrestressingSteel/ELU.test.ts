@@ -1,5 +1,5 @@
 import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
-import Concrete from "../../../src/buildingElements/Concrete.js";
+import Concrete from "../../../src/structuralElements/Concrete.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
 
