@@ -91,9 +91,10 @@ class timeDependentLoss {
             const ep_i = this.ep.values[i];
             
             // Convert moments from kN*m to kN*cm for unit consistency
-            const total_Mg_kNcm = - (Mg1_i + Mg2_i) * 100;
+            const total_Mg_kNcm = (Mg1_i + Mg2_i) * 100; // Moment is positive
 
-            return total_Mg_kNcm * ep_i / this.Ic.value
+            // The sign is determined by ep_i (negative eccentricity gives positive stress)
+            return -total_Mg_kNcm * ep_i / this.Ic.value;
         })
 
         // Total stress is the sum of the parts (sign of ep and Mg will determine final sign)

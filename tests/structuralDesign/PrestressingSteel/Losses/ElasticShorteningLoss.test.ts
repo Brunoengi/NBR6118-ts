@@ -21,7 +21,7 @@ describe('ElasticShorteningLoss', () => {
     });
 
     // Panc values for the full symmetric beam
-    const panc_half = [2167.976, 2187.793, 2207.61, 2227.427, 2247.244, 2267.06];
+    const panc_half = [-2167.976, -2187.793, -2207.61, -2227.427, -2247.244, -2267.06];
     const panc_full = [...panc_half, ...panc_half.slice(0, -1).reverse()];
 
     beforeAll(() => {
@@ -37,10 +37,8 @@ describe('ElasticShorteningLoss', () => {
             Panc: { values: panc_full, unit: 'kN' },
             Ap: { value: 17.82, unit: 'cm²' },
             // sigmacp and sigmacg are not needed for these calculations
-            ncable: 3,
-            sigmacp: { values: [], unit: '' },
-            sigmacg: { values: [], unit: '' },
-        } as any); // Use 'as any' to bypass constructor type checking for sigmacp/sigmacg
+            ncable: 3
+        });
     });
 
     it('should be instantiated correctly', () => {
@@ -88,27 +86,27 @@ describe('ElasticShorteningLoss', () => {
             //console.log('Calculated values to sigmacp:', sigmacp);
 
             // --- Manual Calculation for Verification ---
-            // Formula: σ_cp(x) = Panc(x) * (1/Ac + ep(x)² / Ic)
+            // Formula: σ_cp(x) = Panc(x) * (1/Ac + ep(x)² / Ic) (Panc is negative for compression)
             // Units: Panc (kN), Ac (cm²), ep (cm), Ic (cm⁴) -> σ_cp (kN/cm²)
             const Ac = 7200;
             const Ic = 8640000;
 
             // At x = 0 cm
-            const panc_0 = 2167.976;
+            const panc_0 = -2167.976;
             const ep_0 = 0;
-            const expected_sigmacp_0 = panc_0 * (1 / Ac + ep_0**2 / Ic); // 0.3011 kN/cm²
+            const expected_sigmacp_0 = panc_0 * (1 / Ac + ep_0**2 / Ic); // -0.3011 kN/cm²
             expect(sigmacp.values[0]).toBeCloseTo(expected_sigmacp_0, 4);
 
             // At x = 750 cm (mid-span)
-            const panc_mid = 2267.06;
+            const panc_mid = -2267.06;
             const ep_mid = -48;
-            const expected_sigmacp_mid = panc_mid * (1 / Ac + ep_mid**2 / Ic); // 0.9194 kN/cm²
+            const expected_sigmacp_mid = panc_mid * (1 / Ac + ep_mid**2 / Ic); // -0.9194 kN/cm²
             expect(sigmacp.values[5]).toBeCloseTo(expected_sigmacp_mid, 4);
 
             // At x = 1500 cm (end)
-            const panc_end = 2167.976;
+            const panc_end = -2167.976;
             const ep_end = 0;
-            const expected_sigmacp_end = panc_end * (1 / Ac + ep_end**2 / Ic); // 0.3011 kN/cm²
+            const expected_sigmacp_end = panc_end * (1 / Ac + ep_end**2 / Ic); // -0.3011 kN/cm²
             expect(sigmacp.values[10]).toBeCloseTo(expected_sigmacp_end, 4);
         });
     });
@@ -131,7 +129,7 @@ describe('ElasticShorteningLoss', () => {
             const mg_mid_kNm = 506.25; // From calculateMg test
             const mg_mid_kNcm = mg_mid_kNm * 100;
             const ep_mid = -48;
-            const expected_sigmacg_mid = (mg_mid_kNcm * ep_mid) / Ic; // -0.28125 kN/cm²
+            const expected_sigmacg_mid = -(mg_mid_kNcm * ep_mid) / Ic; // -(50625 * -48) / 8640000 = 0.28125 kN/cm²
             expect(sigmacg.values[5]).toBeCloseTo(expected_sigmacg_mid, 4);
 
             // At x = 1500 cm (end)
@@ -149,16 +147,16 @@ describe('ElasticShorteningLoss', () => {
             // Values are the sum of the expected values from sigmacp and sigmacg tests.
 
             // At x = 0 cm (start)
-            const expected_sigmac_0 = 0.3011 + 0; // sigmacp(0) + sigmacg(0)
-            expect(sigmac.values[0]).toBeCloseTo(expected_sigmac_0, 4);
+            // sigmac(0) = sigmacp(0) + sigmacg(0) = -0.3011 + 0 = -0.3011
+            expect(sigmac.values[0]).toBeCloseTo(-0.3011, 4);
 
             // At x = 750 cm (mid-span)
-            const expected_sigmac_mid = 0.9194 + (-0.28125); // sigmacp(mid) + sigmacg(mid)
-            expect(sigmac.values[5]).toBeCloseTo(expected_sigmac_mid, 4);
+            // sigmac(mid) = sigmacp(mid) + sigmacg(mid) = -0.9194 + 0.28125 = -0.63815
+            expect(sigmac.values[5]).toBeCloseTo(-0.6382, 4);
 
             // At x = 1500 cm (end)
-            const expected_sigmac_end = 0.3011 + 0; // sigmacp(end) + sigmacg(end)
-            expect(sigmac.values[10]).toBeCloseTo(expected_sigmac_end, 4);
+            // sigmac(end) = sigmacp(end) + sigmacg(end) = -0.3011 + 0 = -0.3011
+            expect(sigmac.values[10]).toBeCloseTo(-0.3011, 4);
         });
     });
 
@@ -173,18 +171,19 @@ describe('ElasticShorteningLoss', () => {
             const sequentialFactor = (ncable - 1) / (2 * ncable); // (3-1)/(2*3) = 1/3
 
             // At x = 0 cm (start)
-            const sigmac_0 = 0.3011; // From calculateSigmac test
+            const sigmac_0 = -0.3011; // From calculateSigmac test (now correctly negative)
             const expected_deltaSigmaP_0 = alphap * sigmac_0 * sequentialFactor;
+            // Expected: 6.632 * -0.3011 * (1/3) ≈ -0.6656
             expect(deltaSigmaP.values[0]).toBeCloseTo(expected_deltaSigmaP_0, 4);
 
-            //console.log(deltaSigmaP.values)
             // At x = 750 cm (mid-span)
-            const sigmac_mid = 0.63815; // From calculateSigmac test
+            const sigmac_mid = -0.63815; // From calculateSigmac test
             const expected_deltaSigmaP_mid = alphap * sigmac_mid * sequentialFactor;
+            // Expected: 6.632 * -0.63815 * (1/3) ≈ -1.4107
             expect(deltaSigmaP.values[5]).toBeCloseTo(expected_deltaSigmaP_mid, 4);
 
             // At x = 1500 cm (end)
-            const sigmac_end = 0.3011; // From calculateSigmac test
+            const sigmac_end = -0.3011; // From calculateSigmac test
             const expected_deltaSigmaP_end = alphap * sigmac_end * sequentialFactor;
             expect(deltaSigmaP.values[10]).toBeCloseTo(expected_deltaSigmaP_end, 4);
         });
@@ -196,34 +195,39 @@ describe('ElasticShorteningLoss', () => {
             //console.log(p0)
             /*
             Expected values: [
-              2156.1141784511788,
-              2174.2800804709227,
-              2190.5704516339397,
-              2206.5471277860474,
-              2223.402791516337,
-              2241.920017845118,
-              2223.402791516337,
-              2206.5471277860474,
-              2190.5704516339397,
-              2174.2800804709227,
-              2156.1141784511788
+              -2156.1141784511788,
+              -2174.2800804709227,
+              -2190.5704516339397,
+              -2206.5471277860474,
+              -2223.402791516337,
+              -2241.920017845118,
+              -2223.402791516337,
+              -2206.5471277860474,
+              -2190.5704516339397,
+              -2174.2800804709227,
+              -2156.1141784511788
             ]
             */
 
             // --- Manual Calculation for Verification ---
             // Formula: P0 = Panc - (Δσ_p * Ap)
-            // The expected values below are based on the precise intermediate calculations
-            // performed by the class, matching the console output.
+            // Panc is negative (compressive force). Δσ_p is negative (reduction in steel tension, or increase in steel compression).
+            // So, ΔP_enc = Δσ_p * Ap will be negative.
+            // P0 = Panc - (negative value) = Panc + (positive value).
+            // This means P0 will be less negative (smaller magnitude of compressive force) than Panc, representing a loss.
 
             // At x = 0 cm (start)
-            // Expected: 2167.976 - (0.66564 * 17.82) ≈ 2156.11
-            const expected_p0_0 = 2156.114;
+            // Panc_0 = -2167.976
+            // ΔP_enc(0) = Δσ_p(0) * Ap = -0.6656 * 17.82 = -11.859 kN
+            // P0(0) = Panc(0) - ΔP_enc(0) = -2167.976 - (-11.859) = -2156.117 kN
+            const expected_p0_0 = -2156.114;
             expect(p0.values[0]).toBeCloseTo(expected_p0_0, 2);
 
             // At x = 750 cm (mid-span)
-            // Expected: 2267.06 - (1.4107 * 17.82) ≈ 2241.92
-            const expected_p0_mid = 2241.920;
-            expect(p0.values[5]).toBeCloseTo(expected_p0_mid, 2);
+            // Panc(mid) = -2267.06
+            // ΔP_enc(mid) = Δσ_p(mid) * Ap = -1.4107 * 17.82 = -25.139 kN
+            // P0(mid) = Panc(mid) - ΔP_enc(mid) = -2267.06 - (-25.139) = -2241.921 kN
+            expect(p0.values[5]).toBeCloseTo(-2241.92, 2);
 
             // At x = 1500 cm (end)
             const expected_p0_end = expected_p0_0; // Symmetric

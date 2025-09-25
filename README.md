@@ -5,9 +5,8 @@ A TypeScript library for structural engineering calculations based on the Brazil
 ## Installation
 
 ```bash
-npm install nbr6118-ts
 
-# or clone the repository:
+# clone the repository:
 git clone https://github.com/your-username/nbr6118-ts.git
 cd nbr6118-ts
 npm install
@@ -111,7 +110,208 @@ Provides properties for different types of prestressing steel based on their lab
 | Minimum Area of a Single Cord       | A<sub>p,min</sub>   | cm²  |
 
 
+### Module 2: Prestressing Design
 
+#### `2.1 Prestressing Design Estimated`
+
+This module estimates the required prestressing steel area based on material properties, section geometry, and load combinations.
+
+```typescript
+import { 
+    PrestressingDesign, 
+    Concrete, 
+    PrestressingSteel, 
+    Combinations, 
+    Qsi1, 
+    Qsi2 
+} from 'nbr6118-ts';
+
+// 1. Define the materials
+const concrete = new Concrete({
+    fck: { value: 3.5, unit: 'kN/cm²' }, // 35 MPa
+    section: { type: 'rectangular' }
+});
+
+const prestressingSteel = new PrestressingSteel({ label: 'CP 190 RB 12.7' });
+
+// 2. Define the geometric and design properties
+const geometricProperties = {
+    Ac: { value: 7200, unit: 'cm²' },
+    W1: { value: -144000, unit: 'cm³' }
+};
+
+const epmax = { value: -48, unit: 'cm' };
+const lossFactor = 0.25;
+const ncable = 3;
+const prestressingType = 'Limited';
+
+// 3. Define the load combinations
+const combinations = new Combinations({
+    mg1: { value: 506.25, unit: 'kN * m' },
+    mg2: { value: 562.50, unit: 'kN * m' },
+    mq: { value: 421.875, unit: 'kN * m' },
+    qsi1: new Qsi1(0.60),
+    qsi2: new Qsi2(0.40),
+});
+
+// 4. Create the prestressing design instance
+const prestressingDesign = new PrestressingDesign({
+    prestressingSteel,
+    geometricProperties,
+    lossFactor,
+    epmax,
+    combinations,
+    concrete,
+    type: prestressingType,
+    ncable
+});
+
+// 5. Check the calculated results
+console.log('Calculated final prestressing force (P_inf_calc):', prestressingDesign.P_inf_calc);
+console.log('Estimated prestressing area (Apestimated):', prestressingDesign.Apestimated);
+console.log('Number of strands per cable (ncordagecable):', prestressingDesign.ncordagecable);
+console.log('Designed prestressing area (Ap_proj):', prestressingDesign.Ap_proj);
+console.log('Designed final prestressing force (P_inf_proj):', prestressingDesign.P_inf_proj);
+```
+
+#### `2.2 Presstressing Steel Loss`
+
+This module calculates the immediate and time-dependent (progressive) losses of prestressing force.
+
+##### `2.2.1 Friction Loss`
+
+Calculates the loss of force due to friction between the prestressing tendon and its duct. The example below demonstrates a system with active-passive anchoring.
+
+```typescript
+import { FrictionLoss, CableGeometry } from 'nbr6118-ts';
+
+// 1. Define cable geometry
+const cableGeo = new CableGeometry({
+    width: { value: 1500, unit: 'cm' }, // 15m span
+    epmax: { value: -48, unit: 'cm' },
+    numPoints: 11
+});
+
+// 2. Create FrictionLoss instance
+const frictionLoss = new FrictionLoss({
+    Pi: { value: -2498.72, unit: 'kN' }, // Initial force at the active anchor
+    apparentFrictionCoefficient: 0.2,
+    anchoring: 'active-passive',
+    cableGeometry: cableGeo
+});
+
+// 3. Get the force at different points along the cable
+const forceAtMidspan = frictionLoss.frictionPrestressLoss(7.5); // Force at 7.5m
+const forceAtEnd = frictionLoss.frictionPrestressLoss(15);   // Force at 15m (passive anchor)
+
+console.log('Force at mid-span (7.5m):', forceAtMidspan); // Expected: -2399.636 kN
+console.log('Force at passive anchor (15m):', forceAtEnd); // Expected: -2304.48 kN
+console.log('Average loss per meter (beta):', frictionLoss.beta); // Expected: { value: 12.95, unit: 'kN/m' }
+```
+
+##### `2.2.2 Anchoragem Loss`
+
+Calcula a perda de força devido ao escorregamento do cabo no dispositivo de ancoragem. Esta perda afeta um comprimento `xr` a partir da ancoragem.
+
+```typescript
+import { AnchorageLoss } from 'nbr6118-ts';
+
+const anchorageLoss = new AnchorageLoss({
+    Ap: { value: 17.82, unit: 'cm²' },
+    Ep: { value: 195, unit: 'GPa' },
+-    cableReturn: { value: 5, unit: 'mm' }, // Escorregamento da ancoragem
+-    tangBeta: { value: 13.211, unit: 'kN/m' }, // Perda por atrito (beta), obtida de FrictionLoss
++    cableReturn: { value: 5, unit: 'mm' }, // Anchorage slip
++    tangBeta: { value: 13.211, unit: 'kN/m' }, // Friction loss (beta), obtained from FrictionLoss
+    anchoring: 'active-passive'
+});
+
+const beamWidth = { value: 1500, unit: 'cm' };
+
+-// Obtém a perda em diferentes pontos
++// Get the loss at different points
+const lossAtAnchor = anchorageLoss.deltaPanc({ value: 0, unit: 'cm' }, beamWidth);
+const lossAtMidspan = anchorageLoss.deltaPanc({ value: 750, unit: 'cm' }, beamWidth);
+
+-console.log('Comprimento de influência (xr):', anchorageLoss.xr); // Esperado: { value: 1146.8, unit: 'cm' }
+-console.log('Perda na ancoragem (x=0):', lossAtAnchor); // Esperado: { value: 302.99, unit: 'kN' }
+-console.log('Perda no meio do vão (x=7.5m):', lossAtMidspan); // Esperado: { value: 104.83, unit: 'kN' }
++console.log('Length of influence (xr):', anchorageLoss.xr); // Expected: { value: 1146.8, unit: 'cm' }
++console.log('Loss at the anchor (x=0):', lossAtAnchor); // Expected: { value: 302.99, unit: 'kN' }
++console.log('Loss at mid-span (x=7.5m):', lossAtMidspan); // Expected: { value: 104.83, unit: 'kN' }
+
+```
+
+##### `2.2.3 Elastic Shortening Loss`
+
+Calcula a perda devido ao encurtamento elástico do concreto quando a força de protensão é aplicada. O exemplo assume o tensionamento sequencial de 3 cabos. A força resultante é `P0`.
+
+```typescript
+import { ElasticShorteningLoss } from 'nbr6118-ts';
+
+-// Panc é a força após as perdas por atrito e ancoragem
++// Panc is the force after friction and anchorage losses
+const panc_half = [2167.976, 2187.793, 2207.61, 2227.427, 2247.244, 2267.06];
+const panc_full = [...panc_half, ...panc_half.slice(0, -1).reverse()];
+
+const elasticLoss = new ElasticShorteningLoss({
+    Ecs: { value: 29.403, unit: 'GPa' },
+    Ep: { value: 195, unit: 'GPa' },
+    Ac: { value: 7200, unit: 'cm²' },
+-    Ic: { value: 8640000, 'cm⁴' },
++    Ic: { value: 8640000, unit: 'cm⁴' },
+    Ap: { value: 17.82, unit: 'cm²' },
+    g1: { value: 18, unit: 'kN/m' },
+    ncable: 3,
+    Panc: { values: panc_full, unit: 'kN' },
+-    // Outras propriedades como width, x, e ep também são necessárias
++    // Other properties like width, x, and ep are also needed
+} as any);
+
+-const p0 = elasticLoss.calculateP0(); // Força após encurtamento elástico
++const p0 = elasticLoss.calculateP0(); // Force after elastic shortening
+
+-console.log('Força P0 no meio do vão:', p0.values[5]); // Esperado: 2241.92 kN
++console.log('Force P0 at mid-span:', p0.values[5]); // Expected: 2241.92 kN
+
+```
+
+##### `2.2.4 Time Dependent Loss`
+
+Esta classe estima as perdas combinadas ao longo do tempo (fluência, retração e relaxação do aço) para encontrar a força de protensão final (`P_inf`). O cálculo parte de `P0`.
+
+```typescript
+import { timeDependentLoss } from 'nbr6118-ts';
+
+-// Os valores de P0 são o resultado de ElasticShorteningLoss
++// The P0 values are the result from ElasticShorteningLoss
+const p0_half = [-2156.11, -2174.28, -2190.57, -2206.55, -2223.40, -2241.92];
+const p0_full = [...p0_half, ...p0_half.slice(0, -1).reverse()];
+
+const timeDependentLoss = new TimeDependentLoss({
+-    phi: 2.5, // Coeficiente de fluência
++    phi: 2.5, // Creep coefficient
+    g1: { value: 18, unit: 'kN/m' },
+    g2: { value: 20, unit: 'kN/m' },
+    Ac: { value: 7200, unit: 'cm²' },
+-    Ic: { value: 8640000, unit: 'cm⁴' },
++    Ic: { value: 8640000, unit: 'cm⁴' },
+    P0: { values: p0_full, unit: 'kN' },
+-    alphap: 6.632, // Razão modular (Ep/Ecs)
+-    // Outras propriedades como width, x, e ep também são necessárias
++    alphap: 6.632, // Modular ratio (Ep/Ecs)
++    // Other properties like width, x, and ep are also needed
+} as any);
+
+const finalForce = timeDependentLoss.finalPrestressingForce();
+const lossPercentage = timeDependentLoss.calculatedeltappercent();
+
+-console.log('Força de protensão final (P_inf) no meio do vão:', finalForce.values[5]); // Esperado: -1945.57 kN
+-console.log('Percentual de perda progressiva no meio do vão:', lossPercentage[5]); // Esperado: 13.218 %
++console.log('Final prestressing force (P_inf) at mid-span:', finalForce.values[5]); // Expected: -1945.57 kN
++console.log('Progressive loss percentage at mid-span:', lossPercentage[5]); // Expected: 13.218 %
+
+```
 
 ## Running Tests
 

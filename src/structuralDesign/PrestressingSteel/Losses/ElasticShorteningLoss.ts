@@ -121,7 +121,7 @@ class ElasticShorteningLoss {
         const sigmacg_values = mg_vals_kNcm.map((mg_i, i) => {
             const ep_i = ep_vals_cm[i];
             // Formula: σ_cg = Mg(x) * ep(x) / Ic
-            return (mg_i * ep_i) / ic_val_cm4;
+            return - (mg_i * ep_i) / ic_val_cm4;
         });
 
         return {
