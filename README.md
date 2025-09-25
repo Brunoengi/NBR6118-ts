@@ -21,7 +21,7 @@ Here you can create your material and verify your properties
 #### `1.1 Concrete`
 
 ```typescript
-import Concrete from './src/buildingElements/Concrete.js'
+import Concrete from './src/structuralElements/Concrete.js'
 
 // 1. Define Materials and Geometry
 const concrete = new Concrete({
@@ -60,7 +60,7 @@ Used internally by the `Concrete` class.
 #### `1.2 Steel`
 
 ```typescript
-import Steel from './src/buildingElements/Steel.js'
+import Steel from './src/structuralElements/Steel.js'
 
 // 1. Define Materials and Geometry
 const steel = new Steel('CA 50')
@@ -76,7 +76,7 @@ Property | Acronym | Unit |
 #### `1.3 Aggregate`
 
 ```typescript
-import Aggregate from './src/buildingElements/Aggregate.js';
+import Aggregate from './src/structuralElements/Aggregate.js';
 
 const aggregate = new Aggregate('granite');
 ```
@@ -91,7 +91,7 @@ Provides properties for different types of concrete aggregates.
 #### `1.4 PrestressingSteel`
 
 ```typescript
-import PrestressingSteel from './src/buildingElements/PrestressingSteel.js'
+import PrestressingSteel from './src/structuralElements/PrestressingSteel.js'
 
 const prestressingSteel = new PrestressingSteel({ label: 'CP 190 RB 12.7' })
 
