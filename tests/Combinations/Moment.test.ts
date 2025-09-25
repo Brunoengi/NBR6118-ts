@@ -64,7 +64,10 @@ describe('Combinations.calculateMoments', () => {
         mg2: { value: 0, unit: 'kN*m' },
         mq: { value: 0, unit: 'kN*m' },
         qsi1: new Qsi1(0.5),
-        qsi2: new Qsi2(0.5)
+        qsi2: new Qsi2(0.5),
+        gamma_g1: 1.4,
+        gamma_g2: 1.4,
+        gamma_q: 1.4
     });
 
     it('should calculate bending moments for a simply supported beam', () => {
