@@ -1,9 +1,11 @@
 import { jest, describe, it, expect, beforeAll } from '@jest/globals';
-import Stirrups from "../../../src/structuralDesign/PrestressingSteel/Stirrups.js";
+import Stirrups from "../../../src/structuralDesign/PrestressingSteel/CompressionStruts.js";
 import { Combinations, Qsi1, Qsi2 } from "../../../src/combinations/Load.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import PrestressingSteelForce from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelForce.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
+import Concrete from "../../../src/buildingElements/Concrete.js";
+
 
 describe('Stirrups', () => {
     let stirrups: Stirrups;
@@ -45,7 +47,16 @@ describe('Stirrups', () => {
         prestressSteelForce = new PrestressingSteelForce({ P_inf, cableGeometry });
 
         // 4. Instantiate Stirrups
-        stirrups = new Stirrups({ combinations, cableGeometry, prestressSteelForce });
+        stirrups = new Stirrups({
+            combinations,
+            cableGeometry,
+            prestressSteelForce,
+            sum_phi_b: { value: 4, unit: 'cm' },
+            bw: { value: 60, unit: 'cm' },
+            concrete: new Concrete({ fck: 35, aggregate: 'granite', section: { type: 'rectangular' } }),
+            h: { value: 120, unit: 'cm' }, // Added missing property
+            dl: { value: 5, unit: 'cm' }   // Added missing property
+        });
     });
 
     it('should be instantiated correctly', () => {
@@ -114,8 +125,51 @@ describe('Stirrups', () => {
                 combinations.gamma.gamma_q * Vq_start +
                 0.9 * Vp_start;
 
-            expect(Vsd.values[0]).toBeCloseTo(expected_Vsd_start); // Should be ~342.32 kN
+            expect(Vsd.values[0]).toBeCloseTo(expected_Vsd_start); // Should be ~342.58 kN
             expect(Vsd.unit).toBe('kN');
+        });
+    });
+
+    describe('Shear Stress Calculations', () => {
+        it('should calculate the corrected web width (bw_corr)', () => {
+            // bw = 60 cm, sum_phi_b = 4 cm
+            // bw_corr = 60 - 4 / 2 = 58 cm
+            const bw_corr = stirrups.calculate_bw_corrected();
+            expect(bw_corr.value).toBe(58);
+            expect(bw_corr.unit).toBe('cm');
+        });
+
+        it('should calculate the design shear stress limit (tau_wu)', () => {
+            // fck = 35 MPa, fcd = 35 / 1.4 = 25 MPa
+            // tau_wu = (0.27 * (1 - 35 / 250) * 25) / 10 = 0.5805 kN/cm²
+            const tau_wu = stirrups.calculate_tau_wu();
+            expect(tau_wu.value).toBeCloseTo(0.5805);
+            expect(tau_wu.unit).toBe('kN/cm²');
+        });
+
+        it('should calculate the design shear stress (tau_wd)', () => {
+            const tau_wd = stirrups.calculate_tau_wd();
+
+            // Manual check at start (index 0)
+            // Vsd[0] ≈ 342.58 kN
+            // bw_corr = 58 cm
+            // ds1 = h - dl = 120 - 5 = 115 cm
+            // tau_wd[0] = 342.58 / (58 * 115) ≈ 0.0513 kN/cm²
+            const expected_tau_wd_start = stirrups.Vsd.values[0] / (58 * 115);
+            expect(tau_wd.values[0]).toBeCloseTo(expected_tau_wd_start);
+            expect(tau_wd.unit).toBe('kN/cm²');
+        });
+
+        it('should verify the concrete crushing limit (verification_crush_concrete)', () => {
+            const verification = stirrups.verification_crush_concrete();
+
+            // From previous tests:
+            // tau_wd is ~0.0513 kN/cm² at the support.
+            // tau_wu (limit) is ~0.5805 kN/cm².
+            // Since the maximum shear stress is less than the limit, the verification should pass.
+            expect(verification.passed).toBe(true);
+            expect(verification.limit.value).toBeCloseTo(0.5805);
+            expect(verification.values.values[0]).toBeCloseTo(0.0513, 4);
         });
     });
 });

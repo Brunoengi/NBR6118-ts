@@ -33,3 +33,9 @@ export interface Angle {
   value: number
   unit: 'radians'
 }
+
+export interface Verification {
+  passed: boolean
+  limit: ValueUnit
+  values: ValuesUnit
+}

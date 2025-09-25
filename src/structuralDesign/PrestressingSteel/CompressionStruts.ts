@@ -1,7 +1,9 @@
 import { Combinations } from "combinations/Load.js";
-import { ValueUnit, ValuesUnit } from "types/index.js";
+import { ValueUnit, ValuesUnit, Distance, Verification } from "types/index.js";
 import { CableGeometry } from "./CableGeometry.js";
 import PrestressingSteelForce from "./PrestressingSteelForce.js";
+import Concrete from "buildingElements/Concrete.js";
+
 
 
 
@@ -10,13 +12,26 @@ class Stirrups {
     combinations: Combinations
     cableGeometry: CableGeometry
     prestressSteelForce: PrestressingSteelForce
-    
 
-    constructor({combinations, cableGeometry, prestressSteelForce}: {combinations: Combinations, cableGeometry: CableGeometry, prestressSteelForce: PrestressingSteelForce} ) {
+    concrete: Concrete
+    tau_wu: ValueUnit
+    sum_phi_b: Distance
+    bw: Distance
+    h: Distance
+    dl: Distance
+
+
+    constructor({combinations, cableGeometry, prestressSteelForce, sum_phi_b, bw, concrete, h, dl}: {combinations: Combinations, cableGeometry: CableGeometry, prestressSteelForce: PrestressingSteelForce, sum_phi_b: Distance, bw: Distance, concrete: Concrete, h: Distance, dl: Distance} ) {
 
         this.combinations = combinations
         this.cableGeometry = cableGeometry
         this.prestressSteelForce = prestressSteelForce
+        this.concrete = concrete
+        this.bw = bw
+        this.sum_phi_b = sum_phi_b
+        this.h = h
+        this.dl = dl
+        this.Vsd = this.calculate_Vsd()
     }
 
     calculate_Vsd(): ValuesUnit {
@@ -52,6 +67,45 @@ class Stirrups {
         return {
             values: V,
             unit: 'kN'
+        }
+    }
+
+    calculate_tau_wu(): ValueUnit {
+        return {
+            value: (0.27 * (1 - this.concrete.fck.value / 250) * this.concrete.fcd.value) / 10,
+            unit: 'kN/cm²'
+        }
+    }
+
+    calculate_tau_wd(): ValuesUnit{
+
+        const bw_corr = this.calculate_bw_corrected()
+        const ds1 = this.h.value - this.dl.value
+        
+
+        return {
+            values: this.Vsd.values.map((Vsd_i, i)=> {
+                return Vsd_i / (bw_corr.value * ds1)
+            }),
+            unit: 'kN/cm²'
+        }
+    }
+
+    calculate_bw_corrected(): Distance {
+        return {
+            value: this.bw.value -  this.sum_phi_b.value / 2,
+            unit: 'cm'
+        }
+    }
+
+    verification_crush_concrete(): Verification {
+        const tau_wu = this.calculate_tau_wu()
+        const tau_wd = this.calculate_tau_wd()
+        
+        return {
+            passed: tau_wd.values.every(tau_wd_i => Math.abs(tau_wd_i) <= Math.abs(tau_wu.value)),
+            limit: tau_wu,
+            values: tau_wd
         }
     }
 }

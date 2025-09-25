@@ -1,4 +1,4 @@
-import { ValuesUnit, ValueUnit } from "types/index.js"
+import { ValuesUnit, ValueUnit, Verification } from "types/index.js"
 import Concrete from "buildingElements/Concrete.js"
 
 class ELU {
@@ -60,7 +60,7 @@ class ELU {
         }
     }
 
-    verification_sigma1P0({j}: {j: number}) {
+    verification_sigma1P0({j}: {j: number}): Verification {
         const sigma1P0 = this.calculateSigma1P0()
         const fck = this.concrete.fck.value
         const fckj = this.concrete.calculate_fckj(j).value // in MPa
@@ -89,7 +89,7 @@ class ELU {
         }
     }
 
-    verification_sigma2P0({j}: {j: number}) {
+    verification_sigma2P0({j}: {j: number}): Verification {
         const sigma2P0 = this.calculateSigma2P0() //kN/cm²
         const maxsigma = this.concrete.calculate_fctj(j).value //MPa
 

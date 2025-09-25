@@ -27,6 +27,7 @@ class Concrete {
   public readonly aggregate?: AggregateConcrete;
   public readonly section?: ConcreteSection;
   public readonly fctf: ValueUnit;
+  public readonly fcd: ValueUnit
 
   constructor(options: ConcreteOptions) {
     this.fck = { value: options.fck, unit: "MPa" };
@@ -36,6 +37,9 @@ class Concrete {
     this.fctm = this.calculate_fctm(options.fck);
     this.fctk_inf = this.calculate_fctk_inf(this.fctm.value);
     this.fctk_sup = this.calculate_fctk_sup(this.fctm.value);
+    this.fcd = this.calculate_fcd()
+
+
 
     if (options.aggregate) {
       this.aggregate = new AggregateConcrete(options.aggregate);
@@ -57,6 +61,13 @@ class Concrete {
 
   private calculate_fcm(fck: number): ValueUnit {
     return { value: fck + 12.5, unit: "MPa" };
+  }
+
+  private calculate_fcd() : ValueUnit {
+    return {
+      value: this.fck.value / 1.4,
+      unit: "MPa"
+    }
   }
 
   calculate_fckj(j: number): ValueUnit {
