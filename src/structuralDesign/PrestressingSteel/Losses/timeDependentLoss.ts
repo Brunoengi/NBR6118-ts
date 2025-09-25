@@ -1,6 +1,6 @@
 import { ValueUnit, ValuesUnit } from "types/index.js"
 
-class timeDependentLoss {
+class TimeDependentLoss {
     public readonly phi: number
     public readonly Mg1: ValuesUnit
     public readonly Mg2: ValuesUnit
@@ -136,4 +136,4 @@ class timeDependentLoss {
 
 }
 
-export default timeDependentLoss;
+export default TimeDependentLoss;
