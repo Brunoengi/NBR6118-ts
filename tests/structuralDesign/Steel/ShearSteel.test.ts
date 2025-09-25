@@ -133,7 +133,6 @@ describe('ShearSteel', () => {
         // rho_w_min = 0.2 * (fctm / 10) / fyd = 0.2 * (3.21 / 10) / 43.478 = 0.00147658
         const rho_w = shearSteel.calculate_rho_w();
         expect(rho_w.value).toBeCloseTo(0.00147658);
-        console.log('abbb', rho_w.value)
         expect(rho_w.unit).toBe('adimensional');
     });
 
