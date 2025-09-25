@@ -84,7 +84,7 @@ describe('CableGeometry', () => {
             // At mid-span (x=L/2), angle should be 0
             expect(cableGeo.cableAngle(750)).toBeCloseTo(0);
 
-            // At start (x=0), angle should be -atan(slope) = -atan(-0.16)
+            // At start (x=0), angle should be -atan(slope) = -atan(-0.128)
             expect(cableGeo.angles.values[0]).toBeCloseTo(-Math.atan(-0.128));
             expect(cableGeo.angles.unit).toBe('radians');
         });

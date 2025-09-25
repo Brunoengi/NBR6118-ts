@@ -1,4 +1,4 @@
-import PrestressingDesign from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteel.js";
+import PrestressingDesign from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelEstimated.js";
 import Concrete from "../../../src/buildingElements/Concrete.js";
 import PrestressingSteel from "../../../src/buildingElements/PrestressingSteel.js";
 import { Combinations, Qsi1, Qsi2 } from "../../../src/combinations/Load.js";
@@ -33,8 +33,11 @@ describe('Prestressing Steel Design', () => {
             mg2: { value: 562.50, unit: 'kN * m' },
             mq: { value: 421.875, unit: 'kN * m' },
             qsi1: new Qsi1(0.60),
-            qsi2: new Qsi2(0.40)
-        }, );
+            qsi2: new Qsi2(0.40),
+            gamma_g1: 1.4,
+            gamma_g2: 1.4,
+            gamma_q: 1.4
+        });
 
         const concrete = new Concrete({
             fck: 35,
@@ -99,7 +102,10 @@ describe('Prestressing Steel Design', () => {
             mg2: { value: 644.238 - (3162.5 * 25 / 10000), unit: 'kN * m' },
             mq: { value: 925.488 - (3162.5 * 25 / 10000) - (644.238 - (3162.5 * 25 / 10000)), unit: 'kN * m' },
             qsi1: new Qsi1(0.60),
-            qsi2: new Qsi2(0.40)
+            qsi2: new Qsi2(0.40),
+            gamma_g1: 1.4,
+            gamma_g2: 1.4,
+            gamma_q: 1.4
         });
 
         const concrete = new Concrete({

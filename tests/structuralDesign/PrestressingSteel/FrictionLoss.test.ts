@@ -12,7 +12,7 @@ describe('FrictionLoss - Case 1', () => {
     const anchoring: AnchoringType = 'active-passive';
 
     beforeAll(() => {
-        cableGeo = new CableGeometry({ width, epmax });
+        cableGeo = new CableGeometry({ width, epmax, numPoints: 11 });
         losses = new FrictionLoss({
             Pi,
             apparentFrictionCoefficient: apparentFrictionCoefficient,
@@ -76,7 +76,7 @@ describe('FrictionLoss - Case 2 (Anchoring Active-Active)', () => {
     const anchoring: AnchoringType = 'active-active';
 
     beforeAll(() => {
-        cableGeo = new CableGeometry({ width, epmax });
+        cableGeo = new CableGeometry({ width, epmax, numPoints: 11 });
         losses = new FrictionLoss({
             Pi,
             apparentFrictionCoefficient: apparentFrictionCoefficient,
@@ -129,7 +129,7 @@ describe('FrictionLoss - Case 3 (Anchoring Active-Passive)', () => {
     const anchoring: AnchoringType = 'active-passive';
 
     beforeAll(() => {
-        cableGeo = new CableGeometry({ width, epmax });
+        cableGeo = new CableGeometry({ width, epmax, numPoints: 11 });
         losses = new FrictionLoss({
             Pi,
             apparentFrictionCoefficient: apparentFrictionCoefficient,
