@@ -110,9 +110,9 @@ Provides properties for different types of prestressing steel based on their lab
 | Minimum Area of a Single Cord       | A<sub>p,min</sub>   | cm²  |
 
 
-### Module 2: Prestressing Design
+### Module 3: Prestressing Design
 
-#### `2.1 Prestressing Design Estimated`
+#### `3.1 Prestressing Design Estimated`
 
 This module estimates the required prestressing steel area based on material properties, section geometry, and load combinations.
 
@@ -174,7 +174,7 @@ console.log('Designed prestressing area (Ap_proj):', prestressingDesign.Ap_proj)
 console.log('Designed final prestressing force (P_inf_proj):', prestressingDesign.P_inf_proj);
 ```
 
-#### `2.2 Presstressing Steel Loss`
+#### `2.2 Prestressing Steel Loss`
 
 This module calculates the immediate and time-dependent (progressive) losses of prestressing force.
 
@@ -261,7 +261,7 @@ const elasticLoss = new ElasticShorteningLoss({
   // Other properties like width, x, and ep are also needed
 } as any);
 
-const p0 = elasticLoss.calculateP0(); /
+const p0 = elasticLoss.calculateP0();
 
 console.log('Force P0 at mid-span:', p0.values[5]); // Expected: -2241.92 kN
 
@@ -272,7 +272,7 @@ console.log('Force P0 at mid-span:', p0.values[5]); // Expected: -2241.92 kN
 This class estimates the combined losses over time (creep, shrinkage, and relaxation of the steel) to find the final prestressing force (`P_inf`).
 
 ```typescript
-import { timeDependentLoss } from 'nbr6118-ts';
+import { TimeDependentLoss } from 'nbr6118-ts';
 
 
 // The P0 values are the result from ElasticShorteningLoss
