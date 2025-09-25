@@ -35,6 +35,12 @@ interface ICombinationLoads {
     mq: ValueUnit;
 }
 
+interface ILast extends ICombinationLoads {
+    gamma_g1: number;
+    gamma_g2: number;
+    gamma_q: number;
+}
+
 interface IQuasiPermanent extends ICombinationLoads {
     qsi2: Qsi2;
 }
@@ -46,7 +52,7 @@ interface IFrequent extends ICombinationLoads {
 interface IRare extends ICombinationLoads {}
 
 
-interface ICombinations extends ICombinationLoads {
+interface ICombinations extends ICombinationLoads, ILast {
     qsi1: Qsi1;
     qsi2: Qsi2;
 }
@@ -91,7 +97,7 @@ class Rare {
         this.moment = this.calculateMoment({mg1, mg2, mq})
     }
 
-   private calculateMoment({mg1, mg2, mq, }: IRare): ValueUnit {
+   private calculateMoment({mg1, mg2, mq}: IRare): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value,
@@ -122,6 +128,17 @@ class Combinations {
     public readonly mg1: ValueUnit;
     public readonly mg2: ValueUnit;
     public readonly mq: ValueUnit;
+    public readonly qsi: {
+        qsi1: Qsi1;
+        qsi2: Qsi2;
+    }
+    public readonly gamma: {
+        gamma_g1: number;
+        gamma_g2: number;
+        gamma_q: number;
+        
+    }
+
 
 
     constructor(inputs: ICombinations) {
@@ -146,10 +163,33 @@ class Combinations {
             mq: inputs.mq
         });
 
+        this.last = new Last({
+            mg1: inputs.mg1,
+            mg2: inputs.mg2,
+            mq: inputs.mq,
+            gamma_g1: inputs.gamma_g1,
+            gamma_g2: inputs.gamma_g2,
+            gamma_q: inputs.gamma_q
+        });
+
+
         this.mg1 = inputs.mg1
         this.mg2 = inputs.mg2
         this.mq = inputs.mq
+
+        this.qsi = {
+            qsi1: inputs.qsi1,
+            qsi2: inputs.qsi2
+        }
+
+        this.gamma = {
+            gamma_g1: inputs.gamma_g1,
+            gamma_g2: inputs.gamma_g2,
+            gamma_q: inputs.gamma_q
+        }
     }
+        
+        
 
     calculateMoments({moment, x, width}:{moment: ValueUnit, x: ValuesUnit, width: ValueUnit}): ValuesUnit {
             const momentValue = moment.value;

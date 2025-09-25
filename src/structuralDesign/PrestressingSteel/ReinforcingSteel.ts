@@ -12,9 +12,7 @@ class ReinforcingSteel {
     Asl: ValueUnit
     dl: ValueUnit
     dp: ValueUnit
-
-
-
+    
     constructor({sigma, h, b, dl, dp}: {
         sigma: {
             sigma1P0: ValuesUnit
