@@ -1,8 +1,8 @@
-import { Combinations } from "combinations/Load.js";
+import { Combinations } from "combinationLoads/Load.js";
 import { ValueUnit, ValuesUnit, Distance, Verification } from "types/index.js";
 import { CableGeometry } from "./CableGeometry.js";
 import PrestressingSteelForce from "./PrestressingSteelForce.js";
-import Concrete from "buildingElements/Concrete.js";
+import Concrete from "../../structuralElements/Concrete.js";
 
 
 

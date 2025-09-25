@@ -1,5 +1,5 @@
 import { ValuesUnit, ValueUnit, Verification } from "types/index.js"
-import Concrete from "buildingElements/Concrete.js"
+import Concrete from "../../../structuralElements/Concrete.js"
 
 class ELU {
     public readonly P0: ValuesUnit

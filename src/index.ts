@@ -1,14 +1,14 @@
 // Barrel export file
 
 // buildingElements
-export { default as Aggregate } from './buildingElements/Aggregate.js';
-export { default as Concrete } from './buildingElements/Concrete.js';
-export { default as PrestressingSteel } from './buildingElements/PrestressingSteel.js';
-export { default as Steel } from './buildingElements/Steel.js';
-export type { IPrestressingSteel, PrestressingSteelLabel, RelaxationType } from './buildingElements/PrestressingSteel.js';
+export { default as Aggregate } from './structuralElements/Aggregate.js';
+export { default as Concrete } from './structuralElements/Concrete.js';
+export { default as PrestressingSteel } from './structuralElements/PrestressingSteel.js';
+export { default as Steel } from './structuralElements/Steel.js';
+export type { IPrestressingSteel, PrestressingSteelLabel, RelaxationType } from './structuralElements/PrestressingSteel.js';
 
 // combinations
-export { Combinations, Qsi1, Qsi2 } from './combinations/Load.js';
+export { Combinations, Qsi1, Qsi2 } from './combinationLoads/Load.js';
 
 // structuralDesign
 export { CableGeometry } from './structuralDesign/prestressingSteel/CableGeometry.js';

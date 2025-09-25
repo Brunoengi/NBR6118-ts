@@ -1,4 +1,4 @@
-import AggregateConcrete from "../buildingElements/Aggregate.js";
+import AggregateConcrete from "../structuralElements/Aggregate.js";
 import { ValueUnit, Stress } from "../types/index.js";
 import { AggregateType } from "../types/elementsType.js";
 import { ConcreteSectionType } from "../types/elementsType.js";

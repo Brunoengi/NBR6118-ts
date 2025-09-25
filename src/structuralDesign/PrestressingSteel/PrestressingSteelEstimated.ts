@@ -1,8 +1,8 @@
-import PrestressingSteel from "buildingElements/PrestressingSteel.js";
+import PrestressingSteel from "../../structuralElements/PrestressingSteel.js";
 import { IGeometricProperties } from "types/combinationsType.js";
 import { ValueUnit } from "types/index.js"; 
-import { Combinations } from "combinations/Load.js";
-import Concrete from "buildingElements/Concrete.js";
+import { Combinations } from "combinationLoads/Load.js";
+import Concrete from "../../structuralElements/Concrete.js";
 import { PrestressingDesignType } from "types/prestressSteel.js";
 
 
