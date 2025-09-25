@@ -33,7 +33,7 @@ describe('ReinforcingSteel', () => {
                 W1: { value: -144000, unit: 'cm³' },
                 W2: { value: 144000, unit: 'cm³' },
                 Mg: { values: mg_full, unit: 'kN*m' },
-                concrete: new Concrete({ fck: 35, aggregate: 'granite' })
+                concrete: new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' }, aggregate: 'granite' })
             });
 
             reinforcingSteel = new ReinforcingSteel({
@@ -95,7 +95,7 @@ describe('ReinforcingSteel', () => {
                 W1: { value: -65455.50, unit: 'cm³' },
                 W2: { value: 86845.93, unit: 'cm³' },
                 Mg: { values: mg_full, unit: 'kN*m' },
-                concrete: new Concrete({ fck: 35, aggregate: 'granite' })
+                concrete: new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' }, aggregate: 'granite' })
             });
 
             reinforcingSteel = new ReinforcingSteel({

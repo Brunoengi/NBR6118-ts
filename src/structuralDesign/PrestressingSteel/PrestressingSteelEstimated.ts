@@ -189,7 +189,7 @@ class LimitedPrestressingSteelDesign extends AbstractPrestressingSteelDesign {
 
         // --- Convert all units to a consistent system (kN, m) ---
         const mf_kNm = this.combinations.frequent.moment.value;
-        const fctf_kPa = this.concrete.fctf.value * 1000; // MPa to kPa (kN/m²)
+        const fctf_kPa = this.concrete.fctf.value * 10000; // kN/cm² to kPa (kN/m²)
         const W1_m3 = W1.value / 1e6; // cm³ to m³
         const Ac_m2 = Ac.value / 1e4; // cm² to m²
         const epmax_m = epmax.value / 100; // cm to m
@@ -231,7 +231,7 @@ class CompletePrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         
         // --- Convert all units to a consistent system (kN, m) ---
         const mr_kNm = this.combinations.rare.moment.value;
-        const fctf_kPa = this.concrete.fctf.value * 1000; // MPa to kPa (kN/m²)
+        const fctf_kPa = this.concrete.fctf.value * 10000; // kN/cm² to kPa (kN/m²)
         const W1_m3 = W1.value / 1e6; // cm³ to m³
         const Ac_m2 = Ac.value / 1e4; // cm² to m²
         const epmax_m = epmax.value / 100; // cm to m

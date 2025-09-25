@@ -74,10 +74,12 @@ class ShearSteel {
 
     calculate_tau_c(): ValueUnit {
         const psi3 = this.calculate_psi3()
-        const fck = this.concrete.fck.value
+        const fck_kNCm2 = this.concrete.fck.value
+        const fck_MPa = fck_kNCm2 * 10 // Convert fck to MPa for the formula
 
+        // The formula uses fck in MPa, and the result (in MPa) is divided by 10 to get kN/cm²
         return {
-            value: psi3 * (fck ** (2 / 3)) / 10,
+            value: psi3 * (fck_MPa ** (2 / 3)) / 10,
             unit: 'kN/cm²'
         }
     }
@@ -91,7 +93,7 @@ class ShearSteel {
 
     calculate_rho_w(): ValueUnit {
         return {
-            value: Math.max((this.calculate_tau_d().value / this.steel.fyd.value), (0.2 * ((this.concrete.fctm.value / 10) / this.steel.fyd.value))),
+            value: Math.max((this.calculate_tau_d().value / this.steel.fyd.value), (0.2 * ((this.concrete.fctm.value) / this.steel.fyd.value))),
             unit: 'adimensional'
         }
     }

@@ -72,7 +72,7 @@ class Stirrups {
 
     calculate_tau_wu(): ValueUnit {
         return {
-            value: (0.27 * (1 - this.concrete.fck.value / 250) * this.concrete.fcd.value) / 10,
+            value: (0.27 * (1 - this.concrete.fck.value / 25) * this.concrete.fcd.value) ,
             unit: 'kN/cm²'
         }
     }

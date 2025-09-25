@@ -40,7 +40,10 @@ describe('Prestressing Steel Design', () => {
         });
 
         const concrete = new Concrete({
-            fck: 35,
+            fck: {
+                value: 3.5, // Changed from 35 to 3.5 to represent 35 MPa in kN/cm²
+                unit: 'kN/cm²'
+            },
             section: {
                 type: 'rectangular'
             }
@@ -63,7 +66,7 @@ describe('Prestressing Steel Design', () => {
         expect(prestressingDesign.ELSD().value).toBeCloseTo(-1819.852, 1)
         expect(prestressingDesign.ELSF().value).toBeCloseTo(-1230.189, 1)
         expect(prestressingDesign.P_inf_calc.value).toBeCloseTo(-1819.852, 1)
-        expect(concrete.fctf.value).toBeCloseTo(3.370, 2); 
+        expect(concrete.fctf.value).toBeCloseTo(0.337, 2); 
         expect(prestressingDesign.P_initial_calc.value).toBeCloseTo(-1819.852/(1 - lossFactor), 1)
         expect(prestressingDesign.Apestimated.value).toBeCloseTo(17.305, 2)
         expect(prestressingDesign.ncordestimated).toBeCloseTo(17.48, 2)
@@ -109,7 +112,10 @@ describe('Prestressing Steel Design', () => {
         });
 
         const concrete = new Concrete({
-            fck: 35,
+            fck:{
+                value: 3.5, // Changed from 35 to 3.5 to represent 35 MPa in kN/cm²
+                unit: 'kN/cm²'
+            },
             section: {
                 type: 'T'
             }
@@ -138,7 +144,7 @@ describe('Prestressing Steel Design', () => {
         expect(prestressingDesign.prestressingSteel.sigma_pi.value).toBeCloseTo(1549.8, 1)
         expect(prestressingDesign.Apestimated.value).toBeCloseTo(9.907, 2)
         expect(prestressingDesign.ncordestimated).toBeCloseTo(18.012, 2)
-        expect(concrete.fctf.value).toBeCloseTo(2.696, 2); 
+        expect(concrete.fctf.value).toBeCloseTo(0.2696, 2); 
         expect(prestressingDesign.ncordagecable).toBe(5) // Math.ceil(18.012 / 4) = 5
         expect(prestressingDesign.Ap_proj.value).toBeCloseTo(11.0, 2) // 4 * 5 * 0.55 = 11.0
         expect(prestressingDesign.P_initial_proj.value).toBeCloseTo(-1704.78, 2) // -11.0 * 1549.8 / 10 = -1704.78

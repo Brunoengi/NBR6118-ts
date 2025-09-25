@@ -1,6 +1,6 @@
-import FrictionLoss, {AnchoringType} from "../../../src/structuralDesign/PrestressingSteel/Losses/FrictionLoss.js";
-import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
-import { ValueUnit } from "../../../src/types/index.js";
+import FrictionLoss, {AnchoringType} from "../../../../src/structuralDesign/PrestressingSteel/Losses/FrictionLoss.js";
+import { CableGeometry } from "../../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
+import { ValueUnit } from "../../../../src/types/index.js";
 
 describe('FrictionLoss - Case 1', () => {
     let losses: FrictionLoss;

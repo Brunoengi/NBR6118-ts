@@ -34,7 +34,7 @@ describe('ELU - Case 1', () => {
             W1: W1,
             W2: W2,
             Mg: { values: mg_full, unit: 'kN*m' },
-            concrete: new Concrete({fck: 35, aggregate: 'granite'})
+            concrete: new Concrete({fck: {value: 3.5, unit: 'kN/cm²'}, aggregate: 'granite'})
         });
     });
 
@@ -176,7 +176,7 @@ describe('ELU - Case 2', () => {
             W1: W1,
             W2: W2,
             Mg: { values: mg_full, unit: 'kN*m' },
-            concrete: new Concrete({fck: 35, aggregate: 'granite'})
+            concrete: new Concrete({fck: {value: 3.5, unit: 'kN/cm²'},aggregate: 'granite'})
         });
     });
 
@@ -275,7 +275,7 @@ describe('ELU - Verification Failure Cases', () => {
             W2: { value: 144000, unit: 'cm³' },
             Mg: { values: mg_full, unit: 'kN*m' },
             // Using a very low fck to make the limits smaller and cause the check to fail.
-            concrete: new Concrete({ fck: 1, aggregate: 'granite' })
+            concrete: new Concrete({ fck: { value: 1, unit: 'kN/cm²' }, aggregate: 'granite' })
         });
     });
 

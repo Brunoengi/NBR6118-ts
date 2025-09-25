@@ -39,3 +39,9 @@ export interface Verification {
   limit: ValueUnit
   values: ValuesUnit
 }
+
+export interface Stress {
+  value: number
+  unit: 'kN/cm²'
+}
+

@@ -53,7 +53,7 @@ describe('Stirrups', () => {
             prestressSteelForce,
             sum_phi_b: { value: 4, unit: 'cm' },
             bw: { value: 60, unit: 'cm' },
-            concrete: new Concrete({ fck: 35, aggregate: 'granite', section: { type: 'rectangular' } }),
+            concrete: new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' }, aggregate: 'granite', section: { type: 'rectangular' } }),
             h: { value: 120, unit: 'cm' }, // Added missing property
             dl: { value: 5, unit: 'cm' }   // Added missing property
         });

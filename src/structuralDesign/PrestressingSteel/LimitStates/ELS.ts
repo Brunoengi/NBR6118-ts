@@ -55,10 +55,10 @@ class ELS {
             this.sigma2P_infinity_ELSD = this.sigma2P_infinity({combination: combinations.calculateMoments({moment: combinations.quasiPermanent.moment, x, width})})
 
             this.limit_tensions = {
-                ELSF1: { value: concrete.fctf.value / 10, unit: 'kN/cm²' },
-                ELSF2: { value: - 0.6 * concrete.fck.value / 10, unit: 'kN/cm²'},
+                ELSF1: { value: concrete.fctf.value, unit: 'kN/cm²' },
+                ELSF2: { value: - 0.6 * concrete.fck.value, unit: 'kN/cm²'},
                 ELSD1: { value: 0, unit: 'kN/cm²' },
-                ELSD2: { value: - 0.45 * concrete.fck.value / 10, unit: 'kN/cm²' }
+                ELSD2: { value: - 0.45 * concrete.fck.value, unit: 'kN/cm²' }
             }
             
         } else if(type == 'Complete') {
@@ -69,9 +69,9 @@ class ELS {
 
             this.limit_tensions = {
                 ELSF1: { value: 0, unit: 'kN/cm²' },
-                ELSF2: { value: - 0.6 * concrete.fck.value / 10, unit: 'kN/cm²'},
+                ELSF2: { value: - 0.6 * concrete.fck.value, unit: 'kN/cm²'},
                 ELSD1: { value: 0, unit: 'kN/cm²' },
-                ELSD2: { value: -0.6 * concrete.fck.value / 10, unit: 'kN/cm²' }
+                ELSD2: { value: -0.6 * concrete.fck.value, unit: 'kN/cm²' }
             }
         } else {
             throw new Error ('Invalid type. Must be "Limited" or "Complete".')

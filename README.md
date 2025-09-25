@@ -6,10 +6,8 @@ A TypeScript library for structural engineering calculations based on the Brazil
 
 ```bash
 npm install nbr6118-ts
-```
 
-
-```bash
+# or clone the repository:
 git clone https://github.com/your-username/nbr6118-ts.git
 cd nbr6118-ts
 npm install
@@ -17,67 +15,24 @@ npm install
 
 ## Getting Started
 
-Here is a complete example of how to dimension a prestressed concrete element, from defining the materials to calculating the required prestressing force.
+### Module 1: Materials
+
+Here you can create your material and verify your properties
+
+#### `1.1 Concrete`
 
 ```typescript
 import Concrete from './src/buildingElements/Concrete.js';
-import PrestressingSteel from './src/buildingElements/PrestressingSteel.js';
-import { Combinations, Qsi1, Qsi2 } from './src/combinations/Load.js';
-import PrestressingDesign from './src/structuralDesign/PrestressingSteel.js';
 
-// 1. Define Materials
+// 1. Define Materials and Geometry
 const concrete = new Concrete({
-  fck: 35,
+  fck: { value: 3.5, unit: 'kN/cm²' },
   aggregate: 'granite',
-  section: {
-    type: 'rectangular'
-  }
+  section: { type: 'rectangular' }
 });
-
-const prestressingSteel = new PrestressingSteel({ label: 'CP 190 RB 9.5' });
-
-// 2. Define Geometric Properties
-const geometricProperties = {
-    Ac: { value: 3162.5, unit: 'cm²' },
-    W1: { value: -65455.5, unit: 'cm³' }
-};
-
-const epmax = { value: -48, unit: 'cm' };
-
-// 3. Define Loads and Combinations
-const combinations = new Combinations({
-    mg1: { value: 500, unit: 'kN * m' },
-    mg2: { value: 500, unit: 'kN * m' },
-    mq: { value: 490.63, unit: 'kN * m' },
-    qsi1: new Qsi1(0.656),
-    qsi2: new Qsi2(0.484)
-});
-
-// 4. Create the Design Instance
-const prestressingDesign = new PrestressingDesign({
-    prestressingSteel,
-    geometricProperties,
-    lossFactor: 0.2,
-    epmax,
-    combinations,
-    concrete,
-    type: 'Limited' // or 'Complete'
-});
-
-// 5. Get the Results
-const p_inf = prestressingDesign.P_inf_calc;
-const p_initial = prestressingDesign.P_initial_calc;
-
-console.log(`Final Required Prestressing Force (P_inf): ${p_inf.value.toFixed(2)} ${p_inf.unit}`);
-console.log(`Initial Required Prestressing Force (P_0): ${p_initial.value.toFixed(2)} ${p_initial.unit}`);
-console.log(`Concrete Flexural Tensile Strength (f_ct,f): ${concrete.fctf.value.toFixed(2)} ${concrete.fctf.unit}`);
 ```
 
-## API Reference
-
-### `Concrete`
-
-Calculates properties of concrete based on its characteristic compressive strength (`fck`).
+Calculates properties of concrete based on its characteristic.
 
 | Property                                    | Acronym               | Unit |
 | :------------------------------------------ | :-------------------: | :--: |
@@ -100,35 +55,15 @@ Used internally by the `Concrete` class.
 | :------------------------------------------------------------------------- | :-----------: | :--: |
 | Parameter depending on the type of aggregate that influences the modulus of elasticity | α<sub>E</sub> | -    |
 
-### `PrestressingSteel`
 
-Defines the properties of a specific type of prestressing steel.
+#### `1.2 Steel`
 
-| Property                      | Acronym             | Unit |
-| :---------------------------- | :-----------------: | :--: |
-| Characteristic Tensile Strength | f<sub>ptk</sub>     | MPa  |
-| Nominal Diameter              | &Phi;               | mm   |
-| Minimum Area of a Strand      | A<sub>p,min</sub>   | cm²  |
-| Relaxation Type               | -                   | RB/RN|
+```typescript
+import Steel from './src/buildingElements/Steel.js';
 
-### `Combinations`
-
-Calculates the design moments for different serviceability limit states.
-
-| Property                   | Acronym           | Unit   | Description                |
-| :------------------------- | :---------------: | :----: | :------------------------- |
-| Quasi-Permanent Moment     | M<sub>qp</sub>    | kN·m   | `mg1 + mg2 + ψ₂·mq`        |
-| Frequent Moment            | M<sub>f</sub>     | kN·m   | `mg1 + mg2 + ψ₁·mq`        |
-| Rare Moment                | M<sub>r</sub>     | kN·m   | `mg1 + mg2 + mq`           |
-
-### `PrestressingDesign`
-
-The main class for performing the prestressing design calculations.
-
-| Property                                | Acronym           | Unit | Description                                                              |
-| :-------------------------------------- | :---------------: | :--: | :----------------------------------------------------------------------- |
-| Final Required Prestressing Force       | P<sub>&infin;</sub> | kN   | The maximum required force between ELS-D and ELS-F checks.               |
-| Initial Required Prestressing Force     | P<sub>0</sub>     | kN   | The required force at the time of tensioning, accounting for losses.     |
+// 1. Define Materials and Geometry
+const steel = new Steel('CA 50');
+```
 
 ## Running Tests
 
@@ -137,5 +72,3 @@ To run the test suite, use the following command:
 ```bash
 npm test
 ```
-
-

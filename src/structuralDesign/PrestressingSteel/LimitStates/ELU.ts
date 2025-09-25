@@ -62,18 +62,20 @@ class ELU {
 
     verification_sigma1P0({j}: {j: number}): Verification {
         const sigma1P0 = this.calculateSigma1P0()
-        const fck = this.concrete.fck.value
-        const fckj = this.concrete.calculate_fckj(j).value // in MPa
+        const fck_kNCm2 = this.concrete.fck.value
+        const fckj_kNCm2 = this.concrete.calculate_fckj(j).value // in kN/cm²
+        const fck_MPa = fck_kNCm2 * 10
+        const fckj_MPa = fckj_kNCm2 * 10
 
-        let max_compression_stress_magnitude: number; // Positive value
-        if(fck <= 50) {
-            max_compression_stress_magnitude = 0.7 * fckj
-        } else { // fck > 50
-            max_compression_stress_magnitude = 0.7 * (1 - ((fckj - 50)/200)) * fckj
+        let max_compression_stress_magnitude_MPa: number; // Positive value in MPa
+        if(fck_MPa <= 50) {
+            max_compression_stress_magnitude_MPa = 0.7 * fckj_MPa
+        } else { 
+            max_compression_stress_magnitude_MPa = 0.7 * (1 - ((fck_MPa - 50)/200)) * fckj_MPa
         }
 
-        // Convert MPa to kN/cm² (1 MPa = 0.1 kN/cm²) and make it negative for compression limit
-        const compression_limit_kn_cm2 = -max_compression_stress_magnitude / 10;
+        // Convert the final limit from MPa to kN/cm² and make it negative for compression
+        const compression_limit_kn_cm2 = -max_compression_stress_magnitude_MPa / 10;
 
         // A stress is valid if it's "greater" than the negative limit (e.g., -2.0 >= -2.5)
         return {
@@ -91,14 +93,14 @@ class ELU {
 
     verification_sigma2P0({j}: {j: number}): Verification {
         const sigma2P0 = this.calculateSigma2P0() //kN/cm²
-        const maxsigma = this.concrete.calculate_fctj(j).value //MPa
+        const maxsigma = this.concrete.calculate_fctj(j).value //kN/cm²
 
-        const tension_limit_kn_cm2 = maxsigma / 10;
+      
         
         return {
-            passed: sigma2P0.values.every(sigma2P0_i => sigma2P0_i <= tension_limit_kn_cm2),
+            passed: sigma2P0.values.every(sigma2P0_i => sigma2P0_i <= maxsigma),
             limit: {
-                value: tension_limit_kn_cm2,
+                value: maxsigma,
                 unit: 'kN/cm²'
             },
             values: {

@@ -53,11 +53,14 @@ describe('ELS - Limited Prestressing', () => {
             mg2: { value: 562.50, unit: 'kN*m' },
             mq: { value: 421.875, unit: 'kN*m' },
             qsi1: new Qsi1(0.6),
-            qsi2: new Qsi2(0.4)
+            qsi2: new Qsi2(0.4),
+            gamma_g1: 1.4,
+            gamma_g2: 1.4,
+            gamma_q: 1.4
         });
 
         concrete = new Concrete({
-            fck: 35,
+            fck: { value: 3.5, unit: 'kN/cm²'},
             aggregate: 'granite',
             section: {
                 type: 'rectangular'
@@ -153,7 +156,7 @@ describe('ELS - Limited Prestressing', () => {
             const result = els.verification_sigma1_ELSF_result;
             expect(result).toBeDefined();
 
-            const expectedLimit = concrete.fctf.value / 10;
+            const expectedLimit = concrete.fctf.value;
             expect(result?.limit.value).toBeCloseTo(expectedLimit);
 
             expect(result?.passed).toBe(true);
@@ -163,11 +166,11 @@ describe('ELS - Limited Prestressing', () => {
             const result = els.verification_sigma2_ELSF_result;
             expect(result).toBeDefined();
 
-            // Limit for C35 is -0.6 * 35 MPa = -21 MPa = -2.1 kN/cm²
-            const expectedLimit = -0.6 * concrete.fck.value / 10;
+            // Limit for C35 (fck = 3.5 kN/cm²) is -0.6 * fck = -0.6 * 3.5 = -2.1 kN/cm²
+            const expectedLimit = -0.6 * concrete.fck.value;
             expect(result?.limit.value).toBeCloseTo(expectedLimit);
 
-            // All sigma2 values (e.g., -0.54 kN/cm²) are greater than the limit (-2.45 kN/cm²),
+            // All sigma2 values (e.g., -0.54 kN/cm²) are greater than the limit (-2.1 kN/cm²),
             // so the check should pass.
             expect(result?.passed).toBe(true);
         });
@@ -189,8 +192,8 @@ describe('ELS - Limited Prestressing', () => {
             const result = els.verification_sigma2_ELSD_result;
             expect(result).toBeDefined();
 
-            // Limit for C35 is -0.45 * 35 MPa = -15.75 MPa = -1.575 kN/cm²
-            const expectedLimit = -0.45 * concrete.fck.value / 10;
+            // Limit for C35 (fck = 3.5 kN/cm²) is -0.45 * fck = -0.45 * 3.5 = -1.575 kN/cm²
+            const expectedLimit = -0.45 * concrete.fck.value;
             expect(result?.limit.value).toBeCloseTo(expectedLimit);
 
             // All sigma2 values (e.g., -0.481 kN/cm²) are greater than the limit (-1.575 kN/cm²),
