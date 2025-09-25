@@ -11,14 +11,14 @@ export type { IPrestressingSteel, PrestressingSteelLabel, RelaxationType } from 
 export { Combinations, Qsi1, Qsi2 } from './combinations/Load.js';
 
 // structuralDesign
-export { CableGeometry } from './structuralDesign/PrestressingSteel/CableGeometry.js';
-export { default as PrestressingDesign } from './structuralDesign/PrestressingSteel/PrestressingSteelEstimated.js';
+export { CableGeometry } from './structuralDesign/prestressingSteel/CableGeometry.js';
+export { default as PrestressingDesign } from './structuralDesign/prestressingSteel/PrestressingDesign.js';
 
 // structuralDesign/Losses
-export { default as AnchorageLoss } from './structuralDesign/PrestressingSteel/Losses/AnchorageLoss.js';
-export { default as ElasticShorteningLoss } from './structuralDesign/PrestressingSteel/Losses/ElasticShorteningLoss.js';
-export { default as FrictionLoss, type AnchoringType } from './structuralDesign/PrestressingSteel/Losses/FrictionLoss.js';
-export { default as TimeDependentLoss } from './structuralDesign/PrestressingSteel/Losses/timeDependentLoss.js';
+export { default as AnchorageLoss } from './structuralDesign/prestressingSteel/losses/AnchorageLoss.js';
+export { default as ElasticShorteningLoss } from './structuralDesign/prestressingSteel/losses/ElasticShorteningLoss.js';
+export { default as FrictionLoss, type AnchoringType } from './structuralDesign/prestressingSteel/losses/FrictionLoss.js';
+export { default as TimeDependentLoss } from './structuralDesign/prestressingSteel/losses/TimeDependentLoss.js';
 
 // types
 export type { ValueUnit, ValuesUnit } from './types/index.js';
