@@ -12,7 +12,7 @@ export { Combinations, Qsi1, Qsi2 } from './combinations/Load.js';
 
 // structuralDesign
 export { CableGeometry } from './structuralDesign/prestressingSteel/CableGeometry.js';
-export { default as PrestressingDesign } from './structuralDesign/prestressingSteel/PrestressingDesign.js';
+export { default as PrestressingSteelEstimated } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
 
 // structuralDesign/Losses
 export { default as AnchorageLoss } from './structuralDesign/prestressingSteel/losses/AnchorageLoss.js';
