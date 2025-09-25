@@ -211,7 +211,7 @@ console.log('Average loss per meter (beta):', frictionLoss.beta); // Expected: {
 
 ##### `2.2.2 Anchorage Loss`
 
-Calcula a perda de força devido ao escorregamento do cabo no dispositivo de ancoragem. Esta perda afeta um comprimento `xr` a partir da ancoragem.
+Calculates the force loss due to rope slippage on the anchorage device. This loss affects a length `xr` from the anchorage.
 
 ```typescript
 import { AnchorageLoss } from 'nbr6118-ts';
@@ -239,7 +239,7 @@ console.log('Loss at mid-span (x=7.5m):', lossAtMidspan); // Expected: { value: 
 
 ##### `2.2.3 Elastic Shortening Loss`
 
-Calcula a perda devido ao encurtamento elástico do concreto quando a força de protensão é aplicada. O exemplo assume o tensionamento sequencial de 3 cabos. A força resultante é `P0`.
+Calculates the loss due to elastic shortening of concrete when the prestressing force is applied. The example assumes sequential tensioning of three cables. The resulting force is `P0`.
 
 ```typescript
 import { ElasticShorteningLoss } from 'nbr6118-ts';
@@ -263,13 +263,13 @@ const elasticLoss = new ElasticShorteningLoss({
 
 const p0 = elasticLoss.calculateP0(); /
 
-console.log('Force P0 at mid-span:', p0.values[5]); // Expected: 2241.92 kN
+console.log('Force P0 at mid-span:', p0.values[5]); // Expected: -2241.92 kN
 
 ```
 
 ##### `2.2.4 Time Dependent Loss`
 
-Esta classe estima as perdas combinadas ao longo do tempo (fluência, retração e relaxação do aço) para encontrar a força de protensão final (`P_inf`). O cálculo parte de `P0`.
+This class estimates the combined losses over time (creep, shrinkage, and relaxation of the steel) to find the final prestressing force (`P_inf`).
 
 ```typescript
 import { timeDependentLoss } from 'nbr6118-ts';
