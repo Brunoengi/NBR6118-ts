@@ -1,5 +1,4 @@
 import { Distance } from "types/index.js";
-import {GeometricProps} from "geometric-props"
 import AbstractSection from "./AbstractSection.js";
 
  
@@ -21,4 +20,6 @@ class Rectangular extends AbstractSection {
 
     }
 }
+
+export default Rectangular
 
