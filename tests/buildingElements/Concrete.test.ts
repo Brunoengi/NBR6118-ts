@@ -233,3 +233,60 @@ describe('Concrete time-dependent properties', () => {
       });
   });
 });
+
+describe('Concrete rectangular diagram properties', () => {
+  it('should calculate lambda, alphac, and nc correctly for fck <= 50 MPa', () => {
+    const concrete = new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' } }); // 35 MPa
+
+    // For fck <= 50 MPa: lambda = 0.8
+    expect(concrete.lambda).toBe(0.8);
+
+    // For fck <= 50 MPa: alphac = 0.85
+    expect(concrete.alphac).toBe(0.85);
+
+    // For fck <= 40 MPa: nc = 1
+    expect(concrete.nc).toBe(1);
+  });
+
+  it('should calculate lambda, alphac, and nc correctly for fck > 50 MPa', () => {
+    const concrete = new Concrete({ fck: { value: 6.0, unit: 'kN/cm²' } }); // 60 MPa
+
+    // For fck > 50 MPa: lambda = 0.8 - (fck - 50) / 400
+    const expectedLambda = 0.8 - (60 - 50) / 400; // 0.775
+    expect(concrete.lambda).toBeCloseTo(expectedLambda);
+
+    // For fck > 50 MPa: alphac = 0.85 * (1 - (fck - 50) / 200)
+    const expectedAlphac = 0.85 * (1 - (60 - 50) / 200); // 0.8075
+    expect(concrete.alphac).toBeCloseTo(expectedAlphac);
+
+    // For fck > 40 MPa: nc = (40 / fck)^(1/3)
+    const expectedNc = (40 / 60) ** (1 / 3); // ~0.87358
+    expect(concrete.nc).toBeCloseTo(expectedNc);
+  });
+
+  it('should calculate maxStress_rectangularDiagram correctly', () => {
+    const concrete = new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' } }); // 35 MPa
+    // fcd = (35 / 1.4) / 10 = 2.5 kN/cm²
+    // alphac = 0.85
+    // nc = 1
+    // maxStress = 0.85 * 1 * 2.5 = 2.125 kN/cm²
+    const expectedStress = 0.85 * 1 * (3.5 / 1.4);
+    expect(concrete.maxStress_rectangularDiagram.value).toBeCloseTo(expectedStress);
+    expect(concrete.maxStress_rectangularDiagram.unit).toBe('kN/cm²');
+  });
+
+  it('should calculate maxStress_rectangularDiagram correctly when section is reduced', () => {
+    const concrete = new Concrete({
+      fck: { value: 3.5, unit: 'kN/cm²' },
+      is_section_reduced: true
+    }); // 35 MPa
+
+    // fcd = 2.5 kN/cm²
+    // alphac = 0.85
+    // nc = 1
+    // maxStress = 0.9 * 0.85 * 1 * 2.5 = 1.9125 kN/cm²
+    const expectedStress = 0.9 * 0.85 * 1 * (3.5 / 1.4);
+    expect(concrete.maxStress_rectangularDiagram.value).toBeCloseTo(expectedStress);
+    expect(concrete.maxStress_rectangularDiagram.unit).toBe('kN/cm²');
+  });
+});

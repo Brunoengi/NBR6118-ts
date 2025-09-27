@@ -3,7 +3,7 @@ import { IGeometricProperties } from "types/combinationsType.js";
 import { ValueUnit } from "types/index.js"; 
 import { Combinations } from "combinationLoads/Load.js";
 import Concrete from "../../structuralElements/Concrete.js";
-import { PrestressingDesignType } from "types/prestressSteel.js";
+import { PrestressingDesignType } from "types/prestressSteelType.js";
 
 
 interface IPrestressingSteelDesign {

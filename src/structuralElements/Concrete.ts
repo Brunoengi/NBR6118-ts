@@ -1,18 +1,7 @@
 import AggregateConcrete from "../structuralElements/Aggregate.js";
 import { ValueUnit, Stress } from "../types/index.js";
-import { AggregateType } from "../types/elementsType.js";
 import { ConcreteSectionType } from "../types/elementsType.js";
-
-
-interface ConcreteSectionOptions {
-  type: ConcreteSectionType;
-}
-
-interface ConcreteOptions {
-  fck: Stress; 
-  aggregate?: AggregateType;
-  section?: ConcreteSectionOptions;
-}
+import { ConcreteOptions } from "types/concreteType.js";
 
 class Concrete {
   public readonly fck: Stress;
@@ -28,6 +17,10 @@ class Concrete {
   public readonly section?: ConcreteSection;
   public readonly fctf: Stress;
   public readonly fcd: Stress;
+  public readonly nc: number;
+  public readonly alphac: number;
+  public readonly lambda: number;
+  public readonly maxStress_rectangularDiagram: Stress;
 
   constructor(options: ConcreteOptions) {
     this.fck = options.fck;
@@ -38,8 +31,10 @@ class Concrete {
     this.fctk_inf = this.calculate_fctk_inf(options.fck.value);
     this.fctk_sup = this.calculate_fctk_sup(options.fck.value);
     this.fcd = this.calculate_fcd(options.fck.value);
-
-
+    this.nc = this.calculate_nc(options.fck.value);
+    this.alphac = this.calculate_alphac(options.fck.value);
+    this.lambda = this.calculate_lambda(options.fck.value);
+    this.maxStress_rectangularDiagram = this.calculate_maxStress_rectangularDiagram(options.is_section_reduced ?? false);
 
     if (options.aggregate) {
       this.aggregate = new AggregateConcrete(options.aggregate);
@@ -57,6 +52,28 @@ class Concrete {
       this.section = undefined;
       this.fctf = { value: undefined, unit: "kN/cm²" }
     }
+  }
+
+  calculate_maxStress_rectangularDiagram(is_section_reduced: boolean = false): Stress {
+    return {
+      value: is_section_reduced ? 0.9 * this.alphac * this.nc * this.fcd.value : this.alphac * this.nc * this.fcd.value,
+      unit: this.fcd.unit
+    } 
+  }
+
+  private calculate_lambda(fck_kNCm2: number): number {
+    const fck_MPa = fck_kNCm2 * 10;
+    return fck_MPa <= 50 ? 0.8 : 0.8 - ((fck_MPa - 50)/400)
+  }
+
+  private calculate_nc(fck_kNCm2: number): number {
+    const fck_MPa = fck_kNCm2 * 10;
+    return fck_MPa <=40 ? 1 : (40 / fck_MPa) ** (1 / 3)
+  }
+
+  private calculate_alphac(fck_kNCm2: number): number {
+    const fck_MPa = fck_kNCm2 * 10;
+    return fck_MPa <= 50 ? 0.85 : 0.85 * (1 - ((fck_MPa - 50)/200))
   }
 
   private calculate_fcm(fck_kNCm2: number): Stress {

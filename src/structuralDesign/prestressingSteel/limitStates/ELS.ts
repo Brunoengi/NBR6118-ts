@@ -1,7 +1,7 @@
 import Concrete from "../../../structuralElements/Concrete.js";
 import { Combinations } from "combinationLoads/Load.js";
 import { ValuesUnit, ValueUnit, VerificationResult } from "types/index.js";
-import { PrestressingDesignType } from "types/prestressSteel.js";
+import { PrestressingDesignType } from "types/prestressSteelType.js";
 
 class ELS { 
     public readonly type: PrestressingDesignType
