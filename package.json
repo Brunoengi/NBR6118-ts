@@ -29,5 +29,8 @@
     "@types/jest": "^30.0.0",
     "jest": "^30.1.3",
     "ts-jest": "^29.4.1"
+  },
+  "dependencies": {
+    "geometric-props": "^1.0.27"
   }
 }
