@@ -2,9 +2,6 @@ import { GeometricPropsWithUnitsType, GeometricPropsType } from "types/sectionsT
 import { IBidimensionalPoint } from "geometric-props"
 import { GeometricProps } from "geometric-props"
 import { Distance } from "types/index.js"
-import { IGeometricProperties } from "types/combinationsType.js"
-
-
 
 abstract class AbstractSection {
     public readonly props: GeometricPropsWithUnitsType
@@ -110,6 +107,12 @@ abstract class AbstractSection {
         const yValue = yLine.value;
         const originalPoints = points.slice(0, -1); // Remove o ponto de fechamento duplicado
 
+        // Se todos os pontos estiverem acima da linha, retorna as propriedades originais
+        const allPointsAbove = originalPoints.every(p => p.y >= yValue);
+        if (allPointsAbove) {
+            return this.setProperties(new GeometricProps(points));
+        }
+
         const upperPoints: IBidimensionalPoint[] = [];
 
         for (let i = 0; i < originalPoints.length; i++) {
@@ -133,15 +136,11 @@ abstract class AbstractSection {
             }
         }
 
-
-        // Ordena os pontos no sentido anti-horário para garantir o cálculo correto da área
-        // e fecha o polígono
-        const tempProps = new GeometricProps(upperPoints);
-        const centroid = { x: tempProps.Xg, y: tempProps.Yg };
-        upperPoints.sort((a, b) => Math.atan2(a.y - centroid.y, a.x - centroid.x) - Math.atan2(b.y - centroid.y, b.x - centroid.x));
-        upperPoints.push(upperPoints[0]);
-
-        return this.setProperties(new GeometricProps(upperPoints))
+        if (upperPoints.length > 0) {
+            upperPoints.push(upperPoints[0]); // Fecha o polígono
+            return this.setProperties(new GeometricProps(upperPoints));
+        }
+        return this.setProperties(new GeometricProps([])); // Retorna propriedades zeradas se não houver pontos
     }
 }
 

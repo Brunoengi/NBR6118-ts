@@ -1,8 +1,6 @@
 import { Distance } from "types/index.js";
 import AbstractSection from "./AbstractSection.js";
 
-
-
 class Rectangular extends AbstractSection {
 
     constructor({ base, height }: { base: Distance; height: Distance }) {
