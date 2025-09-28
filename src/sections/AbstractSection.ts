@@ -1,6 +1,9 @@
 import { GeometricPropsWithUnitsType, GeometricPropsType } from "types/sectionsType.js"
 import { IBidimensionalPoint } from "geometric-props"
 import { GeometricProps } from "geometric-props"
+import { Distance } from "types/index.js"
+import { IGeometricProperties } from "types/combinationsType.js"
+
 
 
 abstract class AbstractSection {
@@ -103,6 +106,43 @@ abstract class AbstractSection {
         }
     }
 
+    setProperties_upperHorizontaLine({ points, yLine }: { points: IBidimensionalPoint[], yLine: Distance }): GeometricPropsWithUnitsType{
+        const yValue = yLine.value;
+        const originalPoints = points.slice(0, -1); // Remove o ponto de fechamento duplicado
+
+        const upperPoints: IBidimensionalPoint[] = [];
+
+        for (let i = 0; i < originalPoints.length; i++) {
+            const p1 = originalPoints[i];
+            const p2 = originalPoints[(i + 1) % originalPoints.length];
+
+            const p1_above = p1.y >= yValue;
+            const p2_above = p2.y >= yValue;
+
+            if (p1_above) {
+                upperPoints.push(p1);
+            }
+
+            // Se a aresta (p1, p2) cruza a linha yValue
+            if (p1_above !== p2_above) {
+                // Evita divisão por zero se a linha for horizontal
+                if (p2.y - p1.y !== 0) {
+                    const x_intersect = p1.x + (p2.x - p1.x) * (yValue - p1.y) / (p2.y - p1.y);
+                    upperPoints.push({ x: x_intersect, y: yValue });
+                }
+            }
+        }
+
+
+        // Ordena os pontos no sentido anti-horário para garantir o cálculo correto da área
+        // e fecha o polígono
+        const tempProps = new GeometricProps(upperPoints);
+        const centroid = { x: tempProps.Xg, y: tempProps.Yg };
+        upperPoints.sort((a, b) => Math.atan2(a.y - centroid.y, a.x - centroid.x) - Math.atan2(b.y - centroid.y, b.x - centroid.x));
+        upperPoints.push(upperPoints[0]);
+
+        return this.setProperties(new GeometricProps(upperPoints))
+    }
 }
 
 export default AbstractSection
