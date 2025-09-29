@@ -71,15 +71,6 @@ class ReinforcingSteel {
             unit: 'cm'
         }
     }
-
-    // calculate_As_rectangular(): ValueUnit {
-
-    //     const a = -0.32 * this.b.value * 
-
-    //     return {
-    //         value: this.h.value * this.b.value,
-    //         unit: 'cm²'
-    //     }}
     
 }
 

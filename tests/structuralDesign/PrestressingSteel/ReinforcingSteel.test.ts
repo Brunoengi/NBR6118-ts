@@ -1,4 +1,4 @@
-import ReinforcingSteel from "../../../src/structuralDesign/PrestressingSteel/ReinforcingSteel.js";
+import ReinforcingSteel from "../../../src/structuralDesign/PrestressingSteel/ReinforcingSteelUpper.js";
 import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
 import Concrete from "../../../src/structuralElements/Concrete.js";
 import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";

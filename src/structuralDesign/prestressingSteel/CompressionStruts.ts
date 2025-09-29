@@ -4,9 +4,6 @@ import { CableGeometry } from "./CableGeometry.js";
 import PrestressingSteelForce from "./PrestressingSteelForce.js";
 import Concrete from "../../structuralElements/Concrete.js";
 
-
-
-
 class Stirrups {
     Vsd: ValuesUnit
     combinations: Combinations

@@ -178,6 +178,7 @@ export interface IPrestressingSteel {
     fptk: ValueUnit
     fpyk: ValueUnit
     sigma_pi: ValueUnit
+    fpyd: ValueUnit
 }
 
 class PrestressingSteel implements IPrestressingSteel {
@@ -188,6 +189,7 @@ class PrestressingSteel implements IPrestressingSteel {
     public relaxation: RelaxationType;
     public nominalDiameter: ValueUnit;
     public area_min_cordage: ValueUnit;
+    public fpyd: ValueUnit;
 
     constructor({label}: {label: PrestressingSteelLabel}) {
         this.validate(label);
@@ -205,6 +207,10 @@ class PrestressingSteel implements IPrestressingSteel {
             value: 0.9 * this.fptk.value,
             unit: 'MPa'
         };
+        this.fpyd = {
+            value: this.fpyk.value / 1.15,
+            unit: this.fpyk.unit
+        }
         this.area_min_cordage = steelData.area_min_cordage;
 
         // Extrai informações do label
