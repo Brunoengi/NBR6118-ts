@@ -2,6 +2,7 @@ import { Distance } from "types/index.js";
 import AbstractSection from "./AbstractSection.js";
 
 class T_triangularCorbel extends AbstractSection {
+
     constructor ({ bf, hf, bw, h, bmis, hmis } : { bf: Distance, hf: Distance, bw: Distance, h: Distance, bmis: Distance, hmis: Distance}){
         super([
         {'x':-bw.value/2, 'y':0},                           //point 1
@@ -16,6 +17,7 @@ class T_triangularCorbel extends AbstractSection {
         {'x':-bw.value/2, 'y':h.value-hf.value-hmis.value},                   //point 10
         {'x':-bw.value/2, 'y':0}                            //point 11
     ])
+
     }
 }
 

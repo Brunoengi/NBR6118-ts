@@ -94,11 +94,11 @@ abstract class AbstractSection {
             },
             W1: {
                 value: geometricPropClass.W1,
-                unit: 'cm'
+                unit: 'cm³'
             },
             W2: {
                 value: geometricPropClass.W2,
-                unit: 'cm'
+                unit: 'cm³'
             }
         }
     }

@@ -2,6 +2,7 @@ import AbstractSection from "./AbstractSection.js";
 import { Distance } from "types/index.js";
 
 class I extends AbstractSection {
+
     constructor({bf, hf, bw, h, bi, hi}: {bf: Distance, hf: Distance, bw: Distance, h: Distance, bi: Distance, hi: Distance}) {
         super([
         {'x':-bi.value/2, 'y':0},                           //point 1
@@ -18,6 +19,7 @@ class I extends AbstractSection {
         {'x':-bi.value/2, 'y':hi.value},                          //point 12
         {'x':-bi.value/2, 'y':0}                            //point 13
     ])
+
     }
 }
 
