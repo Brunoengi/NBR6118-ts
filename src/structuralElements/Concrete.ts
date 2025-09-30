@@ -21,6 +21,8 @@ class Concrete {
   public readonly alphac: number;
   public readonly lambda: number;
   public readonly maxStress_rectangularDiagram: Stress;
+  public readonly sigmacd: Stress;
+
 
   constructor(options: ConcreteOptions) {
     this.fck = options.fck;
@@ -35,6 +37,8 @@ class Concrete {
     this.alphac = this.calculate_alphac(options.fck.value);
     this.lambda = this.calculate_lambda(options.fck.value);
     this.maxStress_rectangularDiagram = this.calculate_maxStress_rectangularDiagram(options.is_section_reduced ?? false);
+    this.sigmacd = this.calculate_sigmacd(this.fcd.value);
+
 
     if (options.aggregate) {
       this.aggregate = new AggregateConcrete(options.aggregate);
@@ -69,6 +73,10 @@ class Concrete {
   private calculate_nc(fck_kNCm2: number): number {
     const fck_MPa = fck_kNCm2 * 10;
     return fck_MPa <=40 ? 1 : (40 / fck_MPa) ** (1 / 3)
+  }
+
+  private calculate_sigmacd(fcd_kNCm2: number): Stress {
+    return { value: 0.85* fcd_kNCm2 * this.nc, unit: "kN/cm²" }
   }
 
   private calculate_alphac(fck_kNCm2: number): number {

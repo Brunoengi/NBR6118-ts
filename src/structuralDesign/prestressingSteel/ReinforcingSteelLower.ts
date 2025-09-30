@@ -1,12 +1,14 @@
-import { ValueUnit, ValuesUnit } from "types/index.js";
+import { ValueUnit, ValuesUnit, Distance, VerificationOneValue } from "types/index.js";
 import { CableGeometry } from "structuralDesign/prestressingSteel/CableGeometry.js";
 import AbstractSection from "sections/AbstractSection.js";
 import Concrete from "structuralElements/Concrete.js";
-import { Distance } from "types/index.js";
 import PrestressingSteel from "structuralElements/PrestressingSteel.js";
 import { AbstractPrestressingSteelDesign } from "./PrestressingSteelEstimated.js";
 import { Combinations } from "combinationLoads/Load.js";
 import {GeometricPropsWithUnitsType} from "types/sectionsType.js";
+import Steel from "structuralElements/Steel.js";
+import {A} from "types/sectionsType.js";
+
 
 class ReinforcingSteel {
 
@@ -20,8 +22,12 @@ class ReinforcingSteel {
     public readonly cableGeometry: CableGeometry
     public readonly dl: Distance    
     public readonly h: Distance // Adicionado 'h' como propriedade da classe
+    public readonly steel: Steel
+    public readonly LN: Distance
+    public readonly Rcd: ValueUnit
+    public readonly distanceRcdToAs: Distance
     
-    constructor({cableGeometry, combinations, section, concrete, prestressingSteel, prestressingDesign, dl, h, dpl}: {cableGeometry: CableGeometry, combinations: Combinations, section: AbstractSection, concrete: Concrete, prestressingSteel: PrestressingSteel, prestressingDesign: AbstractPrestressingSteelDesign, dl: Distance, h: Distance, dpl: Distance}) {
+    constructor({cableGeometry, combinations, section, concrete, prestressingSteel, steel, prestressingDesign, dl, h, dpl}: {cableGeometry: CableGeometry, combinations: Combinations, section: AbstractSection, concrete: Concrete, prestressingSteel: PrestressingSteel, prestressingDesign: AbstractPrestressingSteelDesign, dl: Distance, h: Distance, dpl: Distance, steel: Steel}) {
         this.concrete = concrete;
         this.section = section;
         this.prestressingDesign = prestressingDesign
@@ -32,6 +38,12 @@ class ReinforcingSteel {
         this.combinations = combinations // Inicializa 'combinations'
         this.cableGeometry = cableGeometry // Inicializa 'cableGeometry'
         this.prestressingSteel = prestressingSteel // Inicializa 'prestressingSteel'
+        this.steel = steel
+        this.LN = this.calculate_LN()
+
+        const concreteForces = this.calculateConcreteCompressionResultants({ x: this.LN });
+        this.Rcd = concreteForces.Rcd;
+        this.distanceRcdToAs = concreteForces.distanceRcdToAs;
     }
 
     calculate_ds1({h, dl}: {h: Distance, dl: Distance}): Distance {
@@ -80,19 +92,29 @@ class ReinforcingSteel {
 
     }
 
-    //Solver
-    calculate_LN(): ValueUnit { // Retorna o valor da linha neutra
-    const f = (x_number: number) => { // x_number é a profundidade da linha neutra em cm
-        const x_distance: Distance = { value: x_number, unit: 'cm' };
-        const props = this.calculate_props_rectangularDiagram({ x: x_distance });
+    calculateConcreteCompressionResultants({x}: {x: Distance}): { Rcd: ValueUnit, distanceRcdToAs: Distance, moment_concrete: ValueUnit } {
+        const props = this.calculate_props_rectangularDiagram({ x });
 
         const area = props.A.value;
         const Yg = props.Yg.value;
         const maxStress_concrete = this.concrete.calculate_maxStress_rectangularDiagram().value; // kN/cm²
-        const Fc = area * maxStress_concrete; // kN
-        const moment_concrete = Fc * (Yg - this.dl.value); // kN*cm
+        
+        const Rcd_value = area * maxStress_concrete; // kN
+        const distanceRcdToAs_value = (Yg - this.dl.value);
+        const moment_concrete_value = Rcd_value * distanceRcdToAs_value; // kN*cm
 
-        return moment_concrete + this.calculate_c().value;
+        return {
+            Rcd: { value: Rcd_value, unit: 'kN' },
+            distanceRcdToAs: { value: distanceRcdToAs_value, unit: 'cm' },
+            moment_concrete: { value: moment_concrete_value, unit: 'kN*cm' }
+        };
+    }
+
+    //Solver
+    calculate_LN(): Distance { // Retorna o valor da linha neutra
+    const f = (x_number: number) => { // x_number é a profundidade da linha neutra em cm
+        const { moment_concrete } = this.calculateConcreteCompressionResultants({ x: { value: x_number, unit: 'cm' } });
+        return moment_concrete.value + this.calculate_c().value;
     };
 
         // --- Bisection Method with robust interval finding ---
@@ -149,6 +171,68 @@ class ReinforcingSteel {
 
         return { value: solution, unit: 'cm' };
     }
+
+    calculate_xlim(): number {
+        return this.concrete.fck.value <= 5 ? 0.45 : 0.35
+    }
+
+    verification_LN() : VerificationOneValue {
+        const ln = this.LN
+        const xlim = this.calculate_xlim()
+        const ds1 = this.ds1.value
+    
+        return {
+            passed: ln.value < xlim * ds1,
+            limit: { value: xlim * ds1, unit: 'cm' },
+            value: ln
+        }
+    }
+
+    calculate_Asestimated(): A {
+        // Convert fpyd from MPa to kN/cm² by dividing by 10
+        const fpyd_kNCm2 = this.prestressingSteel.fpyd.value / 10
+        const Ap = this.prestressingDesign.Ap_proj.value
+        const  fyd = this.steel.fyd.value
+
+        return {
+            value: (this.Rcd.value - fpyd_kNCm2 * Ap) / fyd,
+            unit: 'cm²'
+        }
+    }
+
+    calculate_Mdmin(): ValueUnit {
+        const fctk_sup = this.concrete.fctk_sup.value
+        const W1 = this.section.props.W1.value
+
+        return {
+            value: Math.abs(0.8 * W1 * fctk_sup),
+            unit: 'kN*cm'
+        }
+    }
+
+    calculate_mi({bf}: {bf: Distance}): number {
+        const Mdmin = this.calculate_Mdmin().value
+        const criticalSection = bf.value
+        console.log(this.concrete.sigmacd.value)
+        return Mdmin / (criticalSection * this.ds1.value * this.ds1.value * this.concrete.sigmacd.value)
+    }
+
+    calculate_Asmin_from_bending({bf}: {bf: Distance}): A {
+        const mi = this.calculate_mi({bf})
+        const criticalSection = bf.value
+        const qsi = 1.25 * (1 - Math.sqrt(1 - 2 * mi))
+        const Asmin_estimated = this.concrete.lambda * qsi * criticalSection * this.ds1.value * (this.concrete.sigmacd.value / this.steel.fyd.value)
+        return { value: Asmin_estimated, unit: 'cm²' }
+    }
+
+    minimumSteel({bf}: {bf: Distance}): A  {
+        const Ac = this.section.props.A.value
+        const Asmin_estimated = this.calculate_Asmin_from_bending({bf}).value
+        return {
+            value: Math.max(Asmin_estimated, Ac * 0.15/100),
+            unit: 'cm²'
+        }
+    }    
 }
 
 export default ReinforcingSteel;

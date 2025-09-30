@@ -40,6 +40,12 @@ export interface Verification {
   values: ValuesUnit
 }
 
+export interface VerificationOneValue {
+  passed: boolean
+  limit: ValueUnit
+  value: ValueUnit
+}
+
 export interface Stress {
   value: number
   unit: 'kN/cm²'
