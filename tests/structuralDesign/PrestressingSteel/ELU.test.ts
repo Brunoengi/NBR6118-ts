@@ -1,6 +1,6 @@
 import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
 import Concrete from "../../../src/structuralElements/Concrete.js";
-import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
+import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
 
 describe('ELU - Case 1', () => {
@@ -33,7 +33,7 @@ describe('ELU - Case 1', () => {
             Ac: Ac,
             W1: W1,
             W2: W2,
-            Mg: { values: mg_full, unit: 'kN*m' },
+            Mg: { values: mg_full.map(m => m * 100), unit: 'kN*cm' },
             concrete: new Concrete({fck: {value: 3.5, unit: 'kN/cm²'}, aggregate: 'granite'})
         });
     });
@@ -41,14 +41,14 @@ describe('ELU - Case 1', () => {
     it('should be instantiated correctly', () => {
         expect(elu).toBeInstanceOf(ELU);
         expect(elu.P0.values).toEqual(p0_full);
-        expect(elu.Mg.values).toEqual(mg_full);
+        expect(elu.Mg.values).toEqual(mg_full.map(m => m * 100));
         expect(elu.Ac).toEqual(Ac);
         expect(elu.W1).toEqual(W1);
         expect(elu.W2).toEqual(W2);
     });
 
     describe('calculateSigma1P0_ELU', () => {
-        it('should calculate the stress in the top fiber correctly', () => {
+        it('should calculate the stress in the less fiber correctly', () => {
             const sigma1 = elu.sigma1P0_ELU;
 
             // --- Verification for multiple points using a data-driven approach ---
@@ -67,7 +67,7 @@ describe('ELU - Case 1', () => {
                 const ep_i = ep_values_cm[testCase.index];
                 const Mg_i = mg_full[testCase.index];
 
-                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W1.value) - (Mg_i * 100) / W1.value;
+                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W1.value) - (Mg_i * 100) / W1.value; // Mg_i is in kN*m, so convert
 
                 // Check if my manual calculation matches the test case expected value
                 expect(expected_sigma).toBeCloseTo(testCase.expected, 4);
@@ -100,7 +100,7 @@ describe('ELU - Case 1', () => {
                 const ep_i = ep_values_cm[testCase.index];
                 const Mg_i = mg_full[testCase.index];
 
-                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W2.value) - (Mg_i * 100) / W2.value;
+                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W2.value) - (Mg_i * 100) / W2.value; // Mg_i is in kN*m, so convert
 
                 expect(sigma2.values[testCase.index]).toBeCloseTo(testCase.expected, 4);
                 expect(expected_sigma).toBeCloseTo(testCase.expected, 4);
@@ -175,7 +175,7 @@ describe('ELU - Case 2', () => {
             Ac: Ac,
             W1: W1,
             W2: W2,
-            Mg: { values: mg_full, unit: 'kN*m' },
+            Mg: { values: mg_full.map(m => m * 100), unit: 'kN*cm' },
             concrete: new Concrete({fck: {value: 3.5, unit: 'kN/cm²'},aggregate: 'granite'})
         });
     });
@@ -183,7 +183,7 @@ describe('ELU - Case 2', () => {
     it('should be instantiated correctly', () => {
         expect(elu).toBeInstanceOf(ELU);
         expect(elu.P0.values).toEqual(p0_full);
-        expect(elu.Mg.values).toEqual(mg_full);
+        expect(elu.Mg.values).toEqual(mg_full.map(m => m * 100));
         expect(elu.Ac).toEqual(Ac);
         expect(elu.W1).toEqual(W1);
         expect(elu.W2).toEqual(W2);
@@ -209,7 +209,7 @@ describe('ELU - Case 2', () => {
                 const ep_i = ep_values_cm[testCase.index];
                 const Mg_i = mg_full[testCase.index];
 
-                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W1.value) - (Mg_i * 100) / W1.value;
+                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W1.value) - (Mg_i * 100) / W1.value; // Mg_i is in kN*m, so convert
 
                 // Check if my manual calculation matches the test case expected value
                 expect(expected_sigma).toBeCloseTo(testCase.expected, 3);
@@ -241,7 +241,7 @@ describe('ELU - Case 2', () => {
                 const ep_i = ep_values_cm[testCase.index];
                 const Mg_i = mg_full[testCase.index];
 
-                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W2.value) - (Mg_i * 100) / W2.value;
+                const expected_sigma = 1.1 * P0_i * (1 / Ac.value + ep_i / W2.value) - (Mg_i * 100) / W2.value; // Mg_i is in kN*m, so convert
 
                 expect(sigma2.values[testCase.index]).toBeCloseTo(testCase.expected, 4);
                 expect(expected_sigma).toBeCloseTo(testCase.expected, 4);
@@ -273,7 +273,7 @@ describe('ELU - Verification Failure Cases', () => {
             Ac: { value: 7200, unit: 'cm²' },
             W1: { value: -144000, unit: 'cm³' },
             W2: { value: 144000, unit: 'cm³' },
-            Mg: { values: mg_full, unit: 'kN*m' },
+            Mg: { values: mg_full.map(m => m * 100), unit: 'kN*cm' },
             // Using a very low fck to make the limits smaller and cause the check to fail.
             concrete: new Concrete({ fck: { value: 1, unit: 'kN/cm²' }, aggregate: 'granite' })
         });

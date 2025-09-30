@@ -98,11 +98,11 @@ describe('ReinforcingSteelLower', () => {
         // fpyd = (0.9 * 1900) / 1.15 = 1486.95 MPa = 148.69565 kN/cm²
         // Ap_proj = 17.82 cm² (from PrestressingSteelEstimated.test.ts)
         // ds1 = 115 cm, dp = 108 cm
-        // Md_max = 1.4 * (506.25 + 562.50 + 421.875) = 2086.875 kN*m = 208687.5 kN*cm
-        // c = -fpyd * Ap * (ds1 - dp) - Md = -148.69565 * 17.82 * (115 - 108) - 208687.5
-        // c = -18554.91 - 208687.5 = -227242.41
+        // Md_max = 208687.5 kN*cm
+        // c = -fpyd * Ap * (ds1 - dp) - Md = -148.69565 * 17.82 * 7 - 208687.5
+        // c = -18548.30 - 208687.5 = -227235.8
         const c = reinforcingSteel.calculate_c();
-        expect(c.value).toBeCloseTo(-227242.41, -2);
+        expect(c.value).toBeCloseTo(-227235.8, 1);
         expect(c.unit).toBe('kN*cm');
     });
 

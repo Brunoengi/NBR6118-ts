@@ -18,8 +18,8 @@ describe('test combinations loads', () => {
         })
 
         // The class calculates mg1=100, mg2=200, mq=300 internally.
-        expect(QP.moment.value).toBe(100 + 200 + 300 * 0.6)
-        expect(QP.moment.unit).toBe('kN*m')
+        expect(QP.moment.value).toBeCloseTo((100 + 200 + 300 * 0.6) * 100)
+        expect(QP.moment.unit).toBe('kN*cm')
     })
 
     it('Frequent Combination', () => {
@@ -28,8 +28,8 @@ describe('test combinations loads', () => {
             qsi1: new Qsi1(0.7)
         })
 
-        expect(Freq.moment.value).toBe(100 + 200 + 300 * 0.7)
-        expect(Freq.moment.unit).toBe('kN*m')
+        expect(Freq.moment.value).toBeCloseTo((100 + 200 + 300 * 0.7) * 100)
+        expect(Freq.moment.unit).toBe('kN*cm')
     })
 
     it('Rare Combination', () => {
@@ -37,8 +37,8 @@ describe('test combinations loads', () => {
             g1, g2, q, width
         })
 
-        expect(Raree.moment.value).toBe(100 + 200 + 300)
-        expect(Raree.moment.unit).toBe('kN*m')
+        expect(Raree.moment.value).toBeCloseTo((100 + 200 + 300) * 100)
+        expect(Raree.moment.unit).toBe('kN*cm')
     })
 
     it('Last Combination (ELU)', () => {
@@ -49,9 +49,9 @@ describe('test combinations loads', () => {
             gamma_q: 1.4
         });
 
-        const expectedValue = 100 * 1.4 + 200 * 1.4 + 300 * 1.4;
+        const expectedValue = (100 * 1.4 + 200 * 1.4 + 300 * 1.4) * 100;
         expect(lastCombination.moment.value).toBeCloseTo(expectedValue);
-        expect(lastCombination.moment.unit).toBe('kN*m');
+        expect(lastCombination.moment.unit).toBe('kN*cm');
     });
 
 })
@@ -72,7 +72,7 @@ describe('Combinations.calculateMoments', () => {
     });
 
     it('should calculate bending moments for a simply supported beam', () => {
-        const maxMoment = { value: 10, unit: 'kN*m' };
+        const maxMoment = { value: 1000, unit: 'kN*cm' }; // 10 kN*m
         const beamWidth = { value: 1000, unit: 'cm' }; // 10m
         const xPoints = { values: [0, 250, 500, 750, 1000], unit: 'cm' };
 
@@ -83,13 +83,13 @@ describe('Combinations.calculateMoments', () => {
         });
 
         // Expected values for M(x) = (M_max * 4 / L²) * (L*x - x²)
-        // M_max = 10, L = 10
+        // M_max = 1000, L = 10
         // M(0) = 0
-        // M(2.5) = 7.5
-        // M(5) = 10
-        // M(7.5) = 7.5
+        // M(2.5) = 750
+        // M(5) = 1000
+        // M(7.5) = 750
         // M(10) = 0
-        const expectedMoments = [0, 7.5, 10, 7.5, 0];
+        const expectedMoments = [0, 750, 1000, 750, 0];
 
         expect(result.values.length).toBe(expectedMoments.length);
         result.values.forEach((value, index) => {
@@ -97,6 +97,6 @@ describe('Combinations.calculateMoments', () => {
         });
 
         // Verifica se a unidade do momento foi calculada corretamente
-        expect(result.unit).toBe('kN*m');
+        expect(result.unit).toBe('kN*cm');
     });
 });

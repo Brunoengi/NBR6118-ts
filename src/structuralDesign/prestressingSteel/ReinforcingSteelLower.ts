@@ -67,11 +67,10 @@ class ReinforcingSteel {
         const ds1 = this.ds1.value
         const dp = this.dp.value
 
-        // Get the maximum design moment (ELU) and convert from kN*m to kN*cm
-        const Md_kNCm = this.combinations.last.moment.value * 100;
-
+        // Get the maximum design moment (ELU) in kN*cm
+        const Md_kNCm = this.combinations.last.moment.value;
         return {
-            value: (- fpyd_kNCm2 * Ap * (ds1 - dp)) - Md_kNCm,
+            value: (-fpyd_kNCm2 * Ap * (ds1 - dp)) - Md_kNCm,
             unit: 'kN*cm'
         }
     }
@@ -213,7 +212,6 @@ class ReinforcingSteel {
     calculate_mi({bf}: {bf: Distance}): number {
         const Mdmin = this.calculate_Mdmin().value
         const criticalSection = bf.value
-        console.log(this.concrete.sigmacd.value)
         return Mdmin / (criticalSection * this.ds1.value * this.ds1.value * this.concrete.sigmacd.value)
     }
 

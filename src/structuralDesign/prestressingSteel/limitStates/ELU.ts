@@ -37,7 +37,7 @@ class ELU {
     calculateSigma1P0(): ValuesUnit {
         const sigma1P0_ELU = this.P0.values.map((P0_i, i) => {
             const p_part = 1.1 * P0_i * ((1 / this.Ac.value) + (this.ep.values[i] / this.W1.value));
-            const mg_part = - (this.Mg.values[i] * 100) / this.W1.value; // Convert Mg from kN*m to kN*cm
+            const mg_part = - this.Mg.values[i] / this.W1.value;
             return p_part + mg_part;
         })
         
@@ -50,7 +50,7 @@ class ELU {
     calculateSigma2P0(): ValuesUnit {
         const sigma2P0_ELU = this.P0.values.map((P0_i, i) => {
             const p_part = 1.1 * P0_i * ((1 / this.Ac.value) + (this.ep.values[i] / this.W2.value));
-            const mg_part = - (this.Mg.values[i] * 100) / this.W2.value
+            const mg_part = - this.Mg.values[i] / this.W2.value
             return p_part + mg_part;
         })
         

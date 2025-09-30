@@ -76,7 +76,7 @@ describe('ELS - Limited Prestressing', () => {
                 const x_m = x_cm / 100;
                 return (4 * M_max / (L_m ** 2)) * (L_m * x_m - x_m ** 2);
             });
-            return { values: moments_values, unit: 'kN*m' };
+            return { values: moments_values, unit: 'kN*cm' };
         });
 
         frequent_moments = combinations.calculateMoments({ moment: combinations.frequent.moment, x: { values: x_values_cm, unit: 'cm' }, width });
@@ -107,10 +107,10 @@ describe('ELS - Limited Prestressing', () => {
             const sigma1_elsf = els.sigma1P_infinity_ELSF;
             // Manual check at mid-span (index 5)
             const P_inf_mid = p_inf_full[5]; // ~ -1945.58
-            const ep_mid = ep_values_cm[5]; // -48
-            const Mf_mid = frequent_moments.values[5]; // 1321.88
+            const ep_mid = ep_values_cm[5];      // -48 cm
+            const Mf_mid = frequent_moments.values[5]; // 132187.5 kN*cm
             
-            const expected_sigma1_mid = P_inf_mid * (1 / Ac.value + ep_mid / W1.value) - (Mf_mid * 100) / W1.value; // ~ -0.00077394
+            const expected_sigma1_mid = P_inf_mid * (1 / Ac.value + ep_mid / W1.value) - Mf_mid / W1.value; // ~ -0.00077394
 
             expect(sigma1_elsf.values[5]).toBeCloseTo(expected_sigma1_mid, 3);
             expect(sigma1_elsf.unit).toBe('kN/cm²');
@@ -122,7 +122,7 @@ describe('ELS - Limited Prestressing', () => {
             const P_inf_mid = p_inf_full[5];
             const ep_mid = ep_values_cm[5];
             const Mf_mid = frequent_moments.values[5];
-            const expected_sigma2_mid = P_inf_mid * (1 / Ac.value + ep_mid / W2.value) - (Mf_mid * 100) / W2.value; // ~ -0.53966
+            const expected_sigma2_mid = P_inf_mid * (1 / Ac.value + ep_mid / W2.value) - Mf_mid / W2.value; // ~ -0.53966
 
             expect(sigma2_elsf.values[5]).toBeCloseTo(expected_sigma2_mid, 2);
             expect(sigma2_elsf.unit).toBe('kN/cm²');
@@ -134,8 +134,8 @@ describe('ELS - Limited Prestressing', () => {
             const sigma1_elsd = els.sigma1P_infinity_ELSD;
             const P_inf_mid = p_inf_full[5];
             const ep_mid = ep_values_cm[5];
-            const Mqp_mid = qp_moments.values[5]; // 1237.50
-            const expected_sigma1_mid = P_inf_mid * (1 / Ac.value + ep_mid / W1.value) - (Mqp_mid * 100) / W1.value; // ~ -0.0594
+            const Mqp_mid = qp_moments.values[5]; // 123750 kN*cm
+            const expected_sigma1_mid = P_inf_mid * (1 / Ac.value + ep_mid / W1.value) - Mqp_mid / W1.value; // ~ -0.0594
             expect(sigma1_elsd.values[5]).toBeCloseTo(expected_sigma1_mid, 3);
         });
 
@@ -144,8 +144,8 @@ describe('ELS - Limited Prestressing', () => {
             // Manual check at mid-span (index 5)
             const P_inf_mid = p_inf_full[5];
             const ep_mid = ep_values_cm[5];
-            const Mqp_mid = qp_moments.values[5]; // 1237.5
-            const expected_sigma2_mid = P_inf_mid * (1 / Ac.value + ep_mid / W2.value) - (Mqp_mid * 100) / W2.value; // ~ -0.481
+            const Mqp_mid = qp_moments.values[5]; // 123750 kN*cm
+            const expected_sigma2_mid = P_inf_mid * (1 / Ac.value + ep_mid / W2.value) - Mqp_mid / W2.value; // ~ -0.481
 
             expect(sigma2_elsd.values[5]).toBeCloseTo(expected_sigma2_mid, 3);
             expect(sigma2_elsd.unit).toBe('kN/cm²');

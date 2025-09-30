@@ -1,7 +1,7 @@
 import ReinforcingSteel from "../../../src/structuralDesign/PrestressingSteel/ReinforcingSteelUpper.js";
 import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
 import Concrete from "../../../src/structuralElements/Concrete.js";
-import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
+import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import { ValueUnit } from "../../../src/types/index.js";
 import { describe, it, expect, beforeAll } from '@jest/globals';
 
@@ -32,7 +32,7 @@ describe('ReinforcingSteel', () => {
                 Ac: { value: 7200, unit: 'cm²' },
                 W1: { value: -144000, unit: 'cm³' },
                 W2: { value: 144000, unit: 'cm³' },
-                Mg: { values: mg_full, unit: 'kN*m' },
+                Mg: { values: mg_full.map(m => m * 100), unit: 'kN*cm' },
                 concrete: new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' }, aggregate: 'granite' })
             });
 
@@ -94,7 +94,7 @@ describe('ReinforcingSteel', () => {
                 Ac: { value: 3162.50, unit: 'cm²' },
                 W1: { value: -65455.50, unit: 'cm³' },
                 W2: { value: 86845.93, unit: 'cm³' },
-                Mg: { values: mg_full, unit: 'kN*m' },
+                Mg: { values: mg_full.map(m => m * 100), unit: 'kN*cm' },
                 concrete: new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' }, aggregate: 'granite' })
             });
 

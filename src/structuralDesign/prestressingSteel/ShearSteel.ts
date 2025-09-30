@@ -69,7 +69,7 @@ class ShearSteel {
     }
 
     calculate_psi3(): number {
-        return Math.min(0.09 * (1 + (this.M0.value / (Math.max(...this.Md.values)* 100))), 0.18)
+        return Math.min(0.09 * (1 + (this.M0.value / Math.max(...this.Md.values))), 0.18)
     }
 
     calculate_tau_c(): ValueUnit {

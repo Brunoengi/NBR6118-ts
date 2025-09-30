@@ -172,13 +172,12 @@ class LimitedPrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const { Ac, W1 } = this.geometricProperties;
         const epmax = this.epmax;
 
-        const numerator = this.combinations.quasiPermanent.moment.value; // kN * m
+        const numerator = this.combinations.quasiPermanent.moment.value; // Now in kN*cm
 
         const denominator = ((1 / Ac.value) + (epmax.value / W1.value)) * W1.value;
-        const denominatorSI = denominator / 100
 
         return {
-            value: numerator / denominatorSI,
+            value: numerator / denominator,
             unit: 'KN'
         }
     }
@@ -188,17 +187,17 @@ class LimitedPrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const epmax = this.epmax;
 
         // --- Convert all units to a consistent system (kN, m) ---
-        const mf_kNm = this.combinations.frequent.moment.value;
-        const fctf_kPa = this.concrete.fctf.value * 10000; // kN/cm² to kPa (kN/m²)
-        const W1_m3 = W1.value / 1e6; // cm³ to m³
-        const Ac_m2 = Ac.value / 1e4; // cm² to m²
-        const epmax_m = epmax.value / 100; // cm to m
+        const mf_kNcm = this.combinations.frequent.moment.value; // Now in kN*cm
+        const fctf_kNcm2 = this.concrete.fctf.value; // kN/cm²
+        const W1_cm3 = W1.value; // cm³
+        const Ac_cm2 = Ac.value; // cm²
+        const epmax_cm = epmax.value; // cm
 
-        // Numerator represents stress in kN/m²
-        const numerator_stress = (mf_kNm / W1_m3) + fctf_kPa;
+        // Numerator represents stress in kN/cm²
+        const numerator_stress = (mf_kNcm / W1_cm3) + fctf_kNcm2;
 
-        // Denominator represents a geometric factor in 1/m²
-        const denominator_geom = (1 / Ac_m2) + (epmax_m / W1_m3);
+        // Denominator represents a geometric factor in 1/cm²
+        const denominator_geom = (1 / Ac_cm2) + (epmax_cm / W1_cm3);
 
         // The result is the required prestressing force in kN
         return {
@@ -215,12 +214,11 @@ class CompletePrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const { Ac, W1 } = this.geometricProperties;
         const epmax = this.epmax;
 
-        const numerator = this.combinations.frequent.moment.value // kN * m
+        const numerator = this.combinations.frequent.moment.value // Now in kN*cm
         const denominator = ((1 / Ac.value) + (epmax.value / W1.value)) * W1.value
-        const denominatorSI = denominator / 100
 
         return {
-            value: numerator / denominatorSI,
+            value: numerator / denominator,
             unit: 'KN'
         }
     }
@@ -230,17 +228,17 @@ class CompletePrestressingSteelDesign extends AbstractPrestressingSteelDesign {
         const epmax = this.epmax;
         
         // --- Convert all units to a consistent system (kN, m) ---
-        const mr_kNm = this.combinations.rare.moment.value;
-        const fctf_kPa = this.concrete.fctf.value * 10000; // kN/cm² to kPa (kN/m²)
-        const W1_m3 = W1.value / 1e6; // cm³ to m³
-        const Ac_m2 = Ac.value / 1e4; // cm² to m²
-        const epmax_m = epmax.value / 100; // cm to m
+        const mr_kNcm = this.combinations.rare.moment.value; // Now in kN*cm
+        const fctf_kNcm2 = this.concrete.fctf.value; // kN/cm²
+        const W1_cm3 = W1.value; // cm³
+        const Ac_cm2 = Ac.value; // cm²
+        const epmax_cm = epmax.value; // cm
 
-        // Numerator represents stress in kN/m²
-        const numerator_stress = (mr_kNm / W1_m3) + fctf_kPa;
+        // Numerator represents stress in kN/cm²
+        const numerator_stress = (mr_kNcm / W1_cm3) + fctf_kNcm2;
 
-        // Denominator represents a geometric factor in 1/m²
-        const denominator_geom = (1 / Ac_m2) + (epmax_m / W1_m3);
+        // Denominator represents a geometric factor in 1/cm²
+        const denominator_geom = (1 / Ac_cm2) + (epmax_cm / W1_cm3);
         
         return {
             value: numerator_stress / denominator_geom,

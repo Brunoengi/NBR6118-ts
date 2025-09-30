@@ -102,7 +102,7 @@ class ELS {
     sigma1P_infinity({combination}: {combination: ValuesUnit}): ValuesUnit {
         const sigma1P_inf = combination.values.map((combination_i, i) => {
             const p_part = this.P_inf.values[i] * ((1/this.Ac.value) + (this.ep.values[i]/this.W1.value))
-            const mg_part = - (combination_i * 100) / this.W1.value
+            const mg_part = - combination_i / this.W1.value
             return p_part + mg_part
         })
 
@@ -115,7 +115,7 @@ class ELS {
     sigma2P_infinity({combination}: {combination: ValuesUnit}): ValuesUnit {
         const sigma2P_inf = combination.values.map((combination_i, i) => {
             const p_part = this.P_inf.values[i] * ((1/this.Ac.value) + (this.ep.values[i]/this.W2.value))
-            const mg_part = - (combination_i * 100) / this.W2.value
+            const mg_part = - combination_i / this.W2.value
             return p_part + mg_part
         })
 

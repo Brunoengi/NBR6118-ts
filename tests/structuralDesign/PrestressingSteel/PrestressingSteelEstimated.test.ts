@@ -139,9 +139,9 @@ describe('Prestressing Steel Design', () => {
             ncable: 4
         })
 
-        expect(combinations.quasiPermanent.moment.value).toBeCloseTo(756.738, 1)
-        expect(combinations.frequent.moment.value).toBeCloseTo(812.988,1)
-        expect(combinations.rare.moment.value).toBeCloseTo(925.488,1)
+        expect(combinations.quasiPermanent.moment.value).toBeCloseTo(75673.8, 0)
+        expect(combinations.frequent.moment.value).toBeCloseTo(81298.8,0)
+        expect(combinations.rare.moment.value).toBeCloseTo(92548.8,0)
         expect(prestressingDesign.ELSD().value).toBeCloseTo(-1151.489, 1)
         expect(prestressingDesign.ELSF().value).toBeCloseTo(-968.511, 1)
         expect(prestressingDesign.P_inf_calc.value).toBeCloseTo(-1151.489, 1)

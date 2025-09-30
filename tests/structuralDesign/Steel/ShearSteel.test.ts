@@ -66,14 +66,14 @@ describe('ShearSteel', () => {
         // 3. Calculate Design Moment (Md) for ShearSteel
         const L_m = width.value / 100;
         const Md_max = combinations.gamma.gamma_g1 * (18 * L_m ** 2 / 8) +
-            combinations.gamma.gamma_g2 * (20 * L_m ** 2 / 8) +
-            combinations.gamma.gamma_q * (15 * L_m ** 2 / 8);
+                       combinations.gamma.gamma_g2 * (20 * L_m ** 2 / 8) +
+                       combinations.gamma.gamma_q * (15 * L_m ** 2 / 8);
 
         const md_values = cableGeometry.x.values.map((x_cm: number) => {
             const x_m = x_cm / 100;
             return (4 * Md_max / (L_m ** 2)) * (L_m * x_m - x_m ** 2);
         });
-        Md = { values: md_values, unit: 'kN*m' };
+        Md = { values: md_values.map((m: Number) => m * 100), unit: 'kN*cm' };
 
         // 4. Instantiate ShearSteel
         shearSteel = new ShearSteel({
@@ -103,7 +103,7 @@ describe('ShearSteel', () => {
 
     it('should calculate psi3 correctly', () => {
         // M0 = 33465.67 //kN*cm 
-        // Md_max = 2086.875 kN*m = 208687.5 kN*cm
+        // Md_max = 208687.5 kN*cm
         // psi3 = 0.09 * (1 + 33465.7 / 208687.5) = 0.104
         const psi3 = shearSteel.calculate_psi3();
         expect(psi3).toBeCloseTo(0.104,1);

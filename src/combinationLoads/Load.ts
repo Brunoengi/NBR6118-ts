@@ -64,12 +64,13 @@ class QuasiPermanent {
     readonly mg1: ValueUnit;
     readonly mg2: ValueUnit;
     readonly mq: ValueUnit;
+    readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, qsi2, width}: IQuasiPermanent){
         const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
@@ -77,13 +78,18 @@ class QuasiPermanent {
             mq: this.mq,
             qsi2
         });
+
+        this.distributedLoad = {
+            value: g1.value + g2.value + q.value * qsi2.value,
+            unit: g1.unit
+        };
     }
 
    private calculateMoment({mg1, mg2, mq, qsi2}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi2: Qsi2}): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value * qsi2.value,
-            unit: 'kN*m'
+            unit: 'kN*cm'
         }
    }
 }
@@ -94,12 +100,13 @@ class Frequent {
     readonly mg1: ValueUnit;
     readonly mg2: ValueUnit;
     readonly mq: ValueUnit;
+    readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, qsi1, width}: IFrequent){
         const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
@@ -107,13 +114,18 @@ class Frequent {
             mq: this.mq,
             qsi1
         });
+
+        this.distributedLoad = {
+            value: g1.value + g2.value + q.value * qsi1.value,
+            unit: g1.unit
+        };
     }
 
    private calculateMoment({mg1, mg2, mq, qsi1}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi1: Qsi1}): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value * qsi1.value,
-            unit: 'kN*m'
+            unit: 'kN*cm'
         }
    }
 }
@@ -124,25 +136,31 @@ class Rare {
     readonly mg1: ValueUnit;
     readonly mg2: ValueUnit;
     readonly mq: ValueUnit;
+    readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, width}: IRare){
         const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
             mg2: this.mg2,
             mq: this.mq
         });
+
+        this.distributedLoad = {
+            value: g1.value + g2.value + q.value,
+            unit: g1.unit
+        };
     }
 
    private calculateMoment({mg1, mg2, mq}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit}): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value,
-            unit: 'kN*m'
+            unit: 'kN*cm'
         }
    }
 }
@@ -152,12 +170,13 @@ class Last {
     readonly mg1: ValueUnit;
     readonly mg2: ValueUnit;
     readonly mq: ValueUnit;
+    readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, gamma_g1, gamma_g2, gamma_q, width}: ILast) {
         const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
-        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
@@ -165,12 +184,17 @@ class Last {
             mq: this.mq,
             gamma_g1, gamma_g2, gamma_q
         });
+
+        this.distributedLoad = {
+            value: g1.value * gamma_g1 + g2.value * gamma_g2 + q.value * gamma_q,
+            unit: g1.unit
+        };
     }
 
     calculateMoment({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, gamma_g1: number, gamma_g2: number, gamma_q: number}): ValueUnit {
         return {
             value: mg1.value * gamma_g1 + mg2.value * gamma_g2 + mq.value * gamma_q,
-            unit: 'kN*m'
+            unit: 'kN*cm'
         }
     }
 }
@@ -263,7 +287,7 @@ class Combinations {
             
         return {
             values: moments,
-            unit: 'kN*m'
+            unit: 'kN*cm'
         }
     }
     
