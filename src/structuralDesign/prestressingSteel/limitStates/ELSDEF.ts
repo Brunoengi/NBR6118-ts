@@ -4,7 +4,7 @@ import { ValueUnit } from "types/index.js";
 import Concrete from "structuralElements/Concrete.js";
 import { Distance, ValuesUnit, VerificationOneValue } from "types/index.js";
 import { CableGeometry } from "../CableGeometry.js";
-import { CreepConcrete } from "structuralDesign/concrete/Creep.js";
+import { CreepConcrete } from "structuralDesign/concreteProps/Creep.js";
 
 class ELSDEF {
     readonly combinations: Combinations
@@ -13,6 +13,13 @@ class ELSDEF {
     readonly cableGeometry: CableGeometry
     readonly P_inf: ValuesUnit
     readonly creepConcrete: CreepConcrete
+    readonly Wc: Distance;
+    readonly wp: ValueUnit;
+    readonly Wp: Distance;
+    readonly W0: Distance;
+    readonly W_inf: Distance;
+    readonly W_adm: Distance;
+    readonly verification: VerificationOneValue;
    
     constructor({combinations, geometricProps, concrete, cableGeometry, P_inf, creepConcrete}: {combinations: Combinations, geometricProps: GeometricPropsWithUnitsType, concrete: Concrete, L: Distance, P_inf: ValuesUnit, epmax: Distance, cableGeometry: CableGeometry, creepConcrete: CreepConcrete}) {
         this.combinations = combinations
@@ -21,16 +28,25 @@ class ELSDEF {
         this.cableGeometry = cableGeometry
         this.P_inf = P_inf
         this.creepConcrete = creepConcrete
+
+        // Calculate all values once and store them as readonly properties
+        this.Wc = this.calculate_Wc();
+        this.wp = this.calculate_wp();
+        this.Wp = this.calculate_Wp();
+        this.W0 = this.calculate_W0();
+        this.W_inf = this.calculate_W_inf();
+        this.W_adm = this.calculate_W_adm();
+        this.verification = this.verification_W();
     }
 
     calculate_Wc(): Distance {
         const L = this.cableGeometry.width.value
-        const combinationQP = this.combinations.quasiPermanent.distributedLoad.value
+        const combinationQP_kNm = this.combinations.quasiPermanent.distributedLoad.value // in kN/m
         const Ecs = this.concrete.Ecs.value
         const Ic = this.geometricProps.Ixg.value
 
         return {
-            value: (5/384) * ((combinationQP * (L ** 4)) / (Ecs * Ic)),
+            value: (5/384) * (((combinationQP_kNm / 100) * (L ** 4)) / (Ecs * Ic)), // combinationQP is in kN/m, must be in kN/cm
             unit: 'cm'
         }
     }
@@ -41,7 +57,7 @@ class ELSDEF {
         const L = this.cableGeometry.width.value
 
         return {
-            value: 8 * P_inf_max * (epmax / L),
+            value: 8 * P_inf_max * epmax / (L ** 2),
             unit: 'kN/cm'
         }
     } 
@@ -60,7 +76,7 @@ class ELSDEF {
 
     calculate_W0(): Distance {
         return {
-            value: this.calculate_Wc().value - this.calculate_Wp().value,
+            value: this.Wc.value - this.Wp.value,
             unit: 'cm'
         }
     }
@@ -68,7 +84,7 @@ class ELSDEF {
     calculate_W_inf(): Distance {
         const W0 = this.calculate_W0().value
         const phi_inf = this.creepConcrete.value
-
+        if (phi_inf === undefined) throw new Error("Creep coefficient (phi) is undefined.");
         return {
             value: (1 + phi_inf) * W0,
             unit: 'cm'
@@ -85,9 +101,9 @@ class ELSDEF {
 
     verification_W(): VerificationOneValue {
         return {
-            passed: this.calculate_W_inf().value <= this.calculate_W_adm().value,
-            limit: this.calculate_W_adm(),
-            value: this.calculate_W_inf()
+            passed: Math.abs(this.W_inf.value) <= this.W_adm.value,
+            limit: this.W_adm,
+            value: this.W_inf
         }
     }
 }
