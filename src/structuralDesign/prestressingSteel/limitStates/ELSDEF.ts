@@ -4,7 +4,7 @@ import { ValueUnit } from "types/index.js";
 import Concrete from "structuralElements/Concrete.js";
 import { Distance, ValuesUnit, VerificationOneValue } from "types/index.js";
 import { CableGeometry } from "../CableGeometry.js";
-import { CreepConcrete } from "structuralDesign/concreteProps/Creep.js";
+import { CreepConcrete } from "structuralDesign/concrete/Creep.js";
 
 class ELSDEF {
     readonly combinations: Combinations

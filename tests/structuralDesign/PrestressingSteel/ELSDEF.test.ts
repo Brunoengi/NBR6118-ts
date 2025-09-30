@@ -1,5 +1,5 @@
 import ELSDEF from "../../../src/structuralDesign/prestressingSteel/limitStates/ELSDEF.js";
-import { CreepConcrete } from "../../../src/structuralDesign/concreteProps/Creep.js";
+import { CreepConcrete } from "../../../src/structuralDesign/concrete/Creep.js";
 import { beforeAll, describe, expect, it, jest } from "@jest/globals";
 
 describe('ELSDEF', () => {

@@ -1,5 +1,5 @@
 
-import { CreepConcrete } from "../../../src/structuralDesign/concreteProps/Creep.js";
+import { CreepConcrete } from "../../../src/structuralDesign/concrete/Creep.js";
 
 describe('CreepConcrete', () => {
   describe('value property', () => {
