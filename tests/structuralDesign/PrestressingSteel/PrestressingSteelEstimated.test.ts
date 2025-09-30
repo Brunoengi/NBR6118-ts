@@ -29,9 +29,9 @@ describe('Prestressing Steel Design', () => {
 
         // Inputs to generate the combination values
         const combinations = new Combinations({
-            g1: { value: 18, unit: 'kN/m' },
-            g2: { value: 20, unit: 'kN/m' },
-            q: { value: 15, unit: 'kN/m' },
+            g1: { value: 0.18, unit: 'kN/cm' },
+            g2: { value: 0.20, unit: 'kN/cm' },
+            q: { value: 0.15, unit: 'kN/cm' },
             width: { value: 1500, unit: 'cm' },
             qsi1: new Qsi1(0.60),
             qsi2: new Qsi2(0.40),
@@ -105,9 +105,9 @@ describe('Prestressing Steel Design', () => {
             // The original moments were: Mg1=79.0625, Mg2=565.1755, Mq=281.25
             // To get these moments from a 15m span, the distributed loads must be:
             // g = M * 8 / L^2
-            g1: { value: 79.0625 * 8 / (15**2), unit: 'kN/m' },   // 2.8111...
-            g2: { value: 565.1755 * 8 / (15**2), unit: 'kN/m' },  // 20.096...
-            q: { value: 281.25 * 8 / (15**2), unit: 'kN/m' },     // 10.0
+            g1: { value: 7906.25 * 8 / (1500**2), unit: 'kN/cm' },   // 0.028111...
+            g2: { value: 56517.55 * 8 / (1500**2), unit: 'kN/cm' },  // 0.20096...
+            q: { value: 28125 * 8 / (1500**2), unit: 'kN/cm' },     // 0.10
             width: { value: 1500, unit: 'cm' },
             qsi1: new Qsi1(0.60),
             qsi2: new Qsi2(0.40),

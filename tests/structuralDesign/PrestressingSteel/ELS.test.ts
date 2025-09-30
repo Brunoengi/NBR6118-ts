@@ -49,9 +49,9 @@ describe('ELS - Limited Prestressing', () => {
 
         // 3. Define load combinations
         const combinations = new Combinations({
-            g1: { value: 18, unit: 'kN/m' },
-            g2: { value: 20, unit: 'kN/m' },
-            q: { value: 15, unit: 'kN/m' },
+            g1: { value: 0.18, unit: 'kN/cm' },
+            g2: { value: 0.20, unit: 'kN/cm' },
+            q: { value: 0.15, unit: 'kN/cm' },
             width: { value: 1500, unit: 'cm' },
             qsi1: new Qsi1(0.6),
             qsi2: new Qsi2(0.4),
@@ -71,10 +71,9 @@ describe('ELS - Limited Prestressing', () => {
         // Mocking calculateMoments as its implementation is not provided
         jest.spyOn(combinations, 'calculateMoments').mockImplementation(({ moment }) => {
             const M_max = moment.value;
-            const L_m = width.value / 100;
+            const L_cm = width.value;
             const moments_values = x_values_cm.map((x_cm: number) => {
-                const x_m = x_cm / 100;
-                return (4 * M_max / (L_m ** 2)) * (L_m * x_m - x_m ** 2);
+                return (4 * M_max / (L_cm ** 2)) * (L_cm * x_cm - x_cm ** 2);
             });
             return { values: moments_values, unit: 'kN*cm' };
         });

@@ -5,10 +5,10 @@ import { Distance } from '../../src/types/index.js';
 describe('test combinations loads', () => {
     // To test the moment calculation, we provide distributed loads and a span
     // that result in the original moment values (100, 200, 300).
-    // Using L=10m (1000cm), M = g*L²/8 => g = M*8/L²
-    const g1 = { value: 100 * 8 / (10**2), unit: 'kN/m' }; // 8 kN/m
-    const g2 = { value: 200 * 8 / (10**2), unit: 'kN/m' }; // 16 kN/m
-    const q = { value: 300 * 8 / (10**2), unit: 'kN/m' };  // 24 kN/m
+    // Using L=10m (1000cm), M = g*L²/8 => g = M*8/L² (in kN/cm)
+    const g1 = { value: (10000 * 8) / (1000**2), unit: 'kN/cm' }; // 0.08 kN/cm to get 10000 kN*cm
+    const g2 = { value: (20000 * 8) / (1000**2), unit: 'kN/cm' }; // 0.16 kN/cm to get 20000 kN*cm
+    const q = { value: (30000 * 8) / (1000**2), unit: 'kN/cm' };  // 0.24 kN/cm to get 30000 kN*cm
     const width: Distance = { value: 1000, unit: 'cm' };
 
     it('Quasi-Permanent Combination', () => {
@@ -17,8 +17,8 @@ describe('test combinations loads', () => {
             qsi2: new Qsi2(0.6)   
         })
 
-        // The class calculates mg1=100, mg2=200, mq=300 internally.
-        expect(QP.moment.value).toBeCloseTo((100 + 200 + 300 * 0.6) * 100)
+        // The class calculates mg1=10000, mg2=20000, mq=30000 internally.
+        expect(QP.moment.value).toBeCloseTo(10000 + 20000 + 30000 * 0.6)
         expect(QP.moment.unit).toBe('kN*cm')
     })
 
@@ -28,7 +28,7 @@ describe('test combinations loads', () => {
             qsi1: new Qsi1(0.7)
         })
 
-        expect(Freq.moment.value).toBeCloseTo((100 + 200 + 300 * 0.7) * 100)
+        expect(Freq.moment.value).toBeCloseTo(10000 + 20000 + 30000 * 0.7)
         expect(Freq.moment.unit).toBe('kN*cm')
     })
 
@@ -37,7 +37,7 @@ describe('test combinations loads', () => {
             g1, g2, q, width
         })
 
-        expect(Raree.moment.value).toBeCloseTo((100 + 200 + 300) * 100)
+        expect(Raree.moment.value).toBeCloseTo(10000 + 20000 + 30000)
         expect(Raree.moment.unit).toBe('kN*cm')
     })
 
@@ -49,7 +49,7 @@ describe('test combinations loads', () => {
             gamma_q: 1.4
         });
 
-        const expectedValue = (100 * 1.4 + 200 * 1.4 + 300 * 1.4) * 100;
+        const expectedValue = (10000 * 1.4 + 20000 * 1.4 + 30000 * 1.4);
         expect(lastCombination.moment.value).toBeCloseTo(expectedValue);
         expect(lastCombination.moment.unit).toBe('kN*cm');
     });
@@ -60,9 +60,9 @@ describe('Combinations.calculateMoments', () => {
     // The Combinations instance is needed to call the method,
     // but its constructor values do not affect the result of calculateMoments.
     const dummyCombinations = new Combinations({
-        g1: { value: 0, unit: 'kN/m' },
-        g2: { value: 0, unit: 'kN/m' },
-        q: { value: 0, unit: 'kN/m' },
+        g1: { value: 0, unit: 'kN/cm' },
+        g2: { value: 0, unit: 'kN/cm' },
+        q: { value: 0, unit: 'kN/cm' },
         width: { value: 1000, unit: 'cm' },
         qsi1: new Qsi1(0.5),
         qsi2: new Qsi2(0.5),

@@ -41,12 +41,12 @@ class ELSDEF {
 
     calculate_Wc(): Distance {
         const L = this.cableGeometry.width.value
-        const combinationQP_kNm = this.combinations.quasiPermanent.distributedLoad.value // in kN/m
+        const combinationQP = this.combinations.quasiPermanent.distributedLoad.value // in kN/cm
         const Ecs = this.concrete.Ecs.value
         const Ic = this.geometricProps.Ixg.value
 
         return {
-            value: (5/384) * (((combinationQP_kNm / 100) * (L ** 4)) / (Ecs * Ic)), // combinationQP is in kN/m, must be in kN/cm
+            value: (5/384) * ((combinationQP * (L ** 4)) / (Ecs * Ic)),
             unit: 'cm'
         }
     }

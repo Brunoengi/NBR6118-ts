@@ -67,10 +67,9 @@ class QuasiPermanent {
     readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, qsi2, width}: IQuasiPermanent){
-        const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg1 = { value: (g1.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width.value**2) / 8, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
@@ -103,10 +102,9 @@ class Frequent {
     readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, qsi1, width}: IFrequent){
-        const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg1 = { value: (g1.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width.value**2) / 8, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
@@ -139,10 +137,9 @@ class Rare {
     readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, width}: IRare){
-        const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg1 = { value: (g1.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width.value**2) / 8, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
@@ -173,10 +170,9 @@ class Last {
     readonly distributedLoad: ValueUnit;
 
     constructor({g1, g2, q, gamma_g1, gamma_g2, gamma_q, width}: ILast) {
-        const width_m = width.value / 100; // cm to m
-        this.mg1 = { value: (g1.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mg2 = { value: (g2.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
-        this.mq = { value: (q.value * width_m**2) / 8 * 100, unit: 'kN*cm' };
+        this.mg1 = { value: (g1.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mg2 = { value: (g2.value * width.value**2) / 8, unit: 'kN*cm' };
+        this.mq = { value: (q.value * width.value**2) / 8, unit: 'kN*cm' };
 
         this.moment = this.calculateMoment({
             mg1: this.mg1,
@@ -276,13 +272,9 @@ class Combinations {
     calculateMoments({moment, x, width}:{moment: ValueUnit, x: ValuesUnit, width: ValueUnit}): ValuesUnit {
             const momentValue = moment.value;
 
-            // Convert all length units to meters
-            const L_m = width.value / 100;
-            const xValues_m = x.values.map(x_cm => x_cm / 100);
-
             // Formula for parabolic distribution of a maximum moment M_max: M(x) = (4*M_max/L²)*(L*x - x²)
-            const moments = xValues_m.map((x_m) => {
-                return (4 * momentValue / (L_m ** 2)) * (L_m * x_m - x_m ** 2);
+            const moments = x.values.map((x_cm) => {
+                return (4 * momentValue / (width.value ** 2)) * (width.value * x_cm - x_cm ** 2);
             })
             
         return {

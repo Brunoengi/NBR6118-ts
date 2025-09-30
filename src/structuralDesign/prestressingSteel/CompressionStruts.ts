@@ -52,15 +52,14 @@ class Stirrups {
     }
 
     calculate_V({g}: {g: ValueUnit}) {
-        // Convert width and x from cm to m for consistency with g (kN/m)
-        const width_m = this.cableGeometry.width.value / 100;
-        const x_m = this.cableGeometry.x.values.map(val => val / 100);
+        // Units are consistent: g is in kN/cm, width and x are in cm.
+        const width_cm = this.cableGeometry.width.value;
+        const x_cm = this.cableGeometry.x.values;
 
-        const V = x_m.map((x_i_m) => {
+        const V = x_cm.map((x_i_cm) => {
             // Formula for shear in a simply supported beam: V(x) = q*L/2 - q*x
-            // All units are now in kN and m.
-            return (g.value * width_m / 2) - (g.value * x_i_m);
-        }) 
+            return (g.value * width_cm / 2) - (g.value * x_i_cm);
+        });
         return {
             values: V,
             unit: 'kN'

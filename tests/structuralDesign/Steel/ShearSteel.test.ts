@@ -35,9 +35,9 @@ describe('ShearSteel', () => {
         steel = new Steel('CA 50');
 
         combinations = new Combinations({
-            g1: { value: 18, unit: 'kN/m' },
-            g2: { value: 20, unit: 'kN/m' },
-            q: { value: 15, unit: 'kN/m' },
+            g1: { value: 0.18, unit: 'kN/cm' },
+            g2: { value: 0.20, unit: 'kN/cm' },
+            q: { value: 0.15, unit: 'kN/cm' },
             width: width,
             gamma_g1: 1.4,
             gamma_g2: 1.4,
@@ -64,16 +64,15 @@ describe('ShearSteel', () => {
         });
 
         // 3. Calculate Design Moment (Md) for ShearSteel
-        const L_m = width.value / 100;
-        const Md_max = combinations.gamma.gamma_g1 * (18 * L_m ** 2 / 8) +
-                       combinations.gamma.gamma_g2 * (20 * L_m ** 2 / 8) +
-                       combinations.gamma.gamma_q * (15 * L_m ** 2 / 8);
+        // Using the 'last' combination moment directly
+        const Md_max = combinations.last.moment.value;
 
+        const L_cm = width.value;
         const md_values = cableGeometry.x.values.map((x_cm: number) => {
-            const x_m = x_cm / 100;
-            return (4 * Md_max / (L_m ** 2)) * (L_m * x_m - x_m ** 2);
+            // M(x) = (4*M_max/L²)*(L*x - x²)
+            return (4 * Md_max / (L_cm ** 2)) * (L_cm * x_cm - x_cm ** 2);
         });
-        Md = { values: md_values.map((m: Number) => m * 100), unit: 'kN*cm' };
+        Md = { values: md_values, unit: 'kN*cm' };
 
         // 4. Instantiate ShearSteel
         shearSteel = new ShearSteel({

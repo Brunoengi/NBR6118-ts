@@ -8,7 +8,7 @@ describe('ELSDEF', () => {
     // Mock data for the constructor
     const mockCombinations = {
         quasiPermanent: {
-            distributedLoad: { value: 26.906, unit: 'kN/m' } // 0.26906 kN/cm
+            distributedLoad: { value: 0.26906, unit: 'kN/cm' }
         }
     };
 
@@ -57,11 +57,11 @@ describe('ELSDEF', () => {
 
     it('should calculate deflection due to quasi-permanent loads (Wc)', () => {
         const L = 1500; // cm
-        const q_kNm = mockCombinations.quasiPermanent.distributedLoad.value; // 26.906 kN/m
+        const q_kNcm = mockCombinations.quasiPermanent.distributedLoad.value; // 0.01616 kN/cm
         const Ecs = mockConcrete.Ecs.value; // 2940.3 kN/cm²
         const Ic = mockGeometricProps.Ixg.value; // 3732429.66 cm⁴
         // Wc = (5/384) * (q * L^4) / (Ecs * Ic)
-        const expected_Wc = (5 / 384) * ((q_kNm / 100) * L ** 4) / (Ecs * Ic); // ~1.616 cm
+        const expected_Wc = (5 / 384) * (q_kNcm * L ** 4) / (Ecs * Ic); // ~1.616 cm
         expect(elsdef.Wc.value).toBeCloseTo(expected_Wc, 2);
         expect(elsdef.Wc.unit).toBe('cm');
     });
