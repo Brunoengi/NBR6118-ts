@@ -1,4 +1,4 @@
-import PrestressingDesign from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelEstimated.js";
+import PrestressingDesign from "../../../src/structuralDesign/prestressingSteel/PrestressingSteelEstimated.js";
 import Concrete from "../../../src/structuralElements/Concrete.js";
 import PrestressingSteel from "../../../src/structuralElements/PrestressingSteel.js";
 import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
@@ -29,9 +29,10 @@ describe('Prestressing Steel Design', () => {
 
         // Inputs to generate the combination values
         const combinations = new Combinations({
-            mg1: { value: 506.25, unit: 'kN * m' },
-            mg2: { value: 562.50, unit: 'kN * m' },
-            mq: { value: 421.875, unit: 'kN * m' },
+            g1: { value: 18, unit: 'kN/m' },
+            g2: { value: 20, unit: 'kN/m' },
+            q: { value: 15, unit: 'kN/m' },
+            width: { value: 1500, unit: 'cm' },
             qsi1: new Qsi1(0.60),
             qsi2: new Qsi2(0.40),
             gamma_g1: 1.4,
@@ -101,9 +102,13 @@ describe('Prestressing Steel Design', () => {
 
         // Inputs to generate the combination values
         const combinations = new Combinations({
-            mg1: { value: 3162.5 * 25 / 10000, unit: 'kN * m' },
-            mg2: { value: 644.238 - (3162.5 * 25 / 10000), unit: 'kN * m' },
-            mq: { value: 925.488 - (3162.5 * 25 / 10000) - (644.238 - (3162.5 * 25 / 10000)), unit: 'kN * m' },
+            // The original moments were: Mg1=79.0625, Mg2=565.1755, Mq=281.25
+            // To get these moments from a 15m span, the distributed loads must be:
+            // g = M * 8 / L^2
+            g1: { value: 79.0625 * 8 / (15**2), unit: 'kN/m' },   // 2.8111...
+            g2: { value: 565.1755 * 8 / (15**2), unit: 'kN/m' },  // 20.096...
+            q: { value: 281.25 * 8 / (15**2), unit: 'kN/m' },     // 10.0
+            width: { value: 1500, unit: 'cm' },
             qsi1: new Qsi1(0.60),
             qsi2: new Qsi2(0.40),
             gamma_g1: 1.4,

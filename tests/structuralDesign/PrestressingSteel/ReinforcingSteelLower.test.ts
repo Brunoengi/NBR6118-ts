@@ -34,9 +34,10 @@ describe('ReinforcingSteelLower', () => {
         const section = new Rectangular({ base, height: h });
 
         const combinations = new Combinations({
-            mg1: { value: 506.25, unit: 'kN*m' },
-            mg2: { value: 562.50, unit: 'kN*m' },
-            mq: { value: 421.875, unit: 'kN*m' },
+            g1: { value: 18, unit: 'kN/m' },
+            g2: { value: 20, unit: 'kN/m' },
+            q: { value: 15, unit: 'kN/m' },
+            width: { value: 1500, unit: 'cm' },
             qsi1: new Qsi1(0.60),
             qsi2: new Qsi2(0.40),
             gamma_g1: 1.4,

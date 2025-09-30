@@ -1,4 +1,4 @@
-import { ValuesUnit, ValueUnit } from "../types/index.js"
+import { ValuesUnit, ValueUnit, Distance } from "../types/index.js"
 import { IQsi1, IQsi2 } from "../types/combinationsType.js"
 
 class Qsi1 implements IQsi1 {
@@ -30,9 +30,10 @@ class Qsi2 implements IQsi2 {
 }
 
 interface ICombinationLoads {
-    mg1: ValueUnit;
-    mg2: ValueUnit;
-    mq: ValueUnit;
+    g1: ValueUnit;
+    g2: ValueUnit;
+    q: ValueUnit;
+    width: Distance;
 }
 
 interface ILast extends ICombinationLoads {
@@ -60,16 +61,29 @@ interface ICombinations extends ICombinationLoads, ILast {
 
 class QuasiPermanent {
     readonly moment: ValueUnit;
+    readonly mg1: ValueUnit;
+    readonly mg2: ValueUnit;
+    readonly mq: ValueUnit;
 
-    constructor({mg1, mg2, mq, qsi2}: IQuasiPermanent){
-        this.moment = this.calculateMoment({mg1, mg2, mq, qsi2})
+    constructor({g1, g2, q, qsi2, width}: IQuasiPermanent){
+        const width_m = width.value / 100; // cm to m
+        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+
+        this.moment = this.calculateMoment({
+            mg1: this.mg1,
+            mg2: this.mg2,
+            mq: this.mq,
+            qsi2
+        });
     }
 
-   private calculateMoment({mg1, mg2, mq, qsi2}: IQuasiPermanent): ValueUnit {
+   private calculateMoment({mg1, mg2, mq, qsi2}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi2: Qsi2}): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value * qsi2.value,
-            unit: unit
+            unit: 'kN*m'
         }
    }
 }
@@ -77,15 +91,29 @@ class QuasiPermanent {
 class Frequent {
     readonly moment: ValueUnit;
 
-    constructor({mg1, mg2, mq, qsi1}: IFrequent){
-        this.moment = this.calculateMoment({mg1, mg2, mq, qsi1})
+    readonly mg1: ValueUnit;
+    readonly mg2: ValueUnit;
+    readonly mq: ValueUnit;
+
+    constructor({g1, g2, q, qsi1, width}: IFrequent){
+        const width_m = width.value / 100; // cm to m
+        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+
+        this.moment = this.calculateMoment({
+            mg1: this.mg1,
+            mg2: this.mg2,
+            mq: this.mq,
+            qsi1
+        });
     }
 
-   private calculateMoment({mg1, mg2, mq, qsi1}: IFrequent): ValueUnit {
+   private calculateMoment({mg1, mg2, mq, qsi1}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi1: Qsi1}): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value * qsi1.value,
-            unit: unit
+            unit: 'kN*m'
         }
    }
 }
@@ -93,29 +121,56 @@ class Frequent {
 class Rare {
     readonly moment: ValueUnit;
 
-    constructor({mg1, mg2, mq}: IRare){
-        this.moment = this.calculateMoment({mg1, mg2, mq})
+    readonly mg1: ValueUnit;
+    readonly mg2: ValueUnit;
+    readonly mq: ValueUnit;
+
+    constructor({g1, g2, q, width}: IRare){
+        const width_m = width.value / 100; // cm to m
+        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+
+        this.moment = this.calculateMoment({
+            mg1: this.mg1,
+            mg2: this.mg2,
+            mq: this.mq
+        });
     }
 
-   private calculateMoment({mg1, mg2, mq}: IRare): ValueUnit {
+   private calculateMoment({mg1, mg2, mq}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit}): ValueUnit {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value,
-            unit: unit
+            unit: 'kN*m'
         }
    }
 }
 
 class Last {
     readonly moment: ValueUnit;
-    constructor({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q}) {
-        this.moment = this.calculateMoment({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q})
+    readonly mg1: ValueUnit;
+    readonly mg2: ValueUnit;
+    readonly mq: ValueUnit;
+
+    constructor({g1, g2, q, gamma_g1, gamma_g2, gamma_q, width}: ILast) {
+        const width_m = width.value / 100; // cm to m
+        this.mg1 = { value: (g1.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mg2 = { value: (g2.value * width_m**2) / 8, unit: 'kN*m' };
+        this.mq = { value: (q.value * width_m**2) / 8, unit: 'kN*m' };
+
+        this.moment = this.calculateMoment({
+            mg1: this.mg1,
+            mg2: this.mg2,
+            mq: this.mq,
+            gamma_g1, gamma_g2, gamma_q
+        });
     }
 
-    calculateMoment({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q}): ValueUnit {
+    calculateMoment({mg1, mg2, mq, gamma_g1, gamma_g2, gamma_q}: {mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, gamma_g1: number, gamma_g2: number, gamma_q: number}): ValueUnit {
         return {
             value: mg1.value * gamma_g1 + mg2.value * gamma_g2 + mq.value * gamma_q,
-            unit: mg1.unit
+            unit: 'kN*m'
         }
     }
 }
@@ -125,9 +180,9 @@ class Combinations {
     public readonly frequent: Frequent;
     public readonly rare: Rare;
     public readonly last: Last;
-    public readonly mg1: ValueUnit;
-    public readonly mg2: ValueUnit;
-    public readonly mq: ValueUnit;
+    public readonly g1: ValueUnit;
+    public readonly g2: ValueUnit;
+    public readonly q: ValueUnit;
     public readonly qsi: {
         qsi1: Qsi1;
         qsi2: Qsi2;
@@ -143,39 +198,42 @@ class Combinations {
 
     constructor(inputs: ICombinations) {
         this.quasiPermanent = new QuasiPermanent({
-            mg1: inputs.mg1,
-            mg2: inputs.mg2,
-            mq: inputs.mq,
-            qsi2: inputs.qsi2
-
+            g1: inputs.g1,
+            g2: inputs.g2,
+            q: inputs.q,
+            qsi2: inputs.qsi2,
+            width: inputs.width
         });
 
         this.frequent = new Frequent({
-            mg1: inputs.mg1,
-            mg2: inputs.mg2,
-            mq: inputs.mq,
-            qsi1: inputs.qsi1
+            g1: inputs.g1,
+            g2: inputs.g2,
+            q: inputs.q,
+            qsi1: inputs.qsi1,
+            width: inputs.width
         });
 
         this.rare = new Rare({
-            mg1: inputs.mg1,
-            mg2: inputs.mg2,
-            mq: inputs.mq
+            g1: inputs.g1,
+            g2: inputs.g2,
+            q: inputs.q,
+            width: inputs.width
         });
 
         this.last = new Last({
-            mg1: inputs.mg1,
-            mg2: inputs.mg2,
-            mq: inputs.mq,
+            g1: inputs.g1,
+            g2: inputs.g2,
+            q: inputs.q,
             gamma_g1: inputs.gamma_g1,
             gamma_g2: inputs.gamma_g2,
-            gamma_q: inputs.gamma_q
+            gamma_q: inputs.gamma_q,
+            width: inputs.width
         });
 
 
-        this.mg1 = inputs.mg1
-        this.mg2 = inputs.mg2
-        this.mq = inputs.mq
+        this.g1 = inputs.g1
+        this.g2 = inputs.g2
+        this.q = inputs.q
 
         this.qsi = {
             qsi1: inputs.qsi1,
@@ -193,16 +251,19 @@ class Combinations {
 
     calculateMoments({moment, x, width}:{moment: ValueUnit, x: ValuesUnit, width: ValueUnit}): ValuesUnit {
             const momentValue = moment.value;
-            const xValues = x.values;
-            const widthValue = width.value;
 
-            const moments = xValues.map((x_i, i) => {
-                return (momentValue * widthValue * x_i / 2) - (momentValue * x_i**2 / 2)
+            // Convert all length units to meters
+            const L_m = width.value / 100;
+            const xValues_m = x.values.map(x_cm => x_cm / 100);
+
+            // Formula for parabolic distribution of a maximum moment M_max: M(x) = (4*M_max/L²)*(L*x - x²)
+            const moments = xValues_m.map((x_m) => {
+                return (4 * momentValue / (L_m ** 2)) * (L_m * x_m - x_m ** 2);
             })
             
         return {
             values: moments,
-            unit: `${moment.unit.split('/')[0]}*${width.unit}`
+            unit: 'kN*m'
         }
     }
     

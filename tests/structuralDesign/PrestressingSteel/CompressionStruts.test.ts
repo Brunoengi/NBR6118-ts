@@ -1,9 +1,9 @@
 import { jest, describe, it, expect, beforeAll } from '@jest/globals';
 import Stirrups from "../../../src/structuralDesign/PrestressingSteel/CompressionStruts.js";
 import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
-import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
+import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import PrestressingSteelForce from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelForce.js";
-import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
+import { ValueUnit, ValuesUnit, Distance } from "../../../src/types/index.js";
 import Concrete from "../../../src/structuralElements/Concrete.js";
 
 
@@ -15,7 +15,7 @@ describe('Stirrups', () => {
     let p_inf_values: number[];
 
     // --- Input Data based on other tests ---
-    const width: ValueUnit = { value: 1500, unit: 'cm' }; // 15m
+    const width: Distance = { value: 1500, unit: 'cm' }; // 15m
     const epmax: ValueUnit = { value: -48, unit: 'cm' };
     const numPoints = 11;
 
@@ -26,9 +26,10 @@ describe('Stirrups', () => {
         // 2. Setup Combinations with distributed loads (kN/m)
         // Note: Stirrups class expects g1, g2, q as distributed loads, not moments.
         combinations = new Combinations({
-            mg1: { value: 18, unit: 'kN/m' },
-            mg2: { value: 20, unit: 'kN/m' },
-            mq: { value: 15, unit: 'kN/m' },
+            g1: { value: 18, unit: 'kN/m' },
+            g2: { value: 20, unit: 'kN/m' },
+            q: { value: 15, unit: 'kN/m' },
+            width: width,
             gamma_g1: 1.4,
             gamma_g2: 1.4,
             gamma_q: 1.4,
@@ -109,9 +110,9 @@ describe('Stirrups', () => {
 
             // --- Manual check at start (index 0) ---
             const L = width.value / 100; // 15m
-            const Vg1_start = (combinations.mg1.value * L / 2); // 18 * 15 / 2 = 135 kN
-            const Vg2_start = (combinations.mg2.value * L / 2); // 20 * 15 / 2 = 150 kN
-            const Vq_start = (combinations.mq.value * L / 2); // 15 * 15 / 2 = 112.5 kN
+            const Vg1_start = (combinations.g1.value * L / 2); // 18 * 15 / 2 = 135 kN
+            const Vg2_start = (combinations.g2.value * L / 2); // 20 * 15 / 2 = 150 kN
+            const Vq_start = (combinations.q.value * L / 2); // 15 * 15 / 2 = 112.5 kN
 
             // Vp at start: P_inf * sin(angle)
             const P_inf_start = p_inf_values[0]; // -1874.373 kN

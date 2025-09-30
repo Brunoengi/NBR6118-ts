@@ -2,11 +2,11 @@ import { jest, describe, it, expect, beforeAll } from '@jest/globals';
 import ShearSteel from "../../../src/structuralDesign/PrestressingSteel/ShearSteel.js";
 import CompressionStruts from "../../../src/structuralDesign/PrestressingSteel/CompressionStruts.js";
 import PrestressingSteelForce from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelForce.js";
-import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
+import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
 import Concrete from "../../../src/structuralElements/Concrete.js";
 import Steel from "../../../src/structuralElements/Steel.js";
-import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
+import { ValueUnit, ValuesUnit, Distance } from "../../../src/types/index.js";
 
 describe('ShearSteel', () => {
     let shearSteel: ShearSteel;
@@ -19,7 +19,7 @@ describe('ShearSteel', () => {
     let Md: ValuesUnit;
 
     // --- Input Data based on other tests ---
-    const width: ValueUnit = { value: 1500, unit: 'cm' }; // 15m
+    const width: Distance = { value: 1500, unit: 'cm' }; // 15m
     const h: ValueUnit = { value: 120, unit: 'cm' };
     const bw: ValueUnit = { value: 60, unit: 'cm' };
     const dl: ValueUnit = { value: 5, unit: 'cm' };
@@ -35,9 +35,10 @@ describe('ShearSteel', () => {
         steel = new Steel('CA 50');
 
         combinations = new Combinations({
-            mg1: { value: 18, unit: 'kN/m' },
-            mg2: { value: 20, unit: 'kN/m' },
-            mq: { value: 15, unit: 'kN/m' },
+            g1: { value: 18, unit: 'kN/m' },
+            g2: { value: 20, unit: 'kN/m' },
+            q: { value: 15, unit: 'kN/m' },
+            width: width,
             gamma_g1: 1.4,
             gamma_g2: 1.4,
             gamma_q: 1.4,

@@ -2,7 +2,7 @@ import ELS from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELS
 import { describe, it, expect, beforeAll, jest } from '@jest/globals';
 import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
 import Concrete from "../../../src/structuralElements/Concrete.js";
-import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
+import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
 import timeDependentLoss from "../../../src/structuralDesign/PrestressingSteel/Losses/TimeDependentLoss.js";
 
@@ -49,9 +49,10 @@ describe('ELS - Limited Prestressing', () => {
 
         // 3. Define load combinations
         const combinations = new Combinations({
-            mg1: { value: 506.25, unit: 'kN*m' },
-            mg2: { value: 562.50, unit: 'kN*m' },
-            mq: { value: 421.875, unit: 'kN*m' },
+            g1: { value: 18, unit: 'kN/m' },
+            g2: { value: 20, unit: 'kN/m' },
+            q: { value: 15, unit: 'kN/m' },
+            width: { value: 1500, unit: 'cm' },
             qsi1: new Qsi1(0.6),
             qsi2: new Qsi2(0.4),
             gamma_g1: 1.4,

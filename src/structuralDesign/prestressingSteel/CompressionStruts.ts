@@ -32,9 +32,9 @@ class Stirrups {
     }
 
     calculate_Vsd(): ValuesUnit {
-        const Vg1 = this.calculate_V({g: this.combinations.mg1})
-        const Vg2 = this.calculate_V({g: this.combinations.mg2})
-        const Vq = this.calculate_V({g: this.combinations.mq})
+        const Vg1 = this.calculate_V({g: this.combinations.g1})
+        const Vg2 = this.calculate_V({g: this.combinations.g2})
+        const Vq = this.calculate_V({g: this.combinations.q})
         const Vp = this.prestressSteelForce.shear()
 
         const gammas = {
