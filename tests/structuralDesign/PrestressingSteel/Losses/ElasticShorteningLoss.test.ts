@@ -1,5 +1,4 @@
-import ElasticShorteningLoss from "../../../../src/structuralDesign/PrestressingSteel/Losses/ElasticShorteningLoss.js"
-import { ValueUnit } from "../../../../src/types/index.js";
+import { ElasticShorteningLoss, ValueUnit } from "../../../../src/index.js";
 
 describe('ElasticShorteningLoss', () => {
     let elasticLoss: ElasticShorteningLoss;

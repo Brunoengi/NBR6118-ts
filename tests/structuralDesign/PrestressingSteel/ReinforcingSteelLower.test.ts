@@ -1,13 +1,18 @@
 import { describe, it, expect, beforeAll } from '@jest/globals';
-import ReinforcingSteelLower from "../../../src/structuralDesign/prestressingSteel/ReinforcingSteelLower.js";
-import Concrete from "../../../src/structuralElements/Concrete.js";
-import PrestressingSteel from "../../../src/structuralElements/PrestressingSteel.js";
-import PrestressingDesign from "../../../src/structuralDesign/prestressingSteel/PrestressingSteelEstimated.js";
-import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
-import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
+import {
+    ReinforcingSteelLower,
+    Concrete,
+    PrestressingSteel,
+    PrestressingDesign,
+    Combinations,
+    Qsi1,
+    Qsi2,
+    CableGeometry,
+    Steel,
+    Distance,
+    ValueUnit
+} from "../../../src/index.js";
 import Rectangular from "../../../src/sections/Rectangular.js";
-import { Distance, ValueUnit } from '../../../src/types/index.js';
-import Steel from '../../../src/structuralElements/Steel.js';
 
 describe('ReinforcingSteelLower', () => {
     let reinforcingSteel: ReinforcingSteelLower;

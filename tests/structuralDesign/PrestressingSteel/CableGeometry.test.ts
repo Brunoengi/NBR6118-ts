@@ -1,5 +1,4 @@
-import { CableGeometry } from "../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
-import { ValueUnit, Distance } from "../../../src/types/index.js";
+import { CableGeometry, ValueUnit, Distance } from "../../../src/index.js";
 import { describe, it, expect } from '@jest/globals';
 
 describe('CableGeometry', () => {

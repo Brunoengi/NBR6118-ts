@@ -1,8 +1,4 @@
-import ReinforcingSteel from "../../../src/structuralDesign/PrestressingSteel/ReinforcingSteelUpper.js";
-import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
-import Concrete from "../../../src/structuralElements/Concrete.js";
-import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
-import { ValueUnit } from "../../../src/types/index.js";
+import { ReinforcingSteelUpper as ReinforcingSteel, ELU, Concrete, CableGeometry, ValueUnit } from "../../../src/index.js";
 import { describe, it, expect, beforeAll } from '@jest/globals';
 
 describe('ReinforcingSteel', () => {

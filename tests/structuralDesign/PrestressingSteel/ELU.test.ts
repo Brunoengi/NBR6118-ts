@@ -1,7 +1,4 @@
-import ELU from "../../../src/structuralDesign/PrestressingSteel/LimitStates/ELU.js";
-import Concrete from "../../../src/structuralElements/Concrete.js";
-import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
-import { ValueUnit, ValuesUnit } from "../../../src/types/index.js";
+import { ELU, Concrete, CableGeometry, ValueUnit } from "../../../src/index.js";
 
 describe('ELU - Case 1', () => {
     let elu: ELU;

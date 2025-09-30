@@ -1,12 +1,18 @@
 import { jest, describe, it, expect, beforeAll } from '@jest/globals';
-import ShearSteel from "../../../src/structuralDesign/PrestressingSteel/ShearSteel.js";
-import CompressionStruts from "../../../src/structuralDesign/PrestressingSteel/CompressionStruts.js";
-import PrestressingSteelForce from "../../../src/structuralDesign/PrestressingSteel/PrestressingSteelForce.js";
-import { CableGeometry } from "../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
-import { Combinations, Qsi1, Qsi2 } from "../../../src/combinationLoads/Load.js";
-import Concrete from "../../../src/structuralElements/Concrete.js";
-import Steel from "../../../src/structuralElements/Steel.js";
-import { ValueUnit, ValuesUnit, Distance } from "../../../src/types/index.js";
+import {
+    ShearSteel,
+    CompressionStruts,
+    PrestressingSteelForce,
+    CableGeometry,
+    Combinations,
+    Qsi1,
+    Qsi2,
+    Concrete,
+    Steel,
+    ValueUnit,
+    ValuesUnit,
+    Distance
+} from "../../../src/index.js";
 
 describe('ShearSteel', () => {
     let shearSteel: ShearSteel;

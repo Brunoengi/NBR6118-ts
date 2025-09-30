@@ -26,7 +26,8 @@ export { default as FrictionLoss, type AnchoringType } from './structuralDesign/
 export { default as TimeDependentLoss } from './structuralDesign/prestressingSteel/losses/TimeDependentLoss.js';
 
 // structuralDesign/limitStates
-export { default as ELS } from './structuralDesign/prestressingSteel/limitStates/ELS.js';
+export { default as ELSD } from './structuralDesign/prestressingSteel/limitStates/ELSD.js';
+export { default as ELSF } from './structuralDesign/prestressingSteel/limitStates/ELSF.js';
 export { default as ELU } from './structuralDesign/prestressingSteel/limitStates/ELU.js';
 export { default as ELSDEF } from './structuralDesign/prestressingSteel/limitStates/ELSDEF.js';
 
