@@ -1,5 +1,12 @@
 // Barrel export file
 
+//Sections
+export {default as Rectangular} from './sections/Rectangular.js';
+export {default as I} from './sections/I.js';
+export {default as I_triangularCorbel} from './sections/I_triangularCorbel.js';
+export {default as T} from './sections/T.js';
+export {default as T_triangularCorbel} from './sections/T_triangularCorbel.js';
+
 // structuralElements
 export { default as Concrete } from './structuralElements/Concrete.js';
 export { default as PrestressingSteel } from './structuralElements/PrestressingSteel.js';
