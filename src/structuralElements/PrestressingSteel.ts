@@ -1,6 +1,7 @@
 import { ValueUnit } from "types/index.js"
+import { IPrestressingSteelOption } from "types/prestressSteelType.js"
 
-const options = [{
+const options: IPrestressingSteelOption[] = [{
         label: 'CP 190 RB 9.5',
         fptk: {
             value: 1900,
@@ -26,6 +27,50 @@ const options = [{
         label: 'CP 190 RB 15.2',
         fptk: {
             value: 1900,
+            unit: 'MPa'
+        },
+        area_min_cordage: {
+            value: 1.40,
+            unit: 'cm²'
+        }
+    },
+    {
+        label: 'CP 200 RB 9.5',
+        fptk: {
+            value: 2000,
+            unit: 'MPa'
+        },
+        area_min_cordage: {
+            value: 0.55,
+            unit: 'cm²'
+        }
+    },
+    {
+        label: 'CP 200 RB 12.7',
+        fptk: {
+            value: 2000,
+            unit: 'MPa'
+        },
+        area_min_cordage: {
+            value: 0.99,
+            unit: 'cm²'
+        }
+    },
+    {
+        label: 'CP 200 RB 15.2',
+        fptk: {
+            value: 2000,
+            unit: 'MPa'
+        },
+        area_min_cordage: {
+            value: 1.40,
+            unit: 'cm²'
+        }
+    },
+    {
+        label: 'CP 200 RB 15.2',
+        fptk: {
+            value: 2000,
             unit: 'MPa'
         },
         area_min_cordage: {

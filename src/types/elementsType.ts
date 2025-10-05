@@ -7,4 +7,4 @@ export type AggregateType =
   | "sandstone";
 
 export type ConcreteSectionType = 'T' | 'doubleT' | 'I' | 'invertedT' | 'rectangular'
-  
+   

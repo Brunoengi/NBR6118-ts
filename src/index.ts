@@ -46,3 +46,5 @@ export type { ValueUnit, ValuesUnit, Distance, Angles, Verification, Verificatio
 export type { IGeometricProperties } from './types/combinationsType.js';
 export type { PrestressingDesignType } from './types/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';
+export type { IPrestressingSteelOption } from './types/prestressSteelType.js'
+export type { ConcreteSectionType } from './types/elementsType.js'
