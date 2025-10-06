@@ -157,3 +157,4 @@ export interface GeometricPropsWithUnitsType {
     W2: W2
 }
 
+export interface GeometricPropsWithoutPerimeterType extends Omit<GeometricPropsWithUnitsType, 'perimeter'> {}

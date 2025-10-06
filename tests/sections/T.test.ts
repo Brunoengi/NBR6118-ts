@@ -41,6 +41,11 @@ describe('T Section', () => {
             { 'x': -10, 'y': 0 }
         ]
         expect(tSection.points).toEqual(expectedPoints)
+
+        // Perimeter = 20 + 40 + 10 + 10 + 40 + 10 + 10 + 40 = 180
+        expect(tSection.props.perimeter.value).toBe(180)
+        expect(tSection.props.perimeter.unit).toBe('cm')
+
     })
 
     describe('setProperties_upperHorizontaLine', () => {

@@ -5,7 +5,7 @@ import Concrete from "structuralElements/Concrete.js";
 import PrestressingSteel from "structuralElements/PrestressingSteel.js";
 import { AbstractPrestressingSteelDesign } from "./PrestressingSteelEstimated.js";
 import { Combinations } from "combinationLoads/Load.js";
-import {GeometricPropsWithUnitsType} from "types/sectionsType.js";
+import {GeometricPropsWithUnitsType, GeometricPropsWithoutPerimeterType} from "types/sectionsType.js";
 import Steel from "structuralElements/Steel.js";
 import {A} from "types/sectionsType.js";
 
@@ -82,7 +82,7 @@ class ReinforcingSteel {
         }
     }
 
-    calculate_props_rectangularDiagram({x}: {x: Distance}): GeometricPropsWithUnitsType {
+    calculate_props_rectangularDiagram({x}: {x: Distance}): GeometricPropsWithoutPerimeterType {
         const lambdax = this.calculate_lambdax({x})
         const yLineValue = this.h.value - lambdax.value;
         const section = this.section.setProperties_upperHorizontaLine({points: this.section.points, yLine: {value: yLineValue, unit: x.unit}})

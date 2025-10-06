@@ -34,6 +34,11 @@ describe('Rectangular Section', () => {
             { 'x': 10, 'y': 0 }
         ]
         expect(rectangularSection.points).toEqual(expectedPoints)
+
+        // Perimeter = 2 * base + 2 * height = 2 * 20 + 2 * 50 = 140
+        expect(rectangularSection.props.perimeter.value).toBe(140)
+        expect(rectangularSection.props.perimeter.unit).toBe('cm')
+
     })
 
     describe('calculate_area_upperHorizontaLine', () => {

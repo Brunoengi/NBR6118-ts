@@ -1,4 +1,4 @@
-import { GeometricPropsWithUnitsType, GeometricPropsType } from "types/sectionsType.js"
+import { GeometricPropsWithUnitsType, GeometricPropsType, GeometricPropsWithoutPerimeterType } from "types/sectionsType.js"
 import { IBidimensionalPoint } from "geometric-props"
 import { GeometricProps } from "geometric-props"
 import { Distance } from "types/index.js"
@@ -102,7 +102,7 @@ abstract class AbstractSection {
         }
     }
 
-    setProperties_upperHorizontaLine({ points, yLine }: { points: IBidimensionalPoint[], yLine: Distance }): Omit<GeometricPropsWithUnitsType, 'perimeter'> {
+    setProperties_upperHorizontaLine({ points, yLine }: { points: IBidimensionalPoint[], yLine: Distance }): GeometricPropsWithoutPerimeterType {
         const yValue = yLine.value;
         const originalPoints = points.slice(0, -1); // Remove o ponto de fechamento duplicado
 

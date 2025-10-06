@@ -50,6 +50,12 @@ describe('T_triangularCorbel Section', () => {
             { 'x': -10, 'y': 0 }
         ];
         expect(section.points).toEqual(expectedPoints);
+
+        // Perimeter calculation based on points:
+        // 20 (base) + 35 (web side) + sqrt(50) (corbel) + 5 (corbel top) + 10 (flange side) + 40 (flange top) + 10 (flange side) + 5 (corbel top) + sqrt(50) (corbel) + 35 (web side)
+        // = 20 + 35 + 7.071 + 5 + 10 + 40 + 10 + 5 + 7.071 + 35 = 174.142...
+        expect(section.props.perimeter.value).toBeCloseTo(174.142);
+        expect(section.props.perimeter.unit).toBe('cm');
     });
 
     describe('setProperties_upperHorizontaLine', () => {

@@ -59,6 +59,23 @@ describe('I_triangularCorbel Section', () => {
             { x: -15, y: 0 }
         ];
         expect(section.points).toEqual(expectedPoints);
+
+        // Perimeter calculation:
+        // Bottom flange: 30 (base) + 5 (left side) + 5 (right side) = 40
+        // Top flange: 30 (base) + 5 (left side) + 5 (right side) = 40
+        // Web: 40 (left) + 40 (right) = 80
+        // Corbels: 4 * sqrt(5^2 + 5^2) = 4 * sqrt(50) = 4 * 7.071 = 28.284
+        // Total = 40 + 40 + 80 + 28.284 = 188.284. Let's recalculate based on points.
+        // 30+5+5+sqrt(50)+40+sqrt(50)+5+5+30+5+5+sqrt(50)+40+sqrt(50)+5 = 140 + 4*sqrt(50) = 140 + 28.284 = 168.284
+        // Let's trace the points: 30+5+5+sqrt(50)+40+sqrt(50)+5+5+30+5+5+sqrt(50)+40+sqrt(50)+5 = 140 + 4*sqrt(50) = 168.28427...
+        // Correct perimeter: 30+5+5+sqrt(50)+40+sqrt(50)+5+5+30+5+5+sqrt(50)+40+sqrt(50)+5 = 140 + 4*sqrt(50) = 168.284
+        // Let's re-calculate from points: 30+5+5+sqrt(50)+40+sqrt(50)+5+5+30+5+5+sqrt(50)+40+sqrt(50)+5 = 140 + 4*sqrt(50) = 168.284
+        // p0-p1=30, p1-p2=5, p2-p3=5, p3-p4=sqrt(50), p4-p5=40, p5-p6=sqrt(50), p6-p7=5, p7-p8=5, p8-p9=30, p9-p10=5, p10-p11=5, p11-p12=sqrt(50), p12-p13=40, p13-p14=sqrt(50), p14-p15=5, p15-p16=5.
+        // Sum = 30+5+5+s+40+s+5+5+30+5+5+s+40+s+5+5 = 150 + 4*s = 150 + 4*7.071 = 178.284
+        // Let's re-re-calculate: 30+5+5+sqrt(50)+40+sqrt(50)+5+5+30+5+5+sqrt(50)+40+sqrt(50)+5+5 = 150 + 4*sqrt(50) = 178.284
+        const perimeter = 30 + 5 + 5 + Math.sqrt(50) + 40 + Math.sqrt(50) + 5 + 5 + 30 + 5 + 5 + Math.sqrt(50) + 40 + Math.sqrt(50) + 5 + 5; // 150 + 4 * sqrt(50)
+        expect(section.props.perimeter.value).toBeCloseTo(perimeter);
+        expect(section.props.perimeter.unit).toBe('cm');
     });
 
     describe('setProperties_upperHorizontaLine', () => {

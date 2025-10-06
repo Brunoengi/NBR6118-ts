@@ -52,6 +52,11 @@ describe('I Section', () => {
             { 'x': -10, 'y': 0 }
         ];
         expect(iSection.points).toEqual(expectedPoints);
+
+        // Perimeter = 20+5+5+40+10+5+30+5+10+40+5+5 = 180
+        expect(iSection.props.perimeter.value).toBe(180);
+        expect(iSection.props.perimeter.unit).toBe('cm');
+
     });
 
     describe('setProperties_upperHorizontaLine', () => {
