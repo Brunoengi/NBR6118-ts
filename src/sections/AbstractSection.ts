@@ -9,11 +9,10 @@ abstract class AbstractSection {
 
     constructor(points: IBidimensionalPoint[]) {
         this.points = points
-        this.props = this.setProperties(new GeometricProps(points))
-    
+        this.props = { ...this.setProperties(new GeometricProps(points)), perimeter: this.calculatePerimeter() }
     }
 
-    setProperties(geometricPropClass: GeometricPropsType): GeometricPropsWithUnitsType {
+    setProperties(geometricPropClass: GeometricPropsType): Omit<GeometricPropsWithUnitsType, 'perimeter'> {
         return {
             A: {
                 value: geometricPropClass.A,
@@ -103,7 +102,7 @@ abstract class AbstractSection {
         }
     }
 
-    setProperties_upperHorizontaLine({ points, yLine }: { points: IBidimensionalPoint[], yLine: Distance }): GeometricPropsWithUnitsType{
+    setProperties_upperHorizontaLine({ points, yLine }: { points: IBidimensionalPoint[], yLine: Distance }): GeometricPropsWithUnitsType {
         const yValue = yLine.value;
         const originalPoints = points.slice(0, -1); // Remove o ponto de fechamento duplicado
 
@@ -141,6 +140,24 @@ abstract class AbstractSection {
             return this.setProperties(new GeometricProps(upperPoints));
         }
         return this.setProperties(new GeometricProps([])); // Retorna propriedades zeradas se não houver pontos
+    }
+
+    calculatePerimeter(): Distance {
+        const points = this.points;
+        let perimeter = 0;
+
+        for (let i = 0; i < points.length - 1; i++) {
+            const p1 = points[i];
+            const p2 = points[i + 1];
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            perimeter += Math.sqrt(dx * dx + dy * dy);
+        }
+
+        return {
+            value: perimeter,
+            unit: 'cm'
+        };
     }
 }
 

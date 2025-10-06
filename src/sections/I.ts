@@ -21,6 +21,7 @@ class I extends AbstractSection {
     ])
 
     }
+
 }
 
 export default I

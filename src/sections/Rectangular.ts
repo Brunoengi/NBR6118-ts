@@ -16,7 +16,6 @@ class Rectangular extends AbstractSection {
             { 'x': -b / 2, 'y': 0 },
             { 'x': b / 2, 'y': 0 }
         ])
-
     }
 }
 

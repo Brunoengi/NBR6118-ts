@@ -127,8 +127,14 @@ export interface Sy {
     unit: 'cm³';
 }
 
+export interface Perimeter {
+    value: number;
+    unit: 'cm';
+}
+
 export interface GeometricPropsWithUnitsType {
     A: A,
+    perimeter: Perimeter, 
     Sx: Sx,
     Sy: Sy,
     Ix: Ix,
