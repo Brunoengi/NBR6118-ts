@@ -167,6 +167,7 @@ class AnchorageLoss {
 
                     const deltaP_mid = Math.max(0, deltaP2); // Loss at mid-span cannot be negative
                     const deltaP_max_eff = deltaP_mid + 2 * deltaP1;
+                    
 
                     // The loss at any point 'x' is the linear interpolation between deltaP_max_eff and deltaP_mid
                     const distanceFromMid = Math.abs(x_cm - width_cm / 2);

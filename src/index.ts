@@ -29,7 +29,7 @@ export { default as ReinforcingSteelUpper } from './structuralDesign/prestressin
 // structuralDesign/losses
 export { default as AnchorageLoss } from './structuralDesign/prestressingSteel/losses/AnchorageLoss.js';
 export { default as ElasticShorteningLoss } from './structuralDesign/prestressingSteel/losses/ElasticShorteningLoss.js';
-export { default as FrictionLoss, type AnchoringType } from './structuralDesign/prestressingSteel/losses/FrictionLoss.js';
+export { default as FrictionLoss } from './structuralDesign/prestressingSteel/losses/FrictionLoss.js';
 export { default as TimeDependentLoss } from './structuralDesign/prestressingSteel/losses/TimeDependentLoss.js';
 
 // structuralDesign/limitStates
@@ -52,3 +52,4 @@ export type { PrestressingDesignType } from './types/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';
 export type { IPrestressingSteelOption } from './types/prestressSteelType.js'
 export type { ConcreteSectionType } from './types/elementsType.js'
+export type { AnchoringType } from './types/prestressSteelType.js'

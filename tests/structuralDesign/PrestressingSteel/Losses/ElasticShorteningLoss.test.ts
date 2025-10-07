@@ -234,3 +234,143 @@ describe('ElasticShorteningLoss', () => {
         });
     });
 });
+
+describe('ElasticShorteningLoss - T-Beam', () => {
+    let elasticLoss: ElasticShorteningLoss;
+
+    // --- Input Data for T-Beam case ---
+    const width: ValueUnit = { value: 2000, unit: 'cm' }; // 20m
+    const numSections = 10; // To get 11 points from 0 to 20m
+
+    // Generate x points from 0 to 20m
+    const x_values_cm = Array.from({ length: numSections + 1 }, (_, i) => (width.value) * i / numSections);
+
+    // Generate parabolic eccentricity ep(x)
+    const epmax_cm = -92;
+    const ep_values_cm = x_values_cm.map(x_i => {
+        const L = width.value;
+        // Parabolic formula: y(x) = -(4*e/L^2)*x^2 + (4*e/L)*x
+        return (-(4 * epmax_cm) / (L ** 2)) * (x_i ** 2) + ((4 * epmax_cm) / L) * x_i;
+    });
+
+    // Panc values for the full symmetric beam
+    const panc_half = [-5806.995, -5880.953, -5954.91, -6028.868, -6102.826, -6176.784];
+    const panc_full = [...panc_half, ...panc_half.slice(0, -1).reverse()];
+
+    beforeAll(() => {
+        elasticLoss = new ElasticShorteningLoss({
+            Ecs: { value: 24.15, unit: 'GPa' }, // For fck = 25 MPa
+            Ep: { value: 195, unit: 'GPa' },
+            ep: { values: ep_values_cm, unit: 'cm' },
+            g1: { value: 62, unit: 'kN/m' }, // 0.62 kN/cm -> 62 kN/m
+            Ac: { value: 12000, unit: 'cm²' }, // 1.2 m²
+            //Foi utilizado o valor aproximado de 20100000
+            Ic: { value: 20100000, unit: 'cm⁴' }, // 0.201 m⁴
+            width: width,
+            x: { values: x_values_cm, unit: 'cm' },
+            Panc: { values: panc_full, unit: 'kN' },
+            Ap: { value: 48.48, unit: 'cm²' }, // From Losses.test.ts T-Beam case
+            ncable: 4
+        });
+    });
+
+    it('should be instantiated correctly for T-Beam', () => {
+        expect(elasticLoss).toBeInstanceOf(ElasticShorteningLoss);
+        expect(elasticLoss.Panc.values.length).toBe(11);
+        expect(elasticLoss.ep.values.length).toBe(11);
+    });
+
+    it('should calculate the modular ratio (alphap) correctly', () => {
+        const alphap = elasticLoss.calculateAlphap();
+        // αp = Ep / Ecs = 195 / 24.15
+        expect(alphap).toBeCloseTo(8.0745, 4);
+    });
+
+    it('should calculate sigmacp correctly for T-Beam', () => {
+        const sigmacp = elasticLoss.calculateSigmacp();
+        // Values from user, divided by 10 for kN/cm² and made symmetric
+        const expectedSigmacp_half = [-0.4839, -0.811, -1.5233, -2.2937, -2.877, -3.1157];
+        const expectedSigmacp = [...expectedSigmacp_half, ...expectedSigmacp_half.slice(0, -1).reverse()];
+
+        sigmacp.values.forEach((val, i) => {
+            expect(val).toBeCloseTo(expectedSigmacp[i], 3);
+        });
+    });
+
+    it('should calculate sigmacg correctly for T-Beam', () => {
+        const sigmacg = elasticLoss.calculateSigmacg();
+        // Values from user, divided by 10 for kN/cm² and made symmetric
+        const expectedSigmacg_half = [0, 0.1839, 0.5812, 1.0012, 1.3077, 1.4189];
+        const expectedSigmacg = [...expectedSigmacg_half, ...expectedSigmacg_half.slice(0, -1).reverse()];
+
+        expect(sigmacg.values.length).toBe(expectedSigmacg.length);
+        sigmacg.values.forEach((val, i) => {
+            expect(val).toBeCloseTo(expectedSigmacg[i], 4);
+        });
+    });
+
+    it('should calculate total stress (sigmac) correctly', () => {
+        const sigmac = elasticLoss.calculateSigmac();
+
+        // Expected values calculated manually by the user
+        const expectedSigmac = {
+            values: [-0.4839, -0.6271, -0.9422, -1.2925, -1.5693, -1.6968, -1.5693, -1.2925, -0.9422, -0.6271, -0.4839],
+            unit: 'kN/cm²'
+        };
+
+        expect(sigmac.unit).toBe(expectedSigmac.unit);
+        sigmac.values.forEach((calculatedValue, i) => {
+            expect(calculatedValue).toBeCloseTo(expectedSigmac.values[i], 2);
+        });
+    });
+
+    it('should calculate elastic shortening force loss (deltaP_el) correctly', () => {
+        const deltaSigmaP = elasticLoss.calculateDeltaSigmaP();
+        const Ap = elasticLoss.Ap.value;
+        const deltaP_el = deltaSigmaP.values.map(stress_loss => stress_loss * Ap);
+
+        const expected_deltaP_el_half = [-71.0, -92.1, -138.3, -189.7, -230.4, -249.1];
+        const expected_deltaP_el = [...expected_deltaP_el_half, ...expected_deltaP_el_half.slice(0, -1).reverse()];
+
+        expect(deltaP_el.length).toBe(expected_deltaP_el.length);
+
+        deltaP_el.forEach((force_loss, i) => {
+            // The loss is a reduction in tension, so the value is negative
+            expect(force_loss).toBeCloseTo(expected_deltaP_el[i], 0);
+        });
+    });
+
+    it('should calculate the final prestressing force (P0) correctly', () => {
+        const p0 = elasticLoss.calculateP0();
+
+        // --- Manual Calculation for Verification at mid-span ---
+        // 1. Δσ_p
+        const alphap = 8.074536223602484; // More precise value
+        const sigmac_mid = -1.6968; // Correct value from previous test
+        const ncable = 4;
+        const sequentialFactor = (ncable - 1) / (2 * ncable); // (4-1)/(2*4) = 3/8 = 0.375
+        const deltaSigmaP_mid = alphap * sigmac_mid * sequentialFactor; // ~ -5.138 kN/cm²
+
+        // 2. ΔP_enc
+        const Ap = 48.48; // cm²
+        const deltaP_enc_mid = deltaSigmaP_mid * Ap; // ~ -249.09 kN
+
+        // 3. P0
+        const panc_mid = -6176.784; // kN
+        const p0_mid = panc_mid - deltaP_enc_mid; // -6176.784 - (-249.09) = -5927.694 kN
+
+        // Expected values for the full beam
+        const expectedP0 = [
+            -5736.0, -5788.9, -5816.6, -5839.1, -5872.5, -5927.7,
+            -5872.5, -5839.1, -5816.6, -5788.9, -5736.0
+        ];
+
+        // Check mid-span value
+        expect(p0.values[5]).toBeCloseTo(p0_mid, 1);
+
+        // Check all values
+        p0.values.forEach((force, i) => {
+            expect(force).toBeCloseTo(expectedP0[i], 0);
+        });
+    });
+});

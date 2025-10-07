@@ -18,7 +18,7 @@ class ElasticShorteningLoss {
     public readonly ncable: number;
     public readonly alphap: number;
     public readonly P0: Forces
-
+    
     
     constructor({Ecs, Ep, ep, g1, x, width, Panc, Ac, Ic, Ap, ncable}: {
         Ecs: ValueUnit,

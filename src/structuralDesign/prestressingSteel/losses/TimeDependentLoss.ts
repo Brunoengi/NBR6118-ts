@@ -102,7 +102,7 @@ class TimeDependentLoss {
         const sigmacpg_MPa = sigmacpg.map(sigmacpg_i => sigmacpg_i * 10)
 
         const deltasigmappercentuais = sigmacpg_MPa.map(sigmacpg_i => {
-            return 7.4 + (this.alphap/ 18.7) * (this.phi) ** 1.07 * (3 - sigmacpg_i)
+            return 7.4 + (this.alphap/ 18.7) * (this.phi ** 1.07) * (3 - sigmacpg_i)
         })
 
         return deltasigmappercentuais

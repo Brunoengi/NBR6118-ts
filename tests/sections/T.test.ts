@@ -99,3 +99,35 @@ describe('T Section', () => {
         })
     })
 })
+
+describe('T Section - Large Beam', () => {
+    const bf = { value: 360, unit: 'cm' };
+    const hf = { value: 20, unit: 'cm' };
+    const bw = { value: 40, unit: 'cm' };
+    const h = { value: 140, unit: 'cm' };
+    const tSection = new T({ bf, hf, bw, h });
+
+    it('should calculate geometric properties for a large T-beam correctly', () => {
+        // Area = bw * (h - hf) + bf * hf = 40 * 120 + 360 * 20 = 4800 + 7200 = 12000
+        expect(tSection.props.A.value).toBeCloseTo(12000);
+
+        // Centroid Yg
+        // Yg_web = (h - hf) / 2 = 120 / 2 = 60
+        // Yg_flange = (h - hf) + hf / 2 = 120 + 10 = 130
+        // Yg = (A_web * Yg_web + A_flange * Yg_flange) / A_total
+        // Yg = (4800 * 60 + 7200 * 130) / 12000 = (288000 + 936000) / 12000 = 1224000 / 12000 = 102
+        expect(tSection.props.Yg.value).toBeCloseTo(102);
+
+        // Moment of Inertia Ixg (about centroidal axis)
+        // Using Parallel Axis Theorem: I = I_local + A * d²
+        // I_web = (40 * 120³) / 12 + 4800 * (102 - 60)² = 5,760,000 + 8,467,200 = 14,227,200
+        // I_flange = (360 * 20³) / 12 + 7200 * (130 - 102)² = 240,000 + 5,644,800 = 5,884,800
+        // Ixg = I_web + I_flange = 14,227,200 + 5,884,800 = 20,112,000
+        expect(tSection.props.Ixg.value).toBeCloseTo(20112000);
+        expect(tSection.props.Ixg.unit).toBe('cm⁴');
+
+        // Moment of Inertia Iyg (about centroidal axis)
+        // Iyg = (120 * 40³) / 12 + (20 * 360³) / 12 = 640,000 + 77,760,000 = 78,400,000
+        expect(tSection.props.Iyg.value).toBeCloseTo(78400000);
+    });
+});
