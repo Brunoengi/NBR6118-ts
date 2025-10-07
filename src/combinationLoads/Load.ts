@@ -1,5 +1,5 @@
 import { ValuesUnit, ValueUnit, Distance } from "../types/index.js"
-import { IQsi1, IQsi2 } from "../types/combinationsType.js"
+import { IQsi1, IQsi2, IQuasiPermanent, IFrequent, ILast, ICombinations, IRare } from "../types/combinationsType.js"
 
 class Qsi1 implements IQsi1 {
 
@@ -27,35 +27,6 @@ class Qsi2 implements IQsi2 {
         }
         this.value = value;
     }
-}
-
-interface ICombinationLoads {
-    g1: ValueUnit;
-    g2: ValueUnit;
-    q: ValueUnit;
-    width: Distance;
-}
-
-interface ILast extends ICombinationLoads {
-    gamma_g1: number;
-    gamma_g2: number;
-    gamma_q: number;
-}
-
-interface IQuasiPermanent extends ICombinationLoads {
-    qsi2: Qsi2;
-}
-
-interface IFrequent extends ICombinationLoads {
-    qsi1: Qsi1;
-}
-
-interface IRare extends ICombinationLoads {}
-
-
-interface ICombinations extends ICombinationLoads, ILast {
-    qsi1: Qsi1;
-    qsi2: Qsi2;
 }
 
 

@@ -1,11 +1,9 @@
-import { ValueUnit, ValuesUnit } from "types/index.js"
+import { ValueUnit, ValuesUnit, Forces } from "types/index.js"
 
 class TimeDependentLoss {
     public readonly phi: number
     public readonly Mg1: ValuesUnit
     public readonly Mg2: ValuesUnit
-    public readonly sigmacpg: ValueUnit
-    public readonly deltasigmap: ValueUnit
     public readonly x: ValuesUnit
     public readonly width: ValueUnit
     public readonly Ac: ValueUnit
@@ -13,31 +11,24 @@ class TimeDependentLoss {
     public readonly ep: ValuesUnit
     public readonly g1: ValueUnit
     public readonly g2: ValueUnit
-    public readonly P0: ValuesUnit
+    public readonly P0: Forces
     public readonly alphap: number
     
 
-    constructor({phi, g2, sigmacpg, deltasigmap, x, width, Ac, Ic, ep, P0, g1, alphap}: {
+    constructor({phi, g2, x, width, Ac, Ic, ep, P0, g1, alphap}: {
         phi: number
-        Mg2: ValuesUnit
-        sigmacpg: ValueUnit
-        deltasigmap: ValueUnit
         x: ValuesUnit
         width: ValueUnit
         Ac: ValueUnit
         Ic: ValueUnit
         ep: ValuesUnit
         g2: ValueUnit
-        P0: ValuesUnit
-        Mg1: ValuesUnit
+        P0: Forces
         g1: ValueUnit
         alphap: number
 
     }) {
         this.phi = phi
-       
-        this.sigmacpg = sigmacpg
-        this.deltasigmap = deltasigmap
         this.x = x
         this.width = width
         this.Ac = Ac
@@ -117,7 +108,7 @@ class TimeDependentLoss {
         return deltasigmappercentuais
     }
 
-    finalPrestressingForce(): ValuesUnit {
+    finalPrestressingForce(): Forces {
         const P0 = this.P0.values;
         const deltasigmap = this.calculatedeltappercent();
 

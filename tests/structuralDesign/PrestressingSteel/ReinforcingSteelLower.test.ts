@@ -3,7 +3,7 @@ import {
     ReinforcingSteelLower,
     Concrete,
     PrestressingSteel,
-    PrestressingDesign,
+    PrestressingDesignEstimated,
     Combinations,
     Qsi1,
     Qsi2,
@@ -56,7 +56,7 @@ describe('ReinforcingSteelLower', () => {
             numPoints: 11
         });
 
-        const prestressingDesign = new PrestressingDesign({
+        const prestressingDesign = new PrestressingDesignEstimated({
             prestressingSteel,
             geometricProperties: {
                 Ac: section.props.A,

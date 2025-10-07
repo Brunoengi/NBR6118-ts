@@ -1,6 +1,8 @@
-import FrictionLoss, {AnchoringType} from "../../../../src/structuralDesign/PrestressingSteel/Losses/FrictionLoss.js";
+import FrictionLoss from "../../../../src/structuralDesign/prestressingSteel/losses/FrictionLoss.js";
 import { CableGeometry } from "../../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
 import { ValueUnit } from "../../../../src/types/index.js";
+import { AnchoringType } from "../../../../src/types/prestressSteelType.js";
+
 
 describe('FrictionLoss - Case 1', () => {
     let losses: FrictionLoss;
@@ -115,6 +117,20 @@ describe('FrictionLoss - Case 2 (Anchoring Active-Active)', () => {
         it.each(testCases)('should calculate symmetric prestress force correctly at x = $x m', ({ x, expected }) => {
             const result = losses.frictionPrestressLoss(x);
             expect(result).toBeCloseTo(expected, 1);
+        });
+
+        describe('calculatePatr', () => {
+            it('should return an array of forces matching the test cases', () => {
+                const Patr = losses.calculatePatr();
+                const expectedForces = testCases.map(tc => tc.expected);
+
+                expect(Patr.values.length).toBe(expectedForces.length);
+                expect(Patr.unit).toBe('kN');
+
+                Patr.values.forEach((calculatedForce: any, index: any) => {
+                    expect(calculatedForce).toBeCloseTo(expectedForces[index], 1);
+                });
+            });
         });
     });
 });

@@ -51,3 +51,8 @@ export interface Stress {
   unit: 'kN/cm²'
 }
 
+export interface Forces {
+  values: number[]
+  unit: 'kN'
+}
+

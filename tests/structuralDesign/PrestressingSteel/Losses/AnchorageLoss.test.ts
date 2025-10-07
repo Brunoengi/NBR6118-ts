@@ -1,12 +1,45 @@
-import AnchorageLoss, { AnchoringType } from "../../../../src/structuralDesign/PrestressingSteel/Losses/AnchorageLoss.js";
-import { ValueUnit } from "../../../../src/types/index.js";
+import AnchorageLoss, { AnchoringType } from "../../../../src/structuralDesign/prestressingSteel/losses/AnchorageLoss.js";
+import { ValueUnit, Forces } from "../../../../src/types/index.js";
+import { CableGeometry } from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
+import FrictionLoss from "../../../../src/structuralDesign/prestressingSteel/losses/FrictionLoss.js";
 
 describe('AnchorageLoss', () => {
     // --- Base Test Data ---
     const cableReturn: ValueUnit = { value: 5, unit: 'mm' };
     const Ep: ValueUnit = { value: 195, unit: 'GPa' };
-    const tangBeta: ValueUnit = { value: 13.211, unit: 'kN/m' };
     const Ap: ValueUnit = { value: 17.82, unit: 'cm²' };
+    const Patr: Forces = {
+        values: [
+            -2498.72,
+            -2478.68,
+            -2458.735,
+            -2438.903,
+            -2419.198,
+            -2399.636,
+            -2419.198,
+            -2438.903,
+            -2458.735,
+            -2478.68,
+            -2498.72
+        ],
+        unit: 'kN'
+    };
+    const width: ValueUnit = { value: 1500, unit: 'cm' }; // 15m cable
+    const cableGeo = new CableGeometry({
+        width,
+        epmax: { value: -48, unit: 'cm' },
+        numPoints: 11
+    });
+    // Create a FrictionLoss instance to get the calculated beta, ensuring consistency.
+    const frictionLoss = new FrictionLoss({
+        Pi: { value: Patr.values[0], unit: 'kN' },
+        apparentFrictionCoefficient: 0.2, // From FrictionLoss.test.ts Case 2
+        anchoring: 'active-active',
+        cableGeometry: cableGeo
+    });
+    // Use the beta calculated by FrictionLoss for all AnchorageLoss tests.
+    // This beta is slightly more precise (13.21146...) than the previously hardcoded 13.211.
+    const tangBeta = frictionLoss.beta;
 
     it('should calculate the length of influence of anchorage slip (xr) correctly', () => {
         const anchorageLoss = new AnchorageLoss({
@@ -14,7 +47,9 @@ describe('AnchorageLoss', () => {
             Ep,
             cableReturn,
             tangBeta,
-            anchoring: 'active-passive' // Anchoring type doesn't affect xr
+            anchoring: 'active-passive', // Anchoring type doesn't affect xr
+            Patr,
+            cableGeometry: cableGeo
         });
 
         // --- Manual Calculation for Verification ---
@@ -38,13 +73,12 @@ describe('AnchorageLoss', () => {
     });
 
     describe('deltaPanc (Anchorage Loss Calculation)', () => {
-        const width: ValueUnit = { value: 1500, unit: 'cm' }; // 15m cable
         const xr_expected = 1146.8; // cm
         const deltaP_max_expected = 302.99; // kN (calculated as 2 * (13.211/100) * 1146.8)
 
         // Helper to create instances of the class for testing
         const createInstance = (anchoring: AnchoringType) => new AnchorageLoss({
-            Ap, Ep, cableReturn, tangBeta, anchoring
+            Ap, Ep, cableReturn, tangBeta, anchoring, Patr, cableGeometry: cableGeo
         });
 
         // --- Test cases for a 15m beam, divided into 11 points (0m to 15m) ---
@@ -132,6 +166,62 @@ describe('AnchorageLoss', () => {
                     // The final loss at the anchor (x=0) should match deltaP_max_eff
                     expect(deltaP_max_eff).toBeCloseTo(330.74, 2);
                 });
+            });
+        });
+    });
+
+    describe('calculatePanc (Final Force Calculation)', () => {
+        // Helper to create instances of the class for testing
+        const createInstance = (anchoring: AnchoringType) => new AnchorageLoss({
+            Ap, Ep, cableReturn, tangBeta, anchoring, Patr, cableGeometry: cableGeo
+        });
+
+        it('should calculate final force Panc correctly for active-passive anchoring', () => {
+            const anchorageLoss = createInstance('active-passive');
+            const Panc = anchorageLoss.calculatePanc();
+
+            // Expected Panc = Patr + deltaPanc (loss is positive, Patr is negative)
+            const expectedPanc = [
+                -2195.73, -2215.33, -2235.02, -2254.83, -2274.77, -2294.81,
+                -2354.00, -2413.33, -2458.74, -2478.68, -2498.72
+            ];
+
+            expect(Panc.unit).toBe('kN');
+            Panc.values.forEach((force: any, i: number) => {
+                expect(force).toBeCloseTo(expectedPanc[i], 1);
+            });
+        });
+
+        it('should calculate final force Panc correctly for passive-active anchoring', () => {
+            const anchorageLoss = createInstance('passive-active');
+            const Panc = anchorageLoss.calculatePanc();
+
+            // Expected Panc = Patr + deltaPanc
+            const expectedPanc = [
+                -2498.72, -2478.68, -2458.74, -2413.33, -2354.00, -2294.81,
+                -2274.77, -2254.83, -2235.02, -2215.33, -2195.73
+            ];
+
+            expect(Panc.unit).toBe('kN');
+            Panc.values.forEach((force: any, i: number) => {
+                expect(force).toBeCloseTo(expectedPanc[i], 1);
+            });
+        });
+
+        it('should calculate final force Panc correctly for active-active anchoring', () => {
+            const anchorageLoss = createInstance('active-active');
+            const Panc = anchorageLoss.calculatePanc();
+
+            // Expected Panc = Patr + deltaPanc
+            // Values updated to reflect the more precise tangBeta calculation.
+            // Patr[mid] + deltaPanc[mid] = -2399.636 + 132.58 = -2267.056
+            const expectedPanc = [
+                -2167.98, -2187.57, -2207.08, -2227.08, -2247.07, -2267.06,
+                -2247.07, -2227.08, -2207.08, -2187.57, -2167.98];
+
+            expect(Panc.unit).toBe('kN');
+            Panc.values.forEach((force: any, i: number) => {
+                expect(force).toBeCloseTo(expectedPanc[i], 0);
             });
         });
     });

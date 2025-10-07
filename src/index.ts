@@ -18,7 +18,7 @@ export { Combinations, QuasiPermanent, Frequent, Rare, Last, Qsi1, Qsi2 } from '
 
 // structuralDesign
 export { CableGeometry } from './structuralDesign/prestressingSteel/CableGeometry.js';
-export { default as PrestressingDesign } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
+export { default as PrestressingDesignEstimated } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
 export { AbstractPrestressingSteelDesign, LimitedPrestressingSteelDesign, CompletePrestressingSteelDesign } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
 export { default as PrestressingSteelForce } from './structuralDesign/prestressingSteel/PrestressingSteelForce.js';
 export { default as CompressionStruts } from './structuralDesign/prestressingSteel/CompressionStruts.js';
@@ -43,7 +43,11 @@ export { CreepConcrete } from './structuralDesign/concrete/Creep.js';
 
 // types
 export type { ValueUnit, ValuesUnit, Distance, Angles, Verification, VerificationOneValue, VerificationResult } from './types/index.js';
+
 export type { IGeometricProperties } from './types/combinationsType.js';
+
+export type { ICombinations } from './types/combinationsType.js'
+
 export type { PrestressingDesignType } from './types/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';
 export type { IPrestressingSteelOption } from './types/prestressSteelType.js'

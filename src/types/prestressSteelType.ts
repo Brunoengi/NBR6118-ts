@@ -7,3 +7,5 @@ export interface IPrestressingSteelOption {
     fptk: ValueUnit;
     area_min_cordage: ValueUnit;
 }
+
+export type AnchoringType = 'active-active' | 'active-passive' | 'passive-active';

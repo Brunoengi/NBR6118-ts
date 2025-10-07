@@ -1,4 +1,4 @@
-import { ValueUnit, ValuesUnit } from "types/index.js";
+import { ValueUnit, ValuesUnit, Forces } from "types/index.js";
 
 
 
@@ -17,6 +17,7 @@ class ElasticShorteningLoss {
     public readonly Ap: ValueUnit;
     public readonly ncable: number;
     public readonly alphap: number;
+    public readonly P0: Forces
 
     
     constructor({Ecs, Ep, ep, g1, x, width, Panc, Ac, Ic, Ap, ncable}: {
@@ -30,7 +31,7 @@ class ElasticShorteningLoss {
         Ac: ValueUnit,
         Ic: ValueUnit
         Ap: ValueUnit,
-        ncable: number
+        ncable: number,
     }) {
         this.Ecs = Ecs;
         this.Ep = Ep;
@@ -44,6 +45,7 @@ class ElasticShorteningLoss {
         this.Ap = Ap;
         this.ncable = ncable;
         this.alphap = this.calculateAlphap();
+        this.P0 = this.calculateP0();
     }
 
     /**
@@ -184,7 +186,7 @@ class ElasticShorteningLoss {
      * Formula: P0(x) = Panc(x) - ΔP_enc(x)
      * where ΔP_enc(x) = Δσ_p,enc(x) * Ap
      */
-    calculateP0(): ValuesUnit {
+    calculateP0(): Forces {
         const deltaSigmaP = this.calculateDeltaSigmaP(); // { values: number[], unit: 'kN/cm²' }
         const panc = this.Panc; // { values: number[], unit: 'kN' }
         const ap_val = this.Ap.value; // cm²

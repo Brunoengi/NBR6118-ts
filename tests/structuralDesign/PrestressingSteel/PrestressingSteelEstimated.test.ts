@@ -1,4 +1,4 @@
-import { PrestressingDesign, Concrete, PrestressingSteel, Combinations, Qsi1, Qsi2 } from "../../../src/index.js";
+import { PrestressingDesignEstimated, Concrete, PrestressingSteel, Combinations, Qsi1, Qsi2 } from "../../../src/index.js";
 
 describe('Prestressing Steel Design', () => {
 
@@ -50,7 +50,7 @@ describe('Prestressing Steel Design', () => {
         const prestressingType = 'Limited'
 
 
-        const prestressingDesign = new PrestressingDesign({
+        const prestressingDesign = new PrestressingDesignEstimated({
             prestressingSteel,
             geometricProperties,
             lossFactor,
@@ -125,7 +125,7 @@ describe('Prestressing Steel Design', () => {
 
         const prestressingType = 'Limited'
 
-        const prestressingDesign = new PrestressingDesign({
+        const prestressingDesign = new PrestressingDesignEstimated({
             prestressingSteel,
             geometricProperties,
             lossFactor,

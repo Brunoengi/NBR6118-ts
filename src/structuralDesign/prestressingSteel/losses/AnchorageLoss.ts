@@ -1,4 +1,6 @@
-import { ValueUnit } from "types/index.js"
+import { ValueUnit, Forces } from "types/index.js"
+import { CableGeometry } from "../CableGeometry.js";
+
 
 export type AnchoringType = 'active-active' | 'active-passive' | 'passive-active';
 
@@ -8,6 +10,8 @@ interface IAnchorageLoss {
     cableReturn: ValueUnit;
     tangBeta: ValueUnit;
     anchoring: AnchoringType;
+    Patr: Forces;
+    cableGeometry: CableGeometry;
 }
 
 class AnchorageLoss {
@@ -16,13 +20,20 @@ class AnchorageLoss {
     public readonly cableReturn: ValueUnit;
     public readonly tangBeta: ValueUnit;
     public readonly anchoring: AnchoringType;
+    public readonly Patr: Forces
+    public readonly cableGeometry: CableGeometry;
+    public readonly Panc: Forces
     
-    constructor({ Ap, Ep, cableReturn, tangBeta, anchoring }: IAnchorageLoss) {
+    constructor({ Patr, Ap, Ep, cableReturn, tangBeta, anchoring, cableGeometry }: IAnchorageLoss) {
         this.Ap = Ap;
         this.Ep = Ep;
         this.cableReturn = cableReturn;
         this.tangBeta = tangBeta;
         this.anchoring = anchoring;
+        this.Patr = Patr
+        this.cableGeometry = cableGeometry
+        this.Panc = this.calculatePanc()
+
     }
 
     /**
@@ -164,6 +175,18 @@ class AnchorageLoss {
                 break;
         }
         return { value: totalLoss_kN, unit: 'kN' };
+    }
+
+    calculatePanc (): Forces {
+        const Patr = this.Patr
+        const x_cm_values = this.cableGeometry.x.values 
+        const width_cm = this.cableGeometry.width
+        const loss = x_cm_values.map(x_cm => this.deltaPanc({value: x_cm, unit:'cm'}, width_cm))
+
+        return {
+            values: loss.map((l,i) => Patr.values[i] + l.value),
+            unit: 'kN'
+        }
     }
 }
 

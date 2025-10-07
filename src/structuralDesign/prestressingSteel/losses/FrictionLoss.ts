@@ -1,7 +1,7 @@
-import { ValueUnit } from "types/index.js";
+import { ValueUnit, ValuesUnit, Forces } from "types/index.js";
 import { CableGeometry } from "../CableGeometry.js";
+import { AnchoringType } from "index.js";
 
-export type AnchoringType = 'active-active' | 'active-passive' | 'passive-active';
 
 interface IFrictionLoss {
     Pi: ValueUnit;
@@ -17,6 +17,7 @@ class FrictionLoss {
     public readonly cableGeometry: CableGeometry;
     public readonly k: ValueUnit;
     public readonly beta: ValueUnit;
+    public readonly Patr: Forces
 
     constructor({ Pi, apparentFrictionCoefficient, anchoring, cableGeometry }: IFrictionLoss) {
         this.Pi = Pi;
@@ -46,6 +47,7 @@ class FrictionLoss {
             value: Math.abs((p2 - p1) / delta_x),
             unit: 'kN/m'
         };
+        this.Patr = this.calculatePatr()
     }
 
     unintendedCurvatureLossPerMeter(nu: number, k_param: number = 0.01): ValueUnit {
@@ -89,6 +91,15 @@ class FrictionLoss {
 
         // Fallback for unknown anchoring type, though TypeScript should prevent this.
         return this.Pi.value;
+    }
+
+    calculatePatr() : Forces {
+        const x = this.cableGeometry.x.values 
+
+        return {
+            values: x.map(x_i_cm => this.frictionPrestressLoss(x_i_cm / 100)),
+            unit: 'kN'
+        }
     }
 }
 
