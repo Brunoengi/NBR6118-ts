@@ -1,7 +1,9 @@
-import { ConcreteSectionType } from "./elementsType.js";
 import { Stress } from "./index.js";
-import { AggregateType } from "./elementsType.js"; 
+import { AggregateType } from "./aggregateType.js"; 
 
+
+export type ConcreteSectionType = 'T' | 'doubleT' | 'I' | 'invertedT' | 'rectangular'
+  
 export interface ConcreteSectionOptions {
   type: ConcreteSectionType;
 }
@@ -12,3 +14,4 @@ export interface ConcreteOptions {
   section?: ConcreteSectionOptions;
   is_section_reduced?: boolean;
 }
+

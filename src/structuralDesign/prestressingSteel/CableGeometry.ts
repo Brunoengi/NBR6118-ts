@@ -1,6 +1,6 @@
 import { ValuesUnit, ValueUnit, Distance, Angles } from "types/index.js";
 
-export class CableGeometry {
+class CableGeometry {
     public readonly width: Distance;
     public readonly epmax: ValueUnit;
     public readonly numPoints: number;
@@ -107,3 +107,6 @@ export class CableGeometry {
         return alpha1 - alphaI;
     }
 }
+
+export default CableGeometry
+export type CableGeometryType = InstanceType<typeof CableGeometry>

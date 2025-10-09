@@ -1,4 +1,4 @@
-import { ValueUnit, ValuesUnit, Forces } from "types/index.js";
+import { ValueUnit, ValuesUnit, Forces, Distances } from "types/index.js";
 
 
 
@@ -8,7 +8,7 @@ class ElasticShorteningLoss {
     public readonly ep: ValuesUnit;
     public readonly sigmacp: ValuesUnit;
     public readonly sigmacg: ValuesUnit;
-    public readonly g1: ValueUnit;
+    public readonly g1: ValueUnit; // kN/m
     public readonly x: ValuesUnit;
     public readonly width: ValueUnit;
     public readonly Panc: ValuesUnit
@@ -24,7 +24,7 @@ class ElasticShorteningLoss {
         Ecs: ValueUnit,
         Ep: ValueUnit,
         ep: ValuesUnit,
-        g1: ValueUnit,
+        g1: ValueUnit, // kN/m
         x: ValuesUnit,
         width: ValueUnit
         Panc: ValuesUnit
@@ -53,22 +53,19 @@ class ElasticShorteningLoss {
      * due to a uniformly distributed load (g1).
      * Formula: Mg(x) = (g1 * L * x / 2) - (g1 * x^2 / 2)
      */
-    calculateMg(): ValuesUnit {
-        const g1_val = this.g1.value; // expecting kN/m
-        const width_val = this.width.value; // expecting cm
-        const x_vals = this.x.values; // expecting cm
+    calculateMg(): ValuesUnit { // Result in kN*cm
+        const g1_kN_m = this.g1.value;
+        const g1_kN_cm = g1_kN_m / 100;
+        const width_cm = this.width.value;
+        const x_vals_cm = this.x.values;
 
-        // Convert lengths from cm to m for consistent calculation with g1 in kN/m
-        const width_m = width_val / 100;
-        const x_vals_m = x_vals.map(x_cm => x_cm / 100);
-
-        const mg_values = x_vals_m.map(x_m => {
-            return (g1_val * width_m * x_m / 2) - (g1_val * x_m**2 / 2);
+        const mg_values_kNcm = x_vals_cm.map(x_cm => {
+            return (g1_kN_cm * width_cm * x_cm / 2) - (g1_kN_cm * x_cm**2 / 2);
         });
 
         return {
-            values: mg_values,
-            unit: 'kN*m'
+            values: mg_values_kNcm,
+            unit: 'kN*cm'
         };
     }
 
@@ -108,17 +105,14 @@ class ElasticShorteningLoss {
     }
 
     calculateSigmacg(): ValuesUnit {
-        const mg = this.calculateMg(); // Returns { values: number[], unit: 'kN*m' }
-        const mg_vals_kNm = mg.values;
+        const mg = this.calculateMg(); // Returns { values: number[], unit: 'kN*cm' }
+        const mg_vals_kNcm = mg.values;
         const ep_vals_cm = this.ep.values;
         const ic_val_cm4 = this.Ic.value;
 
-        if (mg_vals_kNm.length !== ep_vals_cm.length) {
+        if (mg_vals_kNcm.length !== ep_vals_cm.length) {
             throw new Error("Mg and ep arrays must have the same length for point-wise calculation.");
         }
-
-        // Convert Mg from kN*m to kN*cm for unit consistency
-        const mg_vals_kNcm = mg_vals_kNm.map(val => val * 100);
 
         const sigmacg_values = mg_vals_kNcm.map((mg_i, i) => {
             const ep_i = ep_vals_cm[i];

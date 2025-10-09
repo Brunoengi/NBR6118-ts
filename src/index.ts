@@ -17,8 +17,9 @@ export type { IPrestressingSteel, PrestressingSteelLabel, RelaxationType } from 
 export { Combinations, QuasiPermanent, Frequent, Rare, Last, Qsi1, Qsi2 } from './combinationLoads/Load.js';
 
 // structuralDesign
-export { CableGeometry } from './structuralDesign/prestressingSteel/CableGeometry.js';
-export { default as PrestressingDesignEstimated } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
+export { default as CableGeometry, type CableGeometryType } from './structuralDesign/prestressingSteel/CableGeometry.js';
+
+export { default as PrestressingDesignEstimated} from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
 export { AbstractPrestressingSteelDesign, LimitedPrestressingSteelDesign, CompletePrestressingSteelDesign } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
 export { default as PrestressingSteelForce } from './structuralDesign/prestressingSteel/PrestressingSteelForce.js';
 export { default as StrutVerification } from './structuralDesign/prestressingSteel/StrutVerification.js';
@@ -31,7 +32,7 @@ export { default as AnchorageLoss } from './structuralDesign/prestressingSteel/l
 export { default as ElasticShorteningLoss } from './structuralDesign/prestressingSteel/losses/ElasticShorteningLoss.js';
 export { default as FrictionLoss } from './structuralDesign/prestressingSteel/losses/FrictionLoss.js';
 export { default as TimeDependentLoss } from './structuralDesign/prestressingSteel/losses/TimeDependentLoss.js';
-export { default as Losses } from './structuralDesign/prestressingSteel/losses/index.js';
+export { default as Losses, type LossesType } from './structuralDesign/prestressingSteel/losses/index.js';
 
 // structuralDesign/limitStates
 export { default as ELSD } from './structuralDesign/prestressingSteel/limitStates/ELSD.js';
@@ -49,8 +50,6 @@ export type { IGeometricProperties } from './types/combinationsType.js';
 
 export type { ICombinations } from './types/combinationsType.js'
 
-export type {LossesType} from './structuralDesign/prestressingSteel/losses/index.js'
-
 //Longitudinal Steel in Reinforcing Steel
 export type {ReinforcingSteelAsType} from './structuralDesign/prestressingSteel/ReinforcingSteelLower.js'
 export type {ReinforcingSteelAslType} from './structuralDesign/prestressingSteel/ReinforcingSteelUpper.js'
@@ -66,5 +65,5 @@ export type { StrutVerificationType } from './structuralDesign/prestressingSteel
 export type { PrestressingDesignType } from './types/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';
 export type { IPrestressingSteelOption } from './types/prestressSteelType.js'
-export type { ConcreteSectionType } from './types/elementsType.js'
+export type { AggregateType } from './types/aggregateType.js'
 export type { AnchoringType } from './types/prestressSteelType.js'

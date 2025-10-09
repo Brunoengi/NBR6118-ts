@@ -1,5 +1,5 @@
 import { ValueUnit, ValuesUnit, Forces } from "types/index.js";
-import { CableGeometry } from "../CableGeometry.js";
+import CableGeometry from "../CableGeometry.js";
 import { AnchoringType } from "index.js";
 
 

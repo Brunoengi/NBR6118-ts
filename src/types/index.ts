@@ -56,3 +56,8 @@ export interface Forces {
   unit: 'kN'
 }
 
+export interface Force {
+  value: number
+  unit: 'kN'
+}
+

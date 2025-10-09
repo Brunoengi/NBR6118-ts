@@ -1,5 +1,5 @@
 import { ValueUnit, ValuesUnit, Distance, VerificationOneValue } from "types/index.js";
-import { CableGeometry } from "structuralDesign/prestressingSteel/CableGeometry.js";
+import  CableGeometry from "structuralDesign/prestressingSteel/CableGeometry.js";
 import AbstractSection from "sections/AbstractSection.js";
 import Concrete from "structuralElements/Concrete.js";
 import PrestressingSteel from "structuralElements/PrestressingSteel.js";

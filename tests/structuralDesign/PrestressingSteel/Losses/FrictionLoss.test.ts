@@ -1,5 +1,5 @@
 import FrictionLoss from "../../../../src/structuralDesign/prestressingSteel/losses/FrictionLoss.js";
-import { CableGeometry } from "../../../../src/structuralDesign/PrestressingSteel/CableGeometry.js";
+import  CableGeometry  from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import { ValueUnit } from "../../../../src/types/index.js";
 import { AnchoringType } from "../../../../src/types/prestressSteelType.js";
 

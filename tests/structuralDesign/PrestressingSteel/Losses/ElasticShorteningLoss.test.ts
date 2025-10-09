@@ -1,4 +1,4 @@
-import { ElasticShorteningLoss, ValueUnit } from "../../../../src/index.js";
+import { ElasticShorteningLoss, ValueUnit, Distances } from "../../../../src/index.js";
 
 describe('ElasticShorteningLoss', () => {
     let elasticLoss: ElasticShorteningLoss;
@@ -23,6 +23,9 @@ describe('ElasticShorteningLoss', () => {
     const panc_half = [-2167.976, -2187.793, -2207.61, -2227.427, -2247.244, -2267.06];
     const panc_full = [...panc_half, ...panc_half.slice(0, -1).reverse()];
 
+    const x: Distances = { values: x_values_cm, unit: 'cm' };
+
+
     beforeAll(() => {
         elasticLoss = new ElasticShorteningLoss({
             Ecs: { value: 29.403, unit: 'GPa' },
@@ -32,7 +35,7 @@ describe('ElasticShorteningLoss', () => {
             Ac: { value: 7200, unit: 'cm²' },
             Ic: { value: 8640000, unit: 'cm⁴' },
             width: width,
-            x: { values: x_values_cm, unit: 'cm' },
+            x: x,
             Panc: { values: panc_full, unit: 'kN' },
             Ap: { value: 17.82, unit: 'cm²' },
             // sigmacp and sigmacg are not needed for these calculations
@@ -52,16 +55,16 @@ describe('ElasticShorteningLoss', () => {
             
             // --- Manual Calculation for Verification ---
             // Formula: Mg(x) = (g1 * L * x / 2) - (g1 * x^2 / 2)
-            // Units: g1 (kN/m), L (m), x (m) -> Mg (kN*m)
-            const g1 = 18;
-            const L = 15;
+            // Units: g1 (kN/cm), L (cm), x (cm) -> Mg (kN*cm)
+            const g1_kN_cm = 18 / 100;
+            const L_cm = 1500;
 
             // At x = 0m (start)
             expect(mg.values[0]).toBeCloseTo(0, 2);
 
             // At x = 7.5m (mid-span)
-            const x_mid = 7.5;
-            const expected_mg_mid = (g1 * L * x_mid / 2) - (g1 * x_mid**2 / 2); // 506.25 kN*m
+            const x_mid_cm = 750;
+            const expected_mg_mid = (g1_kN_cm * L_cm * x_mid_cm / 2) - (g1_kN_cm * x_mid_cm**2 / 2); // 50625 kN*cm
             expect(mg.values[5]).toBeCloseTo(expected_mg_mid, 2);
 
             // At x = 15m (end)
@@ -257,6 +260,8 @@ describe('ElasticShorteningLoss - T-Beam', () => {
     const panc_half = [-5806.995, -5880.953, -5954.91, -6028.868, -6102.826, -6176.784];
     const panc_full = [...panc_half, ...panc_half.slice(0, -1).reverse()];
 
+    const x: Distances = { values: x_values_cm, unit: 'cm' };
+
     beforeAll(() => {
         elasticLoss = new ElasticShorteningLoss({
             Ecs: { value: 24.15, unit: 'GPa' }, // For fck = 25 MPa
@@ -267,7 +272,7 @@ describe('ElasticShorteningLoss - T-Beam', () => {
             //Foi utilizado o valor aproximado de 20100000
             Ic: { value: 20100000, unit: 'cm⁴' }, // 0.201 m⁴
             width: width,
-            x: { values: x_values_cm, unit: 'cm' },
+            x: x,
             Panc: { values: panc_full, unit: 'kN' },
             Ap: { value: 48.48, unit: 'cm²' }, // From Losses.test.ts T-Beam case
             ncable: 4

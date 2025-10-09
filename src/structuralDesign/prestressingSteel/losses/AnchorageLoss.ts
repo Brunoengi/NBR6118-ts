@@ -1,5 +1,5 @@
-import { ValueUnit, Forces } from "types/index.js"
-import { CableGeometry } from "../CableGeometry.js";
+import { ValueUnit, Forces, Distance } from "types/index.js"
+import CableGeometry from "../CableGeometry.js";
 
 
 export type AnchoringType = 'active-active' | 'active-passive' | 'passive-active';
@@ -7,7 +7,7 @@ export type AnchoringType = 'active-active' | 'active-passive' | 'passive-active
 interface IAnchorageLoss {
     Ap: ValueUnit;
     Ep: ValueUnit;
-    cableReturn: ValueUnit;
+    cableReturn: Distance;
     tangBeta: ValueUnit;
     anchoring: AnchoringType;
     Patr: Forces;
@@ -17,7 +17,7 @@ interface IAnchorageLoss {
 class AnchorageLoss {
     public readonly Ap: ValueUnit;
     public readonly Ep: ValueUnit;
-    public readonly cableReturn: ValueUnit;
+    public readonly cableReturn: Distance;
     public readonly tangBeta: ValueUnit;
     public readonly anchoring: AnchoringType;
     public readonly Patr: Forces
@@ -48,8 +48,8 @@ class AnchorageLoss {
     public get xr(): ValueUnit {
         // --- Unit Conversions to a consistent system (kN, cm) ---
 
-        // cableReturn: mm -> cm
-        const a_cm = this.cableReturn.value / 10;
+        // cableReturn is in cm
+        const a_cm = this.cableReturn.value;
 
         // Ep: GPa -> kN/cm² (1 GPa = 100 kN/cm²)
         const Ep_kN_cm2 = this.Ep.value * 100;
@@ -149,7 +149,7 @@ class AnchorageLoss {
                 if (xr_cm > width_cm / 2) {
                     // Based on the user's formulas for the two "discounts"
                     const tangBeta_kN_cm = this.tangBeta.value / 100;
-                    const a_cm = this.cableReturn.value / 10;
+                    const a_cm = this.cableReturn.value;
                     const Ep_kN_cm2 = this.Ep.value * 100;
                     const Ap_cm2 = this.Ap.value;
 

@@ -2,9 +2,10 @@ import AnchorageLoss from "./AnchorageLoss.js";
 import ElasticShorteningLoss from "./ElasticShorteningLoss.js";
 import FrictionLoss from "./FrictionLoss.js";
 import TimeDependentLoss from "./TimeDependentLoss.js";
-import { ValueUnit, ValuesUnit } from "types/index.js";
+import { ValueUnit, ValuesUnit, Force, Distance, Distances } from "types/index.js";
+import {A, Ixg, Iyg} from "types/sectionsType.js";
 import { AnchoringType } from "./AnchorageLoss.js";
-import { CableGeometry } from "../CableGeometry.js";
+import CableGeometry from "../CableGeometry.js";
 
 
 class Losses {
@@ -17,20 +18,20 @@ class Losses {
     public timeDependentLoss: TimeDependentLoss;
 
     constructor({ Pi, apparentFrictionCoefficient, anchoring, cableGeometry, Ap, Ep, cableReturn, Ecs, ep, g1, x, width, Ac, Ic, ncable, phi, g2, alphap }: {
-        Pi: ValueUnit,
+        Pi: Force,
         apparentFrictionCoefficient: number,
         anchoring: AnchoringType,
         cableGeometry: CableGeometry,
-        Ap: ValueUnit,
+        Ap: A,
         Ep: ValueUnit,
-        cableReturn: ValueUnit,
+        cableReturn: Distance,
         Ecs: ValueUnit,
         ep: ValuesUnit,
         g1: ValueUnit,
-        x: ValuesUnit,
-        width: ValueUnit,
-        Ac: ValueUnit,
-        Ic: ValueUnit,
+        x: Distances,
+        width: Distance,
+        Ac: A,
+        Ic: Ixg,
         ncable: number,
         phi: number,
         g2: ValueUnit

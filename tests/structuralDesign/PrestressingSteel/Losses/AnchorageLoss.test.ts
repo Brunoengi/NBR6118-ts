@@ -1,11 +1,11 @@
 import AnchorageLoss, { AnchoringType } from "../../../../src/structuralDesign/prestressingSteel/losses/AnchorageLoss.js";
 import { ValueUnit, Forces } from "../../../../src/types/index.js";
-import { CableGeometry } from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
+import CableGeometry from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import FrictionLoss from "../../../../src/structuralDesign/prestressingSteel/losses/FrictionLoss.js";
 
 describe('AnchorageLoss', () => {
     // --- Base Test Data ---
-    const cableReturn: ValueUnit = { value: 5, unit: 'mm' };
+    const cableReturn: ValueUnit = { value: 0.5, unit: 'cm' };
     const Ep: ValueUnit = { value: 195, unit: 'GPa' };
     const Ap: ValueUnit = { value: 17.82, unit: 'cm²' };
     const Patr: Forces = {
@@ -55,8 +55,8 @@ describe('AnchorageLoss', () => {
         // --- Manual Calculation for Verification ---
         // Convert units to be consistent: kN and cm
 
-        // a (cableReturn): 5 mm = 0.5 cm
-        const a_cm = 0.5;
+        // a (cableReturn): 0.5 cm
+        const a_cm = cableReturn.value;
 
         // Ep: 195 GPa = 195 * 100 kN/cm² = 19500 kN/cm²
         const Ep_kN_cm2 = 19500;
@@ -141,7 +141,7 @@ describe('AnchorageLoss', () => {
                     // This test verifies the internal logic for the active-active case with overlapping zones.
                     // Values are derived from the base test data.
                     const width_cm = width.value;
-                    const a_cm = cableReturn.value / 10;
+                    const a_cm = cableReturn.value;
                     const Ep_kN_cm2 = Ep.value * 100;
                     const Ap_cm2 = Ap.value;
                     const tangBeta_kN_cm = tangBeta.value / 100;

@@ -1,9 +1,7 @@
 import Losses from "../../../../src/structuralDesign/prestressingSteel/losses/index.js";
-import { CableGeometry } from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
-import { ValueUnit, ValuesUnit } from "../../../../src/types/index.js";
+import  CableGeometry  from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
+import { ValueUnit, ValuesUnit, Distances } from "../../../../src/types/index.js";
 import { AnchoringType } from "../../../../src/types/prestressSteelType.js";
-
-
 
 describe('Losses Integration Test', () => {
     let losses: Losses;
@@ -23,7 +21,7 @@ describe('Losses Integration Test', () => {
 
         const Ap: ValueUnit = { value: 17.82, unit: 'cm²' };
         const Ep: ValueUnit = { value: 195, unit: 'GPa' };
-        const cableReturn: ValueUnit = { value: 5, unit: 'mm' };
+        const cableReturn: ValueUnit = { value: 0.5, unit: 'cm' };
 
         // From ElasticShorteningLoss (using typical concrete properties)
         // Values from ELSD.test.ts and TimeDependentLoss.test.ts for consistency
@@ -32,7 +30,7 @@ describe('Losses Integration Test', () => {
         const Ecs: ValueUnit = { value: 29.403, unit: 'GPa' }; // Ecs for 35MPa concrete
         const g1: ValueUnit = { value: 18, unit: 'kN/m' }; // 0.72m² * 25kN/m³
         const ncable = 3;
-        const x: ValuesUnit = cableGeometry.x;
+        const x: Distances = cableGeometry.x;
         const ep: ValuesUnit = {
             values: x.values.map(x_cm => cableGeometry.cableY(x_cm)),
             unit: 'cm'
@@ -157,7 +155,7 @@ describe('Losses Integration Test - T-Beam', () => {
 
         const Ap: ValueUnit = { value: 48.48, unit: 'cm²' };
         const Ep: ValueUnit = { value: 195, unit: 'GPa' };
-        const cableReturn: ValueUnit = { value: 6, unit: 'mm' };
+        const cableReturn: ValueUnit = { value: 0.6, unit: 'cm' };
 
         // Concrete and Section Properties
         const Ac: ValueUnit = { value: 12000, unit: 'cm²' }; // 1.2 m²
@@ -166,7 +164,7 @@ describe('Losses Integration Test - T-Beam', () => {
         const Ecs: ValueUnit = { value: 24.15, unit: 'GPa' }; // 24150 MPa
         const g1: ValueUnit = { value: 62, unit: 'kN/m' }; // 0.62 kN/cm
         const ncable = 4;
-        const x: ValuesUnit = cableGeometry.x;
+        const x: Distances = cableGeometry.x;
         const ep: ValuesUnit = {
             values: x.values.map(x_cm => cableGeometry.cableY(x_cm)),
             unit: 'cm'
