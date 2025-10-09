@@ -1,6 +1,6 @@
 import { ValuesUnit, ValueUnit } from "types/index.js"
 
-class ReinforcingSteel {
+class ReinforcingSteelAsl {
     public readonly sigma: {
         sigma1P0: ValuesUnit
         sigma2P0: ValuesUnit
@@ -74,4 +74,5 @@ class ReinforcingSteel {
     
 }
 
-export default ReinforcingSteel;
+export default ReinforcingSteelAsl;
+export type ReinforcingSteelAslType = InstanceType<typeof ReinforcingSteelAsl>

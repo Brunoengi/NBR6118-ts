@@ -21,7 +21,7 @@ export { CableGeometry } from './structuralDesign/prestressingSteel/CableGeometr
 export { default as PrestressingDesignEstimated } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
 export { AbstractPrestressingSteelDesign, LimitedPrestressingSteelDesign, CompletePrestressingSteelDesign } from './structuralDesign/prestressingSteel/PrestressingSteelEstimated.js';
 export { default as PrestressingSteelForce } from './structuralDesign/prestressingSteel/PrestressingSteelForce.js';
-export { default as CompressionStruts } from './structuralDesign/prestressingSteel/CompressionStruts.js';
+export { default as StrutVerification } from './structuralDesign/prestressingSteel/StrutVerification.js';
 export { default as ShearSteel } from './structuralDesign/prestressingSteel/ShearSteel.js';
 export { default as ReinforcingSteelLower } from './structuralDesign/prestressingSteel/ReinforcingSteelLower.js';
 export { default as ReinforcingSteelUpper } from './structuralDesign/prestressingSteel/ReinforcingSteelUpper.js';
@@ -50,6 +50,18 @@ export type { IGeometricProperties } from './types/combinationsType.js';
 export type { ICombinations } from './types/combinationsType.js'
 
 export type {LossesType} from './structuralDesign/prestressingSteel/losses/index.js'
+
+//Longitudinal Steel in Reinforcing Steel
+export type {ReinforcingSteelAsType} from './structuralDesign/prestressingSteel/ReinforcingSteelLower.js'
+export type {ReinforcingSteelAslType} from './structuralDesign/prestressingSteel/ReinforcingSteelUpper.js'
+
+//Shear Steel in Reinforcing Steel
+export type { ShearSteelType } from './structuralDesign/prestressingSteel/ShearSteel.js'
+
+//StrutVerification
+export type { StrutVerificationType } from './structuralDesign/prestressingSteel/StrutVerification.js'
+
+
 
 export type { PrestressingDesignType } from './types/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';

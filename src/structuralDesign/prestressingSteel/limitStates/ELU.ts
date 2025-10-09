@@ -12,8 +12,6 @@ class ELU {
     public readonly Mg: ValuesUnit
     public readonly concrete: Concrete
 
-
-
     constructor({P0, ep, Ac, W1, W2, Mg, concrete}: {
         P0: ValuesUnit
         ep: ValuesUnit

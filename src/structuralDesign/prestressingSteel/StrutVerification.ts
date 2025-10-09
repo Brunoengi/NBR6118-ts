@@ -4,7 +4,7 @@ import { CableGeometry } from "./CableGeometry.js";
 import PrestressingSteelForce from "./PrestressingSteelForce.js";
 import Concrete from "../../structuralElements/Concrete.js";
 
-class Stirrups {
+class StrutVerification {
     Vsd: ValuesUnit
     combinations: Combinations
     cableGeometry: CableGeometry
@@ -106,4 +106,5 @@ class Stirrups {
     }
 }
 
-export default Stirrups;
+export default StrutVerification;
+export type StrutVerificationType = InstanceType<typeof StrutVerification>

@@ -3,7 +3,7 @@ import Concrete from "../../structuralElements/Concrete.js";
 import { Combinations } from "../../combinationLoads/Load.js";
 import { ValuesUnit, ValueUnit } from "../../types/index.js";
 import { CableGeometry } from "./CableGeometry.js";
-import CompressionStruts from "./CompressionStruts.js";
+import CompressionStruts from "./StrutVerification.js";
 import Steel from "../../structuralElements/Steel.js";
 
 class ShearSteel {
@@ -107,3 +107,4 @@ class ShearSteel {
 }
 
 export default ShearSteel;
+export type ShearSteelType = InstanceType<typeof ShearSteel>

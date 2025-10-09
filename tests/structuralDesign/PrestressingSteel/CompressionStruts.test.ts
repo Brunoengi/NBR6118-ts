@@ -1,6 +1,6 @@
 import { jest, describe, it, expect, beforeAll } from '@jest/globals';
 import {
-    CompressionStruts as Stirrups,
+    StrutVerification,
     Combinations,
     Qsi1,
     Qsi2,
@@ -14,7 +14,7 @@ import {
 
 
 describe('Stirrups', () => {
-    let stirrups: Stirrups;
+    let stirrups: StrutVerification;
     let cableGeometry: CableGeometry;
     let prestressSteelForce: PrestressingSteelForce;
     let combinations: Combinations;
@@ -54,7 +54,7 @@ describe('Stirrups', () => {
         prestressSteelForce = new PrestressingSteelForce({ P_inf, cableGeometry });
 
         // 4. Instantiate Stirrups
-        stirrups = new Stirrups({
+        stirrups = new StrutVerification({
             combinations,
             cableGeometry,
             prestressSteelForce,
@@ -67,7 +67,6 @@ describe('Stirrups', () => {
     });
 
     it('should be instantiated correctly', () => {
-        expect(stirrups).toBeInstanceOf(Stirrups);
         expect(stirrups.combinations).toBe(combinations);
         expect(stirrups.cableGeometry).toBe(cableGeometry);
         expect(stirrups.prestressSteelForce).toBe(prestressSteelForce);

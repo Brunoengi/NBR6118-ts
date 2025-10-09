@@ -10,7 +10,7 @@ import Steel from "structuralElements/Steel.js";
 import {A} from "types/sectionsType.js";
 
 
-class ReinforcingSteel {
+class ReinforcingSteelAs {
 
     public readonly concrete: Concrete;
     public readonly section: AbstractSection;
@@ -233,4 +233,5 @@ class ReinforcingSteel {
     }    
 }
 
-export default ReinforcingSteel;
+export default ReinforcingSteelAs;
+export type ReinforcingSteelAsType = InstanceType<typeof ReinforcingSteelAs>

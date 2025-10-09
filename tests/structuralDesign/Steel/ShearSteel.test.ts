@@ -1,7 +1,7 @@
 import { jest, describe, it, expect, beforeAll } from '@jest/globals';
 import {
     ShearSteel,
-    CompressionStruts,
+    StrutVerification,
     PrestressingSteelForce,
     CableGeometry,
     Combinations,
@@ -16,7 +16,7 @@ import {
 
 describe('ShearSteel', () => {
     let shearSteel: ShearSteel;
-    let compressionStruts: CompressionStruts;
+    let compressionStruts: StrutVerification;
     let cableGeometry: CableGeometry;
     let prestressSteelForce: PrestressingSteelForce;
     let combinations: Combinations;
@@ -58,7 +58,7 @@ describe('ShearSteel', () => {
         prestressSteelForce = new PrestressingSteelForce({ P_inf, cableGeometry });
 
         // 2. Setup CompressionStruts (Stirrups)
-        compressionStruts = new CompressionStruts({
+        compressionStruts = new StrutVerification({
             combinations,
             cableGeometry,
             prestressSteelForce,
