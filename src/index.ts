@@ -31,6 +31,7 @@ export { default as AnchorageLoss } from './structuralDesign/prestressingSteel/l
 export { default as ElasticShorteningLoss } from './structuralDesign/prestressingSteel/losses/ElasticShorteningLoss.js';
 export { default as FrictionLoss } from './structuralDesign/prestressingSteel/losses/FrictionLoss.js';
 export { default as TimeDependentLoss } from './structuralDesign/prestressingSteel/losses/TimeDependentLoss.js';
+export { default as Losses } from './structuralDesign/prestressingSteel/losses/index.js';
 
 // structuralDesign/limitStates
 export { default as ELSD } from './structuralDesign/prestressingSteel/limitStates/ELSD.js';
@@ -47,6 +48,8 @@ export type { ValueUnit, ValuesUnit, Distance, Angles, Verification, Verificatio
 export type { IGeometricProperties } from './types/combinationsType.js';
 
 export type { ICombinations } from './types/combinationsType.js'
+
+export type {LossesType} from './structuralDesign/prestressingSteel/losses/index.js'
 
 export type { PrestressingDesignType } from './types/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';
