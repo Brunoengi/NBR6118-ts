@@ -97,7 +97,7 @@ describe('TimeDependentLoss', () => {
             // --- Manual Calculation for Verification at mid-span (index 5) ---
             const p0_mid = p0_full[5]; // -2241.92 kN
             const loss_percent_mid = 13.218; // From calculatedeltappercent test
-            const expected_final_force_mid = p0_mid * (1 - loss_percent_mid / 100); // ~1945.57 kN
+            const expected_final_force_mid = p0_mid * (1 - loss_percent_mid / 100); // ~-1945.57 kN
 
             expect(finalForce.values[5]).toBeCloseTo(expected_final_force_mid, 1);
             expect(finalForce.unit).toBe('kN');

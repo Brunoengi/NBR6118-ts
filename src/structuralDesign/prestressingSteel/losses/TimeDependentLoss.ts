@@ -13,7 +13,9 @@ class TimeDependentLoss {
     public readonly g2: ValueUnit
     public readonly P0: Forces
     public readonly alphap: number
-
+    public readonly sigmacpg: Stresses
+    public readonly Pinfinity: Forces
+    public readonly deltappercent: number[]
 
     constructor({ phi, g2, x, width, Ac, Ic, ep, P0, g1, alphap }: {
         phi: number
@@ -38,8 +40,11 @@ class TimeDependentLoss {
         this.g2 = g2
         this.P0 = P0
         this.alphap = alphap
-        this.Mg1 = this.calculateMg({ g: this.g1 });
-        this.Mg2 = this.calculateMg({ g: this.g2 });
+        this.Mg1 = this.calculateMg({ g: this.g1 })
+        this.Mg2 = this.calculateMg({ g: this.g2 })
+        this.sigmacpg = this.calculateSigmacpg()
+        this.Pinfinity = this.finalPrestressingForce()
+        this.deltappercent = this.calculatedeltappercent()
     }
 
     /**
@@ -97,7 +102,7 @@ class TimeDependentLoss {
     }
 
     calculatedeltappercent(): number[] {
-        const sigmacpg = this.calculateSigmacpg().values
+        const sigmacpg = this.sigmacpg.values
         const sigmacpg_MPa = sigmacpg.map(sigmacpg_i => sigmacpg_i * 10)
 
         const deltasigmappercentuais = sigmacpg_MPa.map(sigmacpg_i => {
