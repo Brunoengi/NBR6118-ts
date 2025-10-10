@@ -225,4 +225,41 @@ describe('AnchorageLoss', () => {
             });
         });
     });
+
+    describe('Sensitivity to cableReturn', () => {
+        // Helper to create instances with varying cableReturn
+        const createInstanceWithReturn = (returnValue: number, anchoring: AnchoringType) => {
+            return new AnchorageLoss({
+                Ap,
+                Ep,
+                cableReturn: { value: returnValue, unit: 'cm' },
+                tangBeta,
+                anchoring,
+                Patr,
+                cableGeometry: cableGeo
+            });
+        };
+
+        it('should result in greater loss (less negative Panc) for a larger cableReturn', () => {
+            // 1. Create instance with a smaller cable return
+            const loss_small_return = createInstanceWithReturn(0.3, 'active-active');
+            const Panc_small_return = loss_small_return.calculatePanc();
+
+            // 2. Create instance with a larger cable return
+            const loss_large_return = createInstanceWithReturn(0.7, 'active-active');
+            const Panc_large_return = loss_large_return.calculatePanc();
+
+            // 3. Assert that the forces are different
+            expect(Panc_small_return.values[0]).not.toBeCloseTo(Panc_large_return.values[0]);
+            expect(Panc_small_return.values[5]).not.toBeCloseTo(Panc_large_return.values[5]); // Mid-span
+
+            // 4. Assert that the larger return causes a larger loss (Panc becomes less negative)
+            // A larger cableReturn means more slip, which means a larger loss of prestress.
+            // Since prestress force (Patr) is negative, a larger loss makes the final force (Panc)
+            // less negative (i.e., a greater numerical value).
+            expect(Panc_large_return.values[0]).toBeGreaterThan(Panc_small_return.values[0]);
+            expect(Panc_large_return.values[5]).toBeGreaterThan(Panc_small_return.values[5]); // Mid-span
+            console.log('tem que ser diferente', Panc_large_return, Panc_small_return)
+        });
+    });
 });
