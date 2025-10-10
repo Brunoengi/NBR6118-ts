@@ -1,4 +1,4 @@
-import {CreepConcrete } from "../../../src/index.js";
+import { CreepConcrete } from "../../../src/index.js";
 
 describe('CreepConcrete', () => {
   describe('value property', () => {
