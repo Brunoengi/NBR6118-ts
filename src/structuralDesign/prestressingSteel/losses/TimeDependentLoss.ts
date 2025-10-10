@@ -21,11 +21,11 @@ class TimeDependentLoss {
         width: ValueUnit
         Ac: ValueUnit
         Ic: ValueUnit
-        ep: ValuesUnit
-        g2: ValueUnit
+        ep: ValuesUnit // cm
+        g2: ValueUnit // kN/cm
         P0: Forces
-        g1: ValueUnit
-        alphap: number
+        g1: ValueUnit // kN/cm
+        alphap: number // Ep/Ecs
 
     }) {
         this.phi = phi
@@ -48,8 +48,8 @@ class TimeDependentLoss {
      * Formula: Mg2(x) = (g2 * L * x / 2) - (g2 * x^2 / 2)
      */
     calculateMg({ g }: { g: ValueUnit }): Moments {
-        // Convert load from kN/m to kN/cm for consistency with other units
-        const g_kN_cm = g.value / 100;
+        // Load 'g' is expected in kN/cm. All length units are in cm.
+        const g_kN_cm = g.value;
         const width_cm = this.width.value;
         const x_vals_cm = this.x.values;
 

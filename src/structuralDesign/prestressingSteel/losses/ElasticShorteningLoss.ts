@@ -1,4 +1,4 @@
-import { ValueUnit, ValuesUnit, Forces, Distances, ModulusOfElasticity } from "types/index.js";
+import { ValueUnit, ValuesUnit, Forces, Distances, ModulusOfElasticity, DistributedLoad } from "types/index.js";
 
 
 
@@ -8,7 +8,7 @@ class ElasticShorteningLoss {
     public readonly ep: ValuesUnit;
     public readonly sigmacp: ValuesUnit;
     public readonly sigmacg: ValuesUnit;
-    public readonly g1: ValueUnit; // kN/m
+    public readonly g1: DistributedLoad; // kN/cm
     public readonly x: ValuesUnit;
     public readonly width: ValueUnit;
     public readonly Panc: ValuesUnit
@@ -24,7 +24,7 @@ class ElasticShorteningLoss {
         Ecs: ModulusOfElasticity,
         Ep: ModulusOfElasticity,
         ep: ValuesUnit,
-        g1: ValueUnit, // kN/m
+        g1: DistributedLoad, // kN/cm
         x: ValuesUnit,
         width: ValueUnit
         Panc: ValuesUnit
@@ -54,8 +54,7 @@ class ElasticShorteningLoss {
      * Formula: Mg(x) = (g1 * L * x / 2) - (g1 * x^2 / 2)
      */
     calculateMg(): ValuesUnit { // Result in kN*cm
-        const g1_kN_m = this.g1.value;
-        const g1_kN_cm = g1_kN_m / 100;
+        const g1_kN_cm = this.g1.value;
         const width_cm = this.width.value;
         const x_vals_cm = this.x.values;
 

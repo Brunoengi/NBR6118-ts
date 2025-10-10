@@ -24,6 +24,16 @@ export interface Distance {
   unit: 'cm'
 }
 
+export interface DistributedLoad {
+  value: number
+  unit: 'kN/cm'
+}
+
+export interface DistrubutedLoads {
+  values: number[]
+  unit: 'kN/cm'
+}
+
 export interface Angles {
   values: number[]
   unit: 'radians'

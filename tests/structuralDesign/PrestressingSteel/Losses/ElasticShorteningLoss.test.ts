@@ -31,7 +31,7 @@ describe('ElasticShorteningLoss', () => {
             Ecs: { value: 2940.3, unit: 'kN/cm²' }, // 29.403 GPa
             Ep: { value: 19500, unit: 'kN/cm²' },   // 195 GPa
             ep: { values: ep_values_cm, unit: 'cm' },
-            g1: { value: 18, unit: 'kN/m' },
+            g1: { value: 0.18, unit: 'kN/cm' }, // 18 kN/m -> 0.18 kN/cm
             Ac: { value: 7200, unit: 'cm²' },
             Ic: { value: 8640000, unit: 'cm⁴' },
             width: width,
@@ -56,7 +56,7 @@ describe('ElasticShorteningLoss', () => {
             // --- Manual Calculation for Verification ---
             // Formula: Mg(x) = (g1 * L * x / 2) - (g1 * x^2 / 2)
             // Units: g1 (kN/cm), L (cm), x (cm) -> Mg (kN*cm)
-            const g1_kN_cm = 18 / 100;
+            const g1_kN_cm = 0.18;
             const L_cm = 1500;
 
             // At x = 0m (start)
@@ -128,8 +128,7 @@ describe('ElasticShorteningLoss', () => {
             expect(sigmacg.values[0]).toBeCloseTo(0, 4);
 
             // At x = 750 cm (mid-span)
-            const mg_mid_kNm = 506.25; // From calculateMg test
-            const mg_mid_kNcm = mg_mid_kNm * 100;
+            const mg_mid_kNcm = 50625; // From calculateMg test
             const ep_mid = -48;
             const expected_sigmacg_mid = -(mg_mid_kNcm * ep_mid) / Ic; // -(50625 * -48) / 8640000 = 0.28125 kN/cm²
             expect(sigmacg.values[5]).toBeCloseTo(expected_sigmacg_mid, 4);
@@ -267,7 +266,7 @@ describe('ElasticShorteningLoss - T-Beam', () => {
             Ecs: { value: 2415, unit: 'kN/cm²' }, // 24.15 GPa
             Ep: { value: 19500, unit: 'kN/cm²' },  // 195 GPa
             ep: { values: ep_values_cm, unit: 'cm' },
-            g1: { value: 62, unit: 'kN/m' }, // 0.62 kN/cm -> 62 kN/m
+            g1: { value: 0.62, unit: 'kN/cm' }, // 62 kN/m -> 0.62 kN/cm
             Ac: { value: 12000, unit: 'cm²' }, // 1.2 m²
             //Foi utilizado o valor aproximado de 20100000
             Ic: { value: 20100000, unit: 'cm⁴' }, // 0.201 m⁴

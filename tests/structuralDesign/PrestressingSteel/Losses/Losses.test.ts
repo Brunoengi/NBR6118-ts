@@ -28,7 +28,7 @@ describe('Losses Integration Test', () => {
         const Ac: ValueUnit = { value: 7200, unit: 'cm²' };
         const Ic: ValueUnit = { value: 8640000, unit: 'cm⁴' };
         const Ecs: ValueUnit = { value: 2940.3, unit: 'kN/cm²' }; // 29.403 GPa
-        const g1: ValueUnit = { value: 18, unit: 'kN/m' }; // 0.72m² * 25kN/m³
+        const g1: ValueUnit = { value: 0.18, unit: 'kN/cm' }; // 18 kN/m -> 0.18 kN/cm
         const ncable = 3;
         const x: Distances = cableGeometry.x;
         const ep: ValuesUnit = {
@@ -38,7 +38,7 @@ describe('Losses Integration Test', () => {
 
         // From TimeDependentLoss (using typical values)
         const phi = 2.5; // Creep coefficient
-        const g2: ValueUnit = { value: 20, unit: 'kN/m' }; // Additional permanent load
+        const g2: ValueUnit = { value: 0.20, unit: 'kN/cm' }; // 20 kN/m -> 0.20 kN/cm
         const alphap = Ep.value / Ecs.value; // Ep/Ecs = 19500 / 2940.3 ~ 6.632
 
         // --- 2. Instantiate the main Losses class ---
@@ -162,7 +162,7 @@ describe('Losses Integration Test - T-Beam', () => {
         // Calculated for T-Beam, aprixated value: 20100000
         const Ic: ValueUnit = { value: 20100000, unit: 'cm⁴' }; // 0.20112 m⁴
         const Ecs: ValueUnit = { value: 2415, unit: 'kN/cm²' }; // 24.15 GPa
-        const g1: ValueUnit = { value: 62, unit: 'kN/m' }; // 0.62 kN/cm
+        const g1: ValueUnit = { value: 0.62, unit: 'kN/cm' }; // 62 kN/m
         const ncable = 4;
         const x: Distances = cableGeometry.x;
         const ep: ValuesUnit = {
@@ -172,7 +172,7 @@ describe('Losses Integration Test - T-Beam', () => {
 
         // Time-Dependent Properties
         const phi = 2.1;
-        const g2: ValueUnit = { value: 42, unit: 'kN/m' }; // 0.42 kN/cm
+        const g2: ValueUnit = { value: 0.42, unit: 'kN/cm' }; // 42 kN/m
         const alphap = Ep.value / Ecs.value; // 19500 / 2415 ~ 8.0745
 
         // --- 2. Instantiate the main Losses class ---
