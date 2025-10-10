@@ -1,9 +1,9 @@
-import { ValueUnit, ValuesUnit, Forces } from "types/index.js"
+import { ValueUnit, ValuesUnit, Forces, Moments } from "types/index.js"
 
 class TimeDependentLoss {
     public readonly phi: number
-    public readonly Mg1: ValuesUnit
-    public readonly Mg2: ValuesUnit
+    public readonly Mg1: Moments
+    public readonly Mg2: Moments
     public readonly x: ValuesUnit
     public readonly width: ValueUnit
     public readonly Ac: ValueUnit
@@ -47,21 +47,20 @@ class TimeDependentLoss {
      * due to a uniformly distributed load (g2).
      * Formula: Mg2(x) = (g2 * L * x / 2) - (g2 * x^2 / 2)
      */
-    calculateMg({ g }: { g: ValueUnit }): ValuesUnit {
-        const g_val = g.value; // expecting kN/m
-        const width_val = this.width.value; // expecting cm
-        const x_vals = this.x.values; // expecting cm
+    calculateMg({ g }: { g: ValueUnit }): Moments {
+        // Convert load from kN/m to kN/cm for consistency with other units
+        const g_kN_cm = g.value / 100;
+        const width_cm = this.width.value;
+        const x_vals_cm = this.x.values;
 
-        // Convert lengths from cm to m for consistent calculation with g2 in kN/m
-        const width_m = width_val / 100;
-        const x_vals_m = x_vals.map(x_cm => x_cm / 100);
-        const mg_values = x_vals_m.map(x_m => {
-            return (g_val * width_m * x_m / 2) - (g_val * x_m ** 2 / 2);
+        const mg_values_kNcm = x_vals_cm.map(x_cm => {
+            // Formula: Mg(x) = (g * L * x / 2) - (g * x^2 / 2)
+            return (g_kN_cm * width_cm * x_cm / 2) - (g_kN_cm * x_cm ** 2 / 2);
         });
 
         return {
-            values: mg_values,
-            unit: 'kN*m'
+            values: mg_values_kNcm,
+            unit: 'kN*cm'
         };
     }
 
@@ -81,8 +80,8 @@ class TimeDependentLoss {
             const Mg2_i = this.Mg2.values[i];
             const ep_i = this.ep.values[i];
 
-            // Convert moments from kN*m to kN*cm for unit consistency
-            const total_Mg_kNcm = (Mg1_i + Mg2_i) * 100; // Moment is positive
+            // Moments are now calculated in kN*cm directly
+            const total_Mg_kNcm = Mg1_i + Mg2_i; // Moment is positive
 
             // The sign is determined by ep_i (negative eccentricity gives positive stress)
             return -total_Mg_kNcm * ep_i / this.Ic.value;

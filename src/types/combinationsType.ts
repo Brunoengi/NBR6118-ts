@@ -1,10 +1,10 @@
-import { ValueUnit } from "./index.js"
+import { ValueUnit, Moment } from "./index.js"
 import { Distance } from "./index.js"
 
 export interface IMoments {
-    Mg1: ValueUnit
-    Mg2: ValueUnit
-    Mq: ValueUnit
+    Mg1: Moment
+    Mg2: Moment
+    Mq: Moment
 }
 
 export interface IQsi {

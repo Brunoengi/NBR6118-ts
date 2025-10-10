@@ -53,25 +53,28 @@ describe('TimeDependentLoss', () => {
     it('should still calculate bending moments correctly as they do not depend on phi', () => {
         const mg1 = timeLoss.Mg1;
         const mg2 = timeLoss.Mg2;
-        const expected_mg1_mid = 506.25;
-        const expected_mg2_mid = 562.5;
+        // Values are now in kN*cm
+        const expected_mg1_mid_kNcm = 50625;
+        const expected_mg2_mid_kNcm = 56250;
 
-        expect(mg1.values[5]).toBeCloseTo(expected_mg1_mid, 2);
-        expect(mg2.values[5]).toBeCloseTo(expected_mg2_mid, 2);
+        expect(mg1.values[5]).toBeCloseTo(expected_mg1_mid_kNcm, 2);
+        expect(mg2.values[5]).toBeCloseTo(expected_mg2_mid_kNcm, 2);
     });
 
     it('should still calculate sigmacpg correctly as it does not depend on phi', () => {
         const sigmacpg = timeLoss.calculateSigmacpg();
         // Manual calculation from the other test case
-        const P0_mid = p0_full[5]; // Use the correct P0 value for mid-span
+        const P0_mid = p0_full[5];
         const ep_mid = -48;
         const Ac = 7200;
         const Ic = 8640000;
-        const Mg1_mid = 506.25;
-        const Mg2_mid = 562.5;
-        const part1 = P0_mid * ((1 / Ac) + (ep_mid ** 2 / Ic));
+        // Moments are now in kN*cm
+        const Mg1_mid_kNcm = 50625;
+        const Mg2_mid_kNcm = 56250;
 
-        const total_Mg_kNcm = (Mg1_mid + Mg2_mid) * 100;
+        const part1 = P0_mid * ((1 / Ac) + (ep_mid ** 2 / Ic));
+        // The conversion `* 100` is no longer needed as moments are already in kN*cm
+        const total_Mg_kNcm = Mg1_mid_kNcm + Mg2_mid_kNcm;
         const part2 = -total_Mg_kNcm * ep_mid / Ic;
         const expected_sigmacpg_mid = part1 + part2;
         expect(sigmacpg.values[5]).toBeCloseTo(expected_sigmacpg_mid, 4);
@@ -92,7 +95,7 @@ describe('TimeDependentLoss', () => {
             const finalForce = timeLoss.finalPrestressingForce();
 
             // --- Manual Calculation for Verification at mid-span (index 5) ---
-            const p0_mid = p0_full[5]; // -2219.770 kN (Updated P0 from ElasticShorteningLoss)
+            const p0_mid = p0_full[5]; // -2241.92 kN
             const loss_percent_mid = 13.218; // From calculatedeltappercent test
             const expected_final_force_mid = p0_mid * (1 - loss_percent_mid / 100); // ~1945.57 kN
 
