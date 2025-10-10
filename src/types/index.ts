@@ -61,6 +61,12 @@ export interface Stress {
   unit: 'kN/cm²'
 }
 
+export interface Stresses {
+  values: number[]
+  unit: 'kN/cm²'
+}
+
+
 export interface Moment {
   value: number
   unit: 'kN*cm'

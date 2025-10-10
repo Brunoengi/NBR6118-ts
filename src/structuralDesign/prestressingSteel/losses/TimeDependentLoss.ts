@@ -1,4 +1,4 @@
-import { ValueUnit, ValuesUnit, Forces, Moments } from "types/index.js"
+import { ValueUnit, ValuesUnit, Forces, Moments, Stresses } from "types/index.js"
 
 class TimeDependentLoss {
     public readonly phi: number
@@ -64,7 +64,7 @@ class TimeDependentLoss {
         };
     }
 
-    calculateSigmacpg(): ValuesUnit {
+    calculateSigmacpg(): Stresses {
 
         const P0_values = this.P0.values;
 
