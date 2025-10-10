@@ -51,6 +51,8 @@ export interface Stress {
   unit: 'kN/cm²'
 }
 
+export type ModulusOfElasticity = Stress;
+
 export interface Forces {
   values: number[]
   unit: 'kN'
@@ -60,4 +62,3 @@ export interface Force {
   value: number
   unit: 'kN'
 }
-

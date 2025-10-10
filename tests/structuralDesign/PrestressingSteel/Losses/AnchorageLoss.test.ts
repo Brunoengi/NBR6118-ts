@@ -6,7 +6,7 @@ import FrictionLoss from "../../../../src/structuralDesign/prestressingSteel/los
 describe('AnchorageLoss', () => {
     // --- Base Test Data ---
     const cableReturn: ValueUnit = { value: 0.5, unit: 'cm' };
-    const Ep: ValueUnit = { value: 195, unit: 'GPa' };
+    const Ep: ValueUnit = { value: 19500, unit: 'kN/cm²' }; // 195 GPa
     const Ap: ValueUnit = { value: 17.82, unit: 'cm²' };
     const Patr: Forces = {
         values: [
@@ -59,10 +59,10 @@ describe('AnchorageLoss', () => {
         const a_cm = cableReturn.value;
 
         // Ep: 195 GPa = 195 * 100 kN/cm² = 19500 kN/cm²
-        const Ep_kN_cm2 = 19500;
+        const Ep_kN_cm2 = Ep.value;
 
         // Ap: 17.82 cm² (already in correct unit)
-        const Ap_cm2 = 17.82;
+        const Ap_cm2 = Ap.value;
 
         // β (beta): 13.211 kN/m = 13.211 / 100 kN/cm = 0.13211 kN/cm
         const tangBeta_kN_cm = 0.13211;
@@ -142,7 +142,7 @@ describe('AnchorageLoss', () => {
                     // Values are derived from the base test data.
                     const width_cm = width.value;
                     const a_cm = cableReturn.value;
-                    const Ep_kN_cm2 = Ep.value * 100;
+                    const Ep_kN_cm2 = Ep.value;
                     const Ap_cm2 = Ap.value;
                     const tangBeta_kN_cm = tangBeta.value / 100;
 

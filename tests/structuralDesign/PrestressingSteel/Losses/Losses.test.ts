@@ -1,5 +1,5 @@
 import Losses from "../../../../src/structuralDesign/prestressingSteel/losses/index.js";
-import  CableGeometry  from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
+import CableGeometry from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
 import { ValueUnit, ValuesUnit, Distances } from "../../../../src/types/index.js";
 import { AnchoringType } from "../../../../src/types/prestressSteelType.js";
 
@@ -20,14 +20,14 @@ describe('Losses Integration Test', () => {
         const anchoring: AnchoringType = 'active-active';
 
         const Ap: ValueUnit = { value: 17.82, unit: 'cm²' };
-        const Ep: ValueUnit = { value: 195, unit: 'GPa' };
+        const Ep: ValueUnit = { value: 19500, unit: 'kN/cm²' }; // 195 GPa
         const cableReturn: ValueUnit = { value: 0.5, unit: 'cm' };
 
         // From ElasticShorteningLoss (using typical concrete properties)
         // Values from ELSD.test.ts and TimeDependentLoss.test.ts for consistency
         const Ac: ValueUnit = { value: 7200, unit: 'cm²' };
         const Ic: ValueUnit = { value: 8640000, unit: 'cm⁴' };
-        const Ecs: ValueUnit = { value: 29.403, unit: 'GPa' }; // Ecs for 35MPa concrete
+        const Ecs: ValueUnit = { value: 2940.3, unit: 'kN/cm²' }; // 29.403 GPa
         const g1: ValueUnit = { value: 18, unit: 'kN/m' }; // 0.72m² * 25kN/m³
         const ncable = 3;
         const x: Distances = cableGeometry.x;
@@ -39,7 +39,7 @@ describe('Losses Integration Test', () => {
         // From TimeDependentLoss (using typical values)
         const phi = 2.5; // Creep coefficient
         const g2: ValueUnit = { value: 20, unit: 'kN/m' }; // Additional permanent load
-        const alphap = Ep.value / Ecs.value; // Ep/Ecs = 195 / 29.403 ~ 6.632
+        const alphap = Ep.value / Ecs.value; // Ep/Ecs = 19500 / 2940.3 ~ 6.632
 
         // --- 2. Instantiate the main Losses class ---
         losses = new Losses({
@@ -154,14 +154,14 @@ describe('Losses Integration Test - T-Beam', () => {
         const anchoring: AnchoringType = 'active-active';
 
         const Ap: ValueUnit = { value: 48.48, unit: 'cm²' };
-        const Ep: ValueUnit = { value: 195, unit: 'GPa' };
+        const Ep: ValueUnit = { value: 19500, unit: 'kN/cm²' }; // 195 GPa
         const cableReturn: ValueUnit = { value: 0.6, unit: 'cm' };
 
         // Concrete and Section Properties
         const Ac: ValueUnit = { value: 12000, unit: 'cm²' }; // 1.2 m²
         // Calculated for T-Beam, aprixated value: 20100000
         const Ic: ValueUnit = { value: 20100000, unit: 'cm⁴' }; // 0.20112 m⁴
-        const Ecs: ValueUnit = { value: 24.15, unit: 'GPa' }; // 24150 MPa
+        const Ecs: ValueUnit = { value: 2415, unit: 'kN/cm²' }; // 24.15 GPa
         const g1: ValueUnit = { value: 62, unit: 'kN/m' }; // 0.62 kN/cm
         const ncable = 4;
         const x: Distances = cableGeometry.x;
@@ -173,7 +173,7 @@ describe('Losses Integration Test - T-Beam', () => {
         // Time-Dependent Properties
         const phi = 2.1;
         const g2: ValueUnit = { value: 42, unit: 'kN/m' }; // 0.42 kN/cm
-        const alphap = Ep.value / Ecs.value; // 195 / 24.15 ~ 8.0745
+        const alphap = Ep.value / Ecs.value; // 19500 / 2415 ~ 8.0745
 
         // --- 2. Instantiate the main Losses class ---
         losses = new Losses({

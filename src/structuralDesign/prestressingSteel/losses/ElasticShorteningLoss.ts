@@ -1,10 +1,10 @@
-import { ValueUnit, ValuesUnit, Forces, Distances } from "types/index.js";
+import { ValueUnit, ValuesUnit, Forces, Distances, ModulusOfElasticity } from "types/index.js";
 
 
 
 class ElasticShorteningLoss {
-    public readonly Ecs: ValueUnit;
-    public readonly Ep: ValueUnit;
+    public readonly Ecs: ModulusOfElasticity;
+    public readonly Ep: ModulusOfElasticity;
     public readonly ep: ValuesUnit;
     public readonly sigmacp: ValuesUnit;
     public readonly sigmacg: ValuesUnit;
@@ -21,8 +21,8 @@ class ElasticShorteningLoss {
     
     
     constructor({Ecs, Ep, ep, g1, x, width, Panc, Ac, Ic, Ap, ncable}: {
-        Ecs: ValueUnit,
-        Ep: ValueUnit,
+        Ecs: ModulusOfElasticity,
+        Ep: ModulusOfElasticity,
         ep: ValuesUnit,
         g1: ValueUnit, // kN/m
         x: ValuesUnit,
@@ -74,7 +74,7 @@ class ElasticShorteningLoss {
      * Formula: αp = Ep / Ecs
      */
     calculateAlphap(): number {
-        // Both Ep and Ecs should be in the same unit (e.g., GPa or MPa), making the result dimensionless.
+        // Both Ep and Ecs are in 'kN/cm²', making the result dimensionless.
         return this.Ep.value / this.Ecs.value;
     }
 

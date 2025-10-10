@@ -28,8 +28,8 @@ describe('ElasticShorteningLoss', () => {
 
     beforeAll(() => {
         elasticLoss = new ElasticShorteningLoss({
-            Ecs: { value: 29.403, unit: 'GPa' },
-            Ep: { value: 195, unit: 'GPa' }, // Standard value from other tests
+            Ecs: { value: 2940.3, unit: 'kN/cm²' }, // 29.403 GPa
+            Ep: { value: 19500, unit: 'kN/cm²' },   // 195 GPa
             ep: { values: ep_values_cm, unit: 'cm' },
             g1: { value: 18, unit: 'kN/m' },
             Ac: { value: 7200, unit: 'cm²' },
@@ -75,7 +75,7 @@ describe('ElasticShorteningLoss', () => {
     describe('calculateAlphap', () => {
         it('should calculate the modular ratio correctly', () => {
             const alphap = elasticLoss.calculateAlphap();
-            // αp = Ep / Ecs = 195 / 29.403
+            // αp = Ep / Ecs = 19500 / 2940.3
             expect(alphap).toBeCloseTo(6.632, 3);
         });
     });
@@ -264,8 +264,8 @@ describe('ElasticShorteningLoss - T-Beam', () => {
 
     beforeAll(() => {
         elasticLoss = new ElasticShorteningLoss({
-            Ecs: { value: 24.15, unit: 'GPa' }, // For fck = 25 MPa
-            Ep: { value: 195, unit: 'GPa' },
+            Ecs: { value: 2415, unit: 'kN/cm²' }, // 24.15 GPa
+            Ep: { value: 19500, unit: 'kN/cm²' },  // 195 GPa
             ep: { values: ep_values_cm, unit: 'cm' },
             g1: { value: 62, unit: 'kN/m' }, // 0.62 kN/cm -> 62 kN/m
             Ac: { value: 12000, unit: 'cm²' }, // 1.2 m²
@@ -287,7 +287,7 @@ describe('ElasticShorteningLoss - T-Beam', () => {
 
     it('should calculate the modular ratio (alphap) correctly', () => {
         const alphap = elasticLoss.calculateAlphap();
-        // αp = Ep / Ecs = 195 / 24.15
+        // αp = Ep / Ecs = 19500 / 2415
         expect(alphap).toBeCloseTo(8.0745, 4);
     });
 

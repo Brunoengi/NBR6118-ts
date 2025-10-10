@@ -218,8 +218,8 @@ import { AnchorageLoss } from 'nbr6118-ts';
 
 const anchorageLoss = new AnchorageLoss({
     Ap: { value: 17.82, unit: 'cm²' },
-    Ep: { value: 195, unit: 'GPa' },
-    cableReturn: { value: 5, unit: 'mm' }, // Anchorage slip
+    Ep: { value: 19500, unit: 'kN/cm²' }, // 195 GPa
+    cableReturn: { value: 0.5, unit: 'cm' }, // Anchorage slip
     tangBeta: { value: 13.211, unit: 'kN/m' }, // Friction loss (beta), obtained from FrictionLoss
     anchoring: 'active-passive'
 });
@@ -249,8 +249,8 @@ const panc_half = [2167.976, 2187.793, 2207.61, 2227.427, 2247.244, 2267.06];
 const panc_full = [...panc_half, ...panc_half.slice(0, -1).reverse()];
 
 const elasticLoss = new ElasticShorteningLoss({
-    Ecs: { value: 29.403, unit: 'GPa' },
-    Ep: { value: 195, unit: 'GPa' },
+    Ecs: { value: 2940.3, unit: 'kN/cm²' }, // 29.403 GPa
+    Ep: { value: 19500, unit: 'kN/cm²' },   // 195 GPa
     Ac: { value: 7200, unit: 'cm²' },
     Ic: { value: 8640000, unit: 'cm⁴' },
     Ap: { value: 17.82, unit: 'cm²' },

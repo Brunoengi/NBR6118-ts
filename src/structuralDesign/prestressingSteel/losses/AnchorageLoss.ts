@@ -1,4 +1,4 @@
-import { ValueUnit, Forces, Distance } from "types/index.js"
+import { ValueUnit, Forces, Distance, ModulusOfElasticity } from "types/index.js"
 import CableGeometry from "../CableGeometry.js";
 
 
@@ -6,7 +6,7 @@ export type AnchoringType = 'active-active' | 'active-passive' | 'passive-active
 
 interface IAnchorageLoss {
     Ap: ValueUnit;
-    Ep: ValueUnit;
+    Ep: ModulusOfElasticity;
     cableReturn: Distance;
     tangBeta: ValueUnit;
     anchoring: AnchoringType;
@@ -16,7 +16,7 @@ interface IAnchorageLoss {
 
 class AnchorageLoss {
     public readonly Ap: ValueUnit;
-    public readonly Ep: ValueUnit;
+    public readonly Ep: ModulusOfElasticity;
     public readonly cableReturn: Distance;
     public readonly tangBeta: ValueUnit;
     public readonly anchoring: AnchoringType;
@@ -51,8 +51,8 @@ class AnchorageLoss {
         // cableReturn is in cm
         const a_cm = this.cableReturn.value;
 
-        // Ep: GPa -> kN/cm² (1 GPa = 100 kN/cm²)
-        const Ep_kN_cm2 = this.Ep.value * 100;
+        // Ep is already in kN/cm²
+        const Ep_kN_cm2 = this.Ep.value;
 
         // Ap: cm² (no conversion needed)
         const Ap_cm2 = this.Ap.value;
@@ -150,7 +150,7 @@ class AnchorageLoss {
                     // Based on the user's formulas for the two "discounts"
                     const tangBeta_kN_cm = this.tangBeta.value / 100;
                     const a_cm = this.cableReturn.value;
-                    const Ep_kN_cm2 = this.Ep.value * 100;
+                    const Ep_kN_cm2 = this.Ep.value;
                     const Ap_cm2 = this.Ap.value;
 
                     // The total energy from slip at both ends (2a) is balanced by the integral of force loss over the length.

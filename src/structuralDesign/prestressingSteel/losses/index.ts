@@ -2,7 +2,7 @@ import AnchorageLoss from "./AnchorageLoss.js";
 import ElasticShorteningLoss from "./ElasticShorteningLoss.js";
 import FrictionLoss from "./FrictionLoss.js";
 import TimeDependentLoss from "./TimeDependentLoss.js";
-import { ValueUnit, ValuesUnit, Force, Distance, Distances } from "types/index.js";
+import { ValueUnit, ValuesUnit, Force, Distance, Distances, ModulusOfElasticity } from "types/index.js";
 import {A, Ixg, Iyg} from "types/sectionsType.js";
 import { AnchoringType } from "./AnchorageLoss.js";
 import CableGeometry from "../CableGeometry.js";
@@ -22,10 +22,10 @@ class Losses {
         apparentFrictionCoefficient: number,
         anchoring: AnchoringType,
         cableGeometry: CableGeometry,
-        Ap: A,
-        Ep: ValueUnit,
+        Ap: A, // Ap is passed to AnchorageLoss and ElasticShorteningLoss
+        Ep: ModulusOfElasticity, // Ep is passed to AnchorageLoss and ElasticShorteningLoss
         cableReturn: Distance,
-        Ecs: ValueUnit,
+        Ecs: ModulusOfElasticity, // Ecs is passed to ElasticShorteningLoss
         ep: ValuesUnit,
         g1: ValueUnit,
         x: Distances,
