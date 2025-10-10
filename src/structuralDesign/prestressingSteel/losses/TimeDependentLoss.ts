@@ -13,9 +13,9 @@ class TimeDependentLoss {
     public readonly g2: ValueUnit
     public readonly P0: Forces
     public readonly alphap: number
-    
 
-    constructor({phi, g2, x, width, Ac, Ic, ep, P0, g1, alphap}: {
+
+    constructor({ phi, g2, x, width, Ac, Ic, ep, P0, g1, alphap }: {
         phi: number
         x: ValuesUnit
         width: ValueUnit
@@ -38,8 +38,8 @@ class TimeDependentLoss {
         this.g2 = g2
         this.P0 = P0
         this.alphap = alphap
-        this.Mg1 = this.calculateMg({g: this.g1});
-        this.Mg2 = this.calculateMg({g: this.g2});
+        this.Mg1 = this.calculateMg({ g: this.g1 });
+        this.Mg2 = this.calculateMg({ g: this.g2 });
     }
 
     /**
@@ -47,7 +47,7 @@ class TimeDependentLoss {
      * due to a uniformly distributed load (g2).
      * Formula: Mg2(x) = (g2 * L * x / 2) - (g2 * x^2 / 2)
      */
-    calculateMg({g}: {g: ValueUnit}): ValuesUnit {
+    calculateMg({ g }: { g: ValueUnit }): ValuesUnit {
         const g_val = g.value; // expecting kN/m
         const width_val = this.width.value; // expecting cm
         const x_vals = this.x.values; // expecting cm
@@ -56,7 +56,7 @@ class TimeDependentLoss {
         const width_m = width_val / 100;
         const x_vals_m = x_vals.map(x_cm => x_cm / 100);
         const mg_values = x_vals_m.map(x_m => {
-            return (g_val * width_m * x_m / 2) - (g_val * x_m**2 / 2);
+            return (g_val * width_m * x_m / 2) - (g_val * x_m ** 2 / 2);
         });
 
         return {
@@ -72,7 +72,7 @@ class TimeDependentLoss {
         // Stress from prestressing force P0
         const part1 = P0_values.map((P0_i, i) => {
             const ep_i = this.ep.values[i];
-            return P0_i * ((1/this.Ac.value) + (ep_i**2 / this.Ic.value))
+            return P0_i * ((1 / this.Ac.value) + (ep_i ** 2 / this.Ic.value))
         })
 
         // Stress from moments Mg1 and Mg2
@@ -80,7 +80,7 @@ class TimeDependentLoss {
             const Mg1_i = this.Mg1.values[i];
             const Mg2_i = this.Mg2.values[i];
             const ep_i = this.ep.values[i];
-            
+
             // Convert moments from kN*m to kN*cm for unit consistency
             const total_Mg_kNcm = (Mg1_i + Mg2_i) * 100; // Moment is positive
 
@@ -102,7 +102,7 @@ class TimeDependentLoss {
         const sigmacpg_MPa = sigmacpg.map(sigmacpg_i => sigmacpg_i * 10)
 
         const deltasigmappercentuais = sigmacpg_MPa.map(sigmacpg_i => {
-            return 7.4 + (this.alphap/ 18.7) * (this.phi ** 1.07) * (3 - sigmacpg_i)
+            return 7.4 + (this.alphap / 18.7) * (this.phi ** 1.07) * (3 - sigmacpg_i)
         })
 
         return deltasigmappercentuais
@@ -113,18 +113,14 @@ class TimeDependentLoss {
         const deltasigmap = this.calculatedeltappercent();
 
         const finalPrestressingForce = P0.map((finalPrestressingForce_i, i) => {
-            return finalPrestressingForce_i * (1 - (deltasigmap[i]/100))
+            return finalPrestressingForce_i * (1 - (deltasigmap[i] / 100))
         })
 
         return {
-           values: finalPrestressingForce,
+            values: finalPrestressingForce,
             unit: 'kN'
+        }
     }
-    }
-
-
-            
-
 }
 
 export default TimeDependentLoss;

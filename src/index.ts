@@ -41,7 +41,7 @@ export { default as ELU } from './structuralDesign/prestressingSteel/limitStates
 export { default as ELSDEF } from './structuralDesign/prestressingSteel/limitStates/ELSDEF.js';
 
 // structuralDesign/concrete
-export { CreepConcrete } from './structuralDesign/concrete/Creep.js';
+export { default as CreepConcrete, type CreepConcreteType} from './structuralDesign/concrete/Creep.js';
 
 // types
 export type { ValueUnit, ValuesUnit, Distance, Angles, Verification, VerificationOneValue, VerificationResult } from './types/index.js';

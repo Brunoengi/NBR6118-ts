@@ -7,7 +7,7 @@ interface TablePoint {
   value: number;
 }
 
-export class CreepConcrete {
+export default class CreepConcrete {
   public readonly value: number | undefined;
 
   private static readonly data: Record<ConcreteClass, TablePoint[]> = {
@@ -188,3 +188,5 @@ export class CreepConcrete {
     this.isInitialized = true;
   }
 }
+
+export type CreepConcreteType = InstanceType<typeof CreepConcrete>
