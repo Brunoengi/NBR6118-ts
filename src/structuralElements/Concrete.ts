@@ -1,13 +1,13 @@
 import AggregateConcrete from "../structuralElements/Aggregate.js";
-import { ValueUnit, Stress } from "../types/index.js";
+import { ValueUnit, Stress, ModulusOfElasticity } from "../types/index.js";
 import { ConcreteSectionType } from "../types/concreteType.js";
 import { ConcreteOptions } from "types/concreteType.js";
 
 class Concrete {
   public readonly fck: Stress;
   public readonly fcm: Stress;
-  public readonly Ec: Stress;
-  public readonly Ecs: Stress;
+  public readonly Ec: ModulusOfElasticity;
+  public readonly Ecs: ModulusOfElasticity;
   public readonly e0: ValueUnit;
   public readonly eu: ValueUnit;
   public readonly fctm: Stress;
@@ -112,7 +112,7 @@ class Concrete {
     return {value: fctmj_MPa / 10, unit: "kN/cm²"};
   }
 
-  private calculate_Ec(fck_kNCm2: number, alpha_e: number): Stress {
+  private calculate_Ec(fck_kNCm2: number, alpha_e: number): ModulusOfElasticity {
     const fck_MPa = fck_kNCm2 * 10;
     let Ec: number;
     if (fck_MPa <= 50) {
@@ -123,7 +123,7 @@ class Concrete {
     return { value: Ec / 10, unit: "kN/cm²" };
   }
 
-  private calculate_Ecs(fck_kNCm2: number): Stress {
+  private calculate_Ecs(fck_kNCm2: number): ModulusOfElasticity {
     const fck_MPa = fck_kNCm2 * 10;
     const Ec_MPa = this.calculate_Ec(fck_kNCm2, this.aggregate!.alpha_e).value * 10;
     let alpha_i = 0.8 + 0.2 * fck_MPa / 80;
