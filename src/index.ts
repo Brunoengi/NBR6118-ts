@@ -37,7 +37,7 @@ export { default as Losses, type LossesType } from './structuralDesign/prestress
 // structuralDesign/limitStates
 export { default as ELSD } from './structuralDesign/prestressingSteel/limitStates/ELSD.js';
 export { default as ELSF } from './structuralDesign/prestressingSteel/limitStates/ELSF.js';
-export { default as ELU } from './structuralDesign/prestressingSteel/limitStates/ELU.js';
+export { default as ELUAP } from './structuralDesign/prestressingSteel/limitStates/ELUAP.js';
 export { default as ELSDEF } from './structuralDesign/prestressingSteel/limitStates/ELSDEF.js';
 
 // structuralDesign/concrete

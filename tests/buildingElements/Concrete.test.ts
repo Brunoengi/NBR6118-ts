@@ -209,7 +209,7 @@ describe('Concrete time-dependent properties', () => {
   describe('calculate_fctj', () => {
       it('should calculate fctj correctly for j < 28 days', () => {
           // At 7 days
-          const fctj_7 = concrete.calculate_fctj(7);
+          const fctj_7 = concrete.calculate_fctmj(7);
           const fckj_7_MPa = concrete.calculate_fckj(7).value * 10;
           const expected_fctj_7_MPa = 0.3 * (fckj_7_MPa ** (2/3)); // ~2.25 MPa
           expect(fctj_7.value).toBeCloseTo(expected_fctj_7_MPa / 10); // ~0.225 kN/cm²
@@ -218,14 +218,14 @@ describe('Concrete time-dependent properties', () => {
 
       it('should return fctm when j = 28 days', () => {
           // At 28 days, fctj should be equal to fctm
-          const fctj_28 = concrete.calculate_fctj(28);
+          const fctj_28 = concrete.calculate_fctmj(28);
           expect(fctj_28.value).toBeCloseTo(concrete.fctm.value);
           expect(fctj_28.unit).toBe('kN/cm²');
       });
 
       it('should calculate fctj correctly for j = 30 days', () => {
         // At 30 days
-        const fctj_30 = concrete.calculate_fctj(30);
+        const fctj_30 = concrete.calculate_fctmj(30);
         const fckj_30_MPa = concrete.calculate_fckj(30).value * 10;
         const expected_fctj_30_MPa = 0.3 * (fckj_30_MPa ** (2/3)); // ~2.58 MPa
         expect(fctj_30.value).toBeCloseTo(expected_fctj_30_MPa / 10); // ~0.258 kN/cm²

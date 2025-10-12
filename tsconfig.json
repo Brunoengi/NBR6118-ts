@@ -11,6 +11,6 @@
     "emitDeclarationOnly": false,
     "isolatedModules": true
   },
-  "include": ["src/**/*", "tests/structuralDesign/PrestressingSteel/ELU.test.ts", "tests/structuralDesign/PrestressingSteel/PrestressingSteelForce.test.ts", "tests/buildingElements/Steel.test.ts", "tests/structuralDesign/Steel/ShearSteel.test.ts", "tests/sections/Rectangular.test.ts", "tests/structuralDesign/PrestressingSteel/ELSDEF.test.ts"],
+  "include": ["src/**/*", "tests/structuralDesign/PrestressingSteel/ELUAP.test.ts", "tests/structuralDesign/PrestressingSteel/PrestressingSteelForce.test.ts", "tests/buildingElements/Steel.test.ts", "tests/structuralDesign/Steel/ShearSteel.test.ts", "tests/sections/Rectangular.test.ts", "tests/structuralDesign/PrestressingSteel/ELSDEF.test.ts"],
   "exclude": ["dist", "node_modules", "**/*.test.ts", "**/*.spec.ts"]
 }

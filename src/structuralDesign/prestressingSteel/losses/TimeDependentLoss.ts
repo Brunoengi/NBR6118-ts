@@ -23,10 +23,10 @@ class TimeDependentLoss {
         width: ValueUnit
         Ac: ValueUnit
         Ic: ValueUnit
-        ep: ValuesUnit // cm
-        g2: ValueUnit // kN/cm
+        ep: ValuesUnit
+        g2: ValueUnit
         P0: Forces
-        g1: ValueUnit // kN/cm
+        g1: ValueUnit
         alphap: number // Ep/Ecs
 
     }) {

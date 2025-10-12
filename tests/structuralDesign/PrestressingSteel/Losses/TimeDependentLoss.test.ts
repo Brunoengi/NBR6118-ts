@@ -29,8 +29,8 @@ describe('TimeDependentLoss', () => {
     beforeAll(() => {
         timeLoss = new timeDependentLoss({
             phi: 2.5,
-            g1: { value: 0.18, unit: 'kN/cm' }, // 18 kN/m -> 0.18 kN/cm
-            g2: { value: 0.20, unit: 'kN/cm' }, // 20 kN/m -> 0.20 kN/cm
+            g1: { value: 0.18, unit: 'kN/cm' },
+            g2: { value: 0.20, unit: 'kN/cm' },
             Ac: { value: 7200, unit: 'cm²' },
             Ic: { value: 8640000, unit: 'cm⁴' },
             width: width,

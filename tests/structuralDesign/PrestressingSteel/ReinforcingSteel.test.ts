@@ -1,11 +1,11 @@
-import { ReinforcingSteelUpper as ReinforcingSteel, ELU, Concrete, CableGeometry, ValueUnit } from "../../../src/index.js";
+import { ReinforcingSteelUpper as ReinforcingSteel, ELUAP, Concrete, CableGeometry, ValueUnit } from "../../../src/index.js";
 import { describe, it, expect, beforeAll } from '@jest/globals';
 
 describe('ReinforcingSteel', () => {
 
     describe('Based on ELU - Case 1', () => {
         let reinforcingSteel: ReinforcingSteel;
-        let elu: ELU;
+        let elu: ELUAP;
         const b: ValueUnit = { value: 60, unit: 'cm' };
         const h: ValueUnit = { value: 120, unit: 'cm' };
         const dl: ValueUnit = { value: 5, unit: 'cm' };
@@ -22,7 +22,7 @@ describe('ReinforcingSteel', () => {
             const x_values_cm = cableGeo.subdivideSpan().values;
             const ep_values_cm = x_values_cm.map((x: number) => cableGeo.cableY(x));
 
-            elu = new ELU({
+            elu = new ELUAP({
                 P0: { values: p0_full, unit: 'kN' },
                 ep: { values: ep_values_cm, unit: 'cm' },
                 Ac: { value: 7200, unit: 'cm²' },
@@ -67,7 +67,7 @@ describe('ReinforcingSteel', () => {
 
     describe('Based on ELU - Case 2', () => {
         let reinforcingSteel: ReinforcingSteel;
-        let elu: ELU;
+        let elu: ELUAP;
         const b: ValueUnit = { value: 70, unit: 'cm' };
         const h: ValueUnit = { value: 100, unit: 'cm' };
         const dl: ValueUnit = { value: 5, unit: 'cm' };
@@ -84,7 +84,7 @@ describe('ReinforcingSteel', () => {
             const x_values_cm = cableGeo.subdivideSpan().values;
             const ep_values_cm = x_values_cm.map((x: number) => cableGeo.cableY(x));
 
-            elu = new ELU({
+            elu = new ELUAP({
                 P0: { values: p0_full, unit: 'kN' },
                 ep: { values: ep_values_cm, unit: 'cm' },
                 Ac: { value: 3162.50, unit: 'cm²' },

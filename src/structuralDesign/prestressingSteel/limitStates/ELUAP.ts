@@ -91,7 +91,7 @@ class ELU {
 
     verification_sigma2P0({j}: {j: number}): Verification {
         const sigma2P0 = this.calculateSigma2P0() //kN/cm²
-        const maxsigma = this.concrete.calculate_fctj(j).value //kN/cm²
+        const maxsigma = 1.2 * this.concrete.calculate_fctmj(j).value //kN/cm²
 
       
         

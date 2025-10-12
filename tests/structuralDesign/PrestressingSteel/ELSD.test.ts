@@ -38,8 +38,8 @@ describe('ELSD - Limited Prestressing', () => {
 
         const timeLoss = new TimeDependentLoss({
             phi: 2.5,
-            g1: { value: 18, unit: 'kN/m' },
-            g2: { value: 20, unit: 'kN/m' },
+            g1: { value: 0.18, unit: 'kN/cm' },
+            g2: { value: 0.20, unit: 'kN/cm' },
             Ac,
             Ic: { value: 8640000, unit: 'cm⁴' },
             width,
@@ -112,12 +112,14 @@ describe('ELSD - Limited Prestressing', () => {
 
         it('should verify decompression (sigma1) correctly', () => {
             const result = elsd.verification_sigma1;
+            // console.log('elsd.verification_sigma1',result)
             expect(result.passed).toBe(true);
             expect(result.limit.value).toBe(0);
         });
 
         it('should verify excessive compression (sigma2) correctly', () => {
             const result = elsd.verification_sigma2;
+            // console.log('elsd.verification_sigma2', result)
             const expectedLimit = -0.45 * concrete.fck.value; // -1.575 kN/cm²
             expect(result.passed).toBe(true);
             expect(result.limit.value).toBeCloseTo(expectedLimit);

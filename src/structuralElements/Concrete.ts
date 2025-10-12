@@ -104,12 +104,11 @@ class Concrete {
     return { value: fckj / 10, unit: "kN/cm²" }
   }
 
-  calculate_fctj(j: number): Stress {
-    const fckj_kNCm2 = this.calculate_fckj(j).value;
-    const fckj_MPa = fckj_kNCm2 * 10;
-    const fctmj_MPa = 0.3 * (fckj_MPa)**(2/3);
+  calculate_fctmj(j: number): Stress {
+    const fckj = this.calculate_fckj(j)
+    const fctmj = this.calculate_fctm(fckj.value)
     
-    return {value: fctmj_MPa / 10, unit: "kN/cm²"};
+    return {value: fctmj.value, unit: "kN/cm²"};
   }
 
   private calculate_Ec(fck_kNCm2: number, alpha_e: number): ModulusOfElasticity {
