@@ -11,6 +11,8 @@ class ELU {
     public readonly sigma2P0_ELU: ValuesUnit
     public readonly Mg: ValuesUnit
     public readonly concrete: Concrete
+    public readonly verificationSigma1P0: Verification
+    public readonly verificationSigma2P0: Verification
 
     constructor({P0, ep, Ac, W1, W2, Mg, concrete}: {
         P0: ValuesUnit
@@ -30,7 +32,10 @@ class ELU {
         this.sigma1P0_ELU = this.calculateSigma1P0()
         this.sigma2P0_ELU = this.calculateSigma2P0()
         this.concrete = concrete
+        this.verificationSigma1P0 = this.verification_sigma1P0.bind(this)
+        this.verificationSigma2P0 = this.verification_sigma2P0.bind(this)
     }
+
 
     calculateSigma1P0(): ValuesUnit {
         const sigma1P0_ELU = this.P0.values.map((P0_i, i) => {
@@ -105,8 +110,7 @@ class ELU {
                 values: sigma2P0.values,
                 unit: 'kN/cm²'
             }
-        }
-            
+        }     
     }
 }
 
