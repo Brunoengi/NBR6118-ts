@@ -32,8 +32,6 @@ class ELUAP {
         this.sigma1P0_ELU = this.calculateSigma1P0()
         this.sigma2P0_ELU = this.calculateSigma2P0()
         this.concrete = concrete
-        this.verificationSigma1P0 = this.verification_sigma1P0.bind(this)
-        this.verificationSigma2P0 = this.verification_sigma2P0.bind(this)
     }
 
 
