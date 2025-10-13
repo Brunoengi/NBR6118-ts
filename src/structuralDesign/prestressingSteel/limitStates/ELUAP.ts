@@ -1,7 +1,7 @@
 import { ValuesUnit, ValueUnit, Verification } from "types/index.js"
 import Concrete from "../../../structuralElements/Concrete.js"
 
-class ELU {
+class ELUAP {
     public readonly P0: ValuesUnit
     public readonly ep: ValuesUnit
     public readonly Ac: ValueUnit
@@ -114,4 +114,4 @@ class ELU {
     }
 }
 
-export default ELU;
+export default ELUAP;
