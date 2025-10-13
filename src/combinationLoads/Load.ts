@@ -182,9 +182,8 @@ class Combinations {
         gamma_g1: number;
         gamma_g2: number;
         gamma_q: number;
-        
     }
-
+    public readonly width: Distance;
 
 
     constructor(inputs: ICombinations) {
@@ -236,10 +235,11 @@ class Combinations {
             gamma_g2: inputs.gamma_g2,
             gamma_q: inputs.gamma_q
         }
+        
+        this.width = inputs.width
     }
         
-        
-
+    
     calculateMoments({moment, x, width}:{moment: ValueUnit, x: ValuesUnit, width: ValueUnit}): ValuesUnit {
             const momentValue = moment.value;
 
