@@ -11,9 +11,8 @@ class ReinforcingSteelAsl {
     Rct: ValueUnit
     Asl: ValueUnit
     dl: ValueUnit
-    dp: ValueUnit
-    
-    constructor({sigma, h, b, dl, dp}: {
+
+    constructor({sigma, h, b, dl}: {
         sigma: {
             sigma1P0: ValuesUnit
             sigma2P0: ValuesUnit
@@ -21,14 +20,12 @@ class ReinforcingSteelAsl {
         h: ValueUnit
         b: ValueUnit
         dl: ValueUnit
-        dp: ValueUnit
     }
     ) {
         this.sigma = sigma
         this.h = h
         this.b = b
         this.dl = dl
-        this.dp = dp
         this.neutralLine = this.calculateNeutralLine()
         this.Rct = this.calculateRct()
         this.Asl = this.calculateAsl()
@@ -63,15 +60,7 @@ class ReinforcingSteelAsl {
             value: this.h.value - this.dl.value,
             unit: 'cm' 
         }
-    }
-
-    calculate_dp(): ValueUnit {
-        return {
-            value: this.h.value - this.dp.value,
-            unit: 'cm'
-        }
-    }
-    
+    }    
 }
 
 export default ReinforcingSteelAsl;

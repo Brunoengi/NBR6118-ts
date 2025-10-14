@@ -1,5 +1,6 @@
 import { ReinforcingSteelUpper as ReinforcingSteel, ELUAP, Concrete, CableGeometry, ValueUnit } from "../../../src/index.js";
 import { describe, it, expect, beforeAll } from '@jest/globals';
+import { ValuesUnit } from "../../../src/index.js";
 
 describe('ReinforcingSteel', () => {
 
@@ -40,7 +41,7 @@ describe('ReinforcingSteel', () => {
                 h,
                 b,
                 dl,
-                dp
+                
             });
         });
 
@@ -102,7 +103,7 @@ describe('ReinforcingSteel', () => {
                 h,
                 b,
                 dl,
-                dp
+                
             });
         });
 
@@ -126,4 +127,44 @@ describe('ReinforcingSteel', () => {
             expect(reinforcingSteel.Asl.unit).toBe('cm²');
         });
     });
+
+    describe('Besed on ELU - Case 3', () => {
+
+        const h = { value: 100, unit: 'cm' }
+        const b = { value: 70, unit: 'cm' }
+        const dl: ValueUnit = { value: 5, unit: 'cm' };
+        const dp: ValueUnit = { value: 12, unit: 'cm' };
+
+        const sigma: {
+            sigma1P0: ValuesUnit
+            sigma2P0: ValuesUnit
+        } = {
+            sigma1P0: { values: [-0.4873, -0.7533, -0.9645, -1.1199, -1.219, -1.2614, -1.219, -1.1199, -0.9645, -0.7533, -0.4873], unit: 'kN/cm²'},
+            sigma2P0: { values: [-0.4873, -0.2934, -0.1395, -0.0276, 0.0413, 0.0664, 0.0413, -0.0276, -0.1395, -0.2934, -0.4873], unit: 'kN/cm²'}
+        }
+
+        const reinforcingSteelUpper = new ReinforcingSteel({ sigma, h, b, dl });
+
+        it('Calculate Neutral Line (x)', () => {
+            const x = reinforcingSteelUpper.neutralLine
+            
+            expect(x.value).toBeCloseTo(5.003, 2)
+            expect(x.unit).toBe('cm')
+        })
+
+        it('Calculate Rct', () => {
+            const Rct = reinforcingSteelUpper.Rct
+    
+            expect(Rct.value).toBeCloseTo(11.632, 1)
+            expect(Rct.unit).toBe('kN')
+        })
+
+        it('Calculate Asl', () => {
+            const Asl = reinforcingSteelUpper.Asl
+
+            expect(Asl.value).toBeCloseTo(0.465, 2)
+            expect(Asl.unit).toBe('cm²')
+        })
+        
+    })
 });
