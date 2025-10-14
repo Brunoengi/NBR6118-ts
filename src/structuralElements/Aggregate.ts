@@ -27,7 +27,7 @@ class AggregateConcrete implements IAgregateConcrete {
       case "sandstone":
         return 0.7;
       default:
-        throw new Error("Invalid aggregate type");
+        throw new Error(`Invalid aggregate type: ${type}`);
     }
   }
 }
