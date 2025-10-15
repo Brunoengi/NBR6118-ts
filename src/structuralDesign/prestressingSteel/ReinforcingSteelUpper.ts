@@ -11,6 +11,8 @@ class ReinforcingSteelAsl {
     Rct: ValueUnit
     Asl: ValueUnit
     dl: ValueUnit
+    isNecessary: boolean
+
 
     constructor({sigma, h, b, dl}: {
         sigma: {
@@ -29,7 +31,12 @@ class ReinforcingSteelAsl {
         this.neutralLine = this.calculateNeutralLine()
         this.Rct = this.calculateRct()
         this.Asl = this.calculateAsl()
+        this.isNecessary = this.verifyIsNecessary()
     
+    }
+
+    verifyIsNecessary(): boolean {
+        return this.sigma.sigma2P0.values.some(sigmaValue => sigmaValue > 0)
     }
 
     calculateNeutralLine(): ValueUnit {

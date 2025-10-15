@@ -145,6 +145,10 @@ describe('ReinforcingSteel', () => {
 
         const reinforcingSteelUpper = new ReinforcingSteel({ sigma, h, b, dl });
 
+        it('Is Necessary', () => {
+            expect(reinforcingSteelUpper.isNecessary).toBe(true)
+        })
+
         it('Calculate Neutral Line (x)', () => {
             const x = reinforcingSteelUpper.neutralLine
             
