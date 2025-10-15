@@ -10,7 +10,6 @@ describe('ReinforcingSteel', () => {
         const b: ValueUnit = { value: 60, unit: 'cm' };
         const h: ValueUnit = { value: 120, unit: 'cm' };
         const dl: ValueUnit = { value: 5, unit: 'cm' };
-        const dp: ValueUnit = { value: 12, unit: 'cm' };
 
         beforeAll(() => {
             // --- Setup based on ELU.test.ts Case 1 ---
