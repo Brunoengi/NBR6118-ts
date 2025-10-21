@@ -72,7 +72,7 @@ describe('ELSF - Limited Prestressing', () => {
         });
 
         // Mocking calculateMoments to ensure parabolic distribution
-        jest.spyOn(combinations, 'calculateMoments').mockImplementation(({ moment }) => {
+        jest.spyOn(combinations, 'calculateMomentsBasedOnMaxMoment').mockImplementation(({ moment }) => {
             const M_max = moment.value;
             const L_cm = width.value;
             const moments_values = x_values_cm.map((x_cm: number) => {
@@ -81,7 +81,7 @@ describe('ELSF - Limited Prestressing', () => {
             return { values: moments_values, unit: 'kN*cm' };
         });
 
-        frequent_moments = combinations.calculateMoments({ moment: combinations.frequent.moment, x: { values: x_values_cm, unit: 'cm' }, width });
+        frequent_moments = combinations.calculateMomentsBasedOnMaxMoment({ moment: combinations.frequent.moment, x: { values: x_values_cm, unit: 'cm' }, width });
 
         // 4. Instantiate ELSF
         elsf = new ELSF({

@@ -1,5 +1,5 @@
 import { QuasiPermanent, Frequent, Rare, Last, Qsi1, Qsi2, Combinations, Distance } from '../../src/index.js';
-
+import {Distance as DistanceProps, Distances as DistancesProps, DistributedLoad, Moment} from '../../src/types/index.js'
 
 describe('test combinations loads', () => {
     // To test the moment calculation, we provide distributed loads and a span
@@ -71,11 +71,11 @@ describe('Combinations.calculateMoments', () => {
     });
 
     it('should calculate bending moments for a simply supported beam', () => {
-        const maxMoment = { value: 1000, unit: 'kN*cm' }; // 10 kN*m
-        const beamWidth = { value: 1000, unit: 'cm' }; // 10m
-        const xPoints = { values: [0, 250, 500, 750, 1000], unit: 'cm' };
+        const maxMoment: Moment = { value: 1000, unit: 'kN*cm' }; // 10 kN*m
+        const beamWidth: DistanceProps = { value: 1000, unit: 'cm' } // 10m
+        const xPoints: DistancesProps = { values: [0, 250, 500, 750, 1000], unit: 'cm' };
 
-        const result = dummyCombinations.calculateMoments({
+        const result = dummyCombinations.calculateMomentsBasedOnMaxMoment({
             moment: maxMoment,
             width: beamWidth,
             x: xPoints
@@ -98,4 +98,33 @@ describe('Combinations.calculateMoments', () => {
         // Verifica se a unidade do momento foi calculada corretamente
         expect(result.unit).toBe('kN*cm');
     });
+
+    it('should calculate bending moments for a simply supported beam based on distributed loads', () => {
+        const distributedLoad: DistributedLoad = { value: 0.07906, unit: 'kN/cm' };
+        const beamWidth: DistanceProps = { value: 1500, unit: 'cm' };
+        const xPoints: DistancesProps = { values: [0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500], unit: 'cm' };
+
+        const result = dummyCombinations.calculateMomentsBasedOnDistributedLoad({
+            distributedLoad,
+            width: beamWidth,
+            x: xPoints
+        })
+
+        const expectedValuesMoments = {
+            values: [0, 8005.1, 14231.3, 18678.5, 21346.9, 22236.3, 21346.9, 18678.5, 14231.3, 8005.1, 0],
+            unit: 'kN*cm'
+        }
+
+        expectedValuesMoments.values.forEach((expectedValue, index) => {
+            expect(result.values[index]).toBeCloseTo(expectedValue, -1)
+        })
+
+        expect(result.unit).toBe(expectedValuesMoments.unit)
+    
+
+
+    })
+
+    
+
 });

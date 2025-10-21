@@ -72,7 +72,7 @@ describe('ELSD - Limited Prestressing', () => {
         });
 
         // Mocking calculateMoments to ensure parabolic distribution
-        jest.spyOn(combinations, 'calculateMoments').mockImplementation(({ moment }) => {
+        jest.spyOn(combinations, 'calculateMomentsBasedOnMaxMoment').mockImplementation(({ moment }) => {
             const M_max = moment.value;
             const L_cm = width.value;
             const moments_values = x_values_cm.map((x_cm: number) => {
@@ -81,7 +81,7 @@ describe('ELSD - Limited Prestressing', () => {
             return { values: moments_values, unit: 'kN*cm' };
         });
 
-        qp_moments = combinations.calculateMoments({ moment: combinations.quasiPermanent.moment, x: { values: x_values_cm, unit: 'cm' }, width });
+        qp_moments = combinations.calculateMomentsBasedOnMaxMoment({ moment: combinations.quasiPermanent.moment, x: { values: x_values_cm, unit: 'cm' }, width });
 
         // 4. Instantiate ELSD
         elsd = new ELSD({
