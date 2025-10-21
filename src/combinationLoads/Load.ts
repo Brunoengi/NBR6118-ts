@@ -171,9 +171,9 @@ class Combinations {
     public readonly frequent: Frequent;
     public readonly rare: Rare;
     public readonly last: Last;
-    public readonly g1: ValueUnit;
-    public readonly g2: ValueUnit;
-    public readonly q: ValueUnit;
+    public readonly g1: DistributedLoad;
+    public readonly g2: DistributedLoad;
+    public readonly q: DistributedLoad;
     public readonly qsi: {
         qsi1: Qsi1;
         qsi2: Qsi2;
