@@ -66,12 +66,12 @@ class QuasiPermanent {
 }
 
 class Frequent {
-    readonly moment: ValueUnit;
+    readonly moment: Moment;
 
-    readonly mg1: ValueUnit;
-    readonly mg2: ValueUnit;
-    readonly mq: ValueUnit;
-    readonly distributedLoad: ValueUnit;
+    readonly mg1: Moment;
+    readonly mg2: Moment;
+    readonly mq: Moment;
+    readonly distributedLoad: DistributedLoad;
 
     constructor({ g1, g2, q, qsi1, width }: IFrequent) {
         this.mg1 = { value: (g1.value * width.value ** 2) / 8, unit: 'kN*cm' };
@@ -87,7 +87,7 @@ class Frequent {
 
         this.distributedLoad = {
             value: g1.value + g2.value + q.value * qsi1.value,
-            unit: g1.unit
+            unit: 'kN/cm'
         };
     }
 
