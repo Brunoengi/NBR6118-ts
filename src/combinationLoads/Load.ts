@@ -33,11 +33,11 @@ class Qsi2 implements IQsi2 {
 
 
 class QuasiPermanent {
-    readonly moment: ValueUnit;
-    readonly mg1: ValueUnit;
-    readonly mg2: ValueUnit;
-    readonly mq: ValueUnit;
-    readonly distributedLoad: ValueUnit;
+    readonly moment: Moment;
+    readonly mg1: Moment;
+    readonly mg2: Moment;
+    readonly mq: Moment;
+    readonly distributedLoad: DistributedLoad;
 
     constructor({ g1, g2, q, qsi2, width }: IQuasiPermanent) {
         this.mg1 = { value: (g1.value * width.value ** 2) / 8, unit: 'kN*cm' };
@@ -53,12 +53,11 @@ class QuasiPermanent {
 
         this.distributedLoad = {
             value: g1.value + g2.value + q.value * qsi2.value,
-            unit: g1.unit
+            unit: 'kN/cm'
         };
     }
 
-    private calculateMoment({ mg1, mg2, mq, qsi2 }: { mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi2: Qsi2 }): ValueUnit {
-        const unit = mg1.unit; // Assume all units are the same
+    private calculateMoment({ mg1, mg2, mq, qsi2 }: { mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi2: Qsi2 }): Moment {
         return {
             value: mg1.value + mg2.value + mq.value * qsi2.value,
             unit: 'kN*cm'
@@ -92,8 +91,7 @@ class Frequent {
         };
     }
 
-    private calculateMoment({ mg1, mg2, mq, qsi1 }: { mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi1: Qsi1 }): ValueUnit {
-        const unit = mg1.unit; // Assume all units are the same
+    private calculateMoment({ mg1, mg2, mq, qsi1 }: { mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit, qsi1: Qsi1 }): Moment {
         return {
             value: mg1.value + mg2.value + mq.value * qsi1.value,
             unit: 'kN*cm'
@@ -102,12 +100,12 @@ class Frequent {
 }
 
 class Rare {
-    readonly moment: ValueUnit;
+    readonly moment: Moment;
 
-    readonly mg1: ValueUnit;
-    readonly mg2: ValueUnit;
-    readonly mq: ValueUnit;
-    readonly distributedLoad: ValueUnit;
+    readonly mg1: Moment;
+    readonly mg2: Moment;
+    readonly mq: Moment;
+    readonly distributedLoad: DistributedLoad;
 
     constructor({ g1, g2, q, width }: IRare) {
         this.mg1 = { value: (g1.value * width.value ** 2) / 8, unit: 'kN*cm' };
@@ -122,11 +120,11 @@ class Rare {
 
         this.distributedLoad = {
             value: g1.value + g2.value + q.value,
-            unit: g1.unit
+            unit: 'kN/cm'
         };
     }
 
-    private calculateMoment({ mg1, mg2, mq }: { mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit }): ValueUnit {
+    private calculateMoment({ mg1, mg2, mq }: { mg1: ValueUnit, mg2: ValueUnit, mq: ValueUnit }): Moment {
         const unit = mg1.unit; // Assume all units are the same
         return {
             value: mg1.value + mg2.value + mq.value,
