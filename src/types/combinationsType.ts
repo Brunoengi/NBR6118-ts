@@ -1,5 +1,4 @@
-import { ValueUnit, Moment } from "./index.js"
-import { Distance } from "./index.js"
+import { ValueUnit, Moment, Distance, DistributedLoad } from "./index.js"
 
 export interface IMoments {
     Mg1: Moment
@@ -27,9 +26,9 @@ export interface IQsi2 {
 }
 
 export interface ICombinationLoads {
-    g1: ValueUnit;
-    g2: ValueUnit;
-    q: ValueUnit;
+    g1: DistributedLoad;
+    g2: DistributedLoad;
+    q: DistributedLoad;
     width: Distance;
 }
 
