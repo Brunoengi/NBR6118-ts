@@ -22,10 +22,18 @@ describe('CableGeometry', () => {
 
     it('should handle a custom "c" value in the constructor', () => {
         const customC = 10;
+        const L = width.value;
+        const e = epmax.value;
         const cableGeoWithC = new CableGeometry({ width, epmax, numPoints, c: customC });
+
         expect(cableGeoWithC.c).toBe(customC);
-        // At x=0, y should be c
-        expect(cableGeoWithC.y.values[0]).toBe(customC);
+
+        // Verify the y-value for all points along the cable
+        cableGeoWithC.x.values.forEach((x: any, index: number) => {
+            // The correct formula for the parabola is: y(x) = 4 * (c - e)/L^2 * x * (x - L) + c
+            const expectedY = (4 * (customC - e) / (L ** 2)) * x * (x - L) + customC;
+            expect(cableGeoWithC.y.values[index]).toBeCloseTo(expectedY);
+        });
     });
 
     describe('subdivideSpan', () => {
