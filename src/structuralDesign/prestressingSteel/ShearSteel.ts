@@ -5,6 +5,8 @@ import { ValuesUnit, ValueUnit } from "../../types/index.js";
 import CableGeometry from "./CableGeometry.js";
 import CompressionStruts from "./StrutVerification.js";
 import Steel from "../../structuralElements/Steel.js";
+import {A} from "../../types/sectionsType.js";
+
 
 class ShearSteel {
 
@@ -22,6 +24,8 @@ class ShearSteel {
     steel: Steel
     rho_w: ValueUnit
     bw: ValueUnit
+    Asw: ValueUnit
+
 
     constructor({
         prestressingSteelForce, concrete, cableGeometry, combinations, compressionStruts, Ac, W1, Md, steel, bw
@@ -54,6 +58,7 @@ class ShearSteel {
         this.tau_c = this.calculate_tau_c()
         this.tau_d = this.calculate_tau_d()
         this.rho_w = this.calculate_rho_w()
+        this.Asw = this.calculate_Asw()
     }
 
     calculateM0(): ValueUnit {
