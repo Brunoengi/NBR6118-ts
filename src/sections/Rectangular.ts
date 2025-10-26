@@ -5,7 +5,7 @@ class Rectangular extends AbstractSection {
 
 
     constructor({ base, height }: { base: Distance; height: Distance }) {
-        
+
         const b = base.value
         const h = height.value
 
@@ -15,7 +15,7 @@ class Rectangular extends AbstractSection {
             { 'x': -b / 2, 'y': h },
             { 'x': -b / 2, 'y': 0 },
             { 'x': b / 2, 'y': 0 }
-        ])
+        ], { base, height })
     }
 }
 

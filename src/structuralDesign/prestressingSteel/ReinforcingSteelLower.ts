@@ -26,6 +26,9 @@ class ReinforcingSteelAs {
     public readonly LN: Distance
     public readonly Rcd: ValueUnit
     public readonly distanceRcdToAs: Distance
+    public readonly asEstimated: A
+    public readonly asMin: A
+    public readonly asEffective: A
     
     constructor({cableGeometry, combinations, section, concrete, prestressingSteel, steel, prestressingDesign, dl, h, dpl}: {cableGeometry: CableGeometry, combinations: Combinations, section: AbstractSection, concrete: Concrete, prestressingSteel: PrestressingSteel, prestressingDesign: AbstractPrestressingSteelDesign, dl: Distance, h: Distance, dpl: Distance, steel: Steel}) {
         this.concrete = concrete;
@@ -44,6 +47,11 @@ class ReinforcingSteelAs {
         const concreteForces = this.calculateConcreteCompressionResultants({ x: this.LN });
         this.Rcd = concreteForces.Rcd;
         this.distanceRcdToAs = concreteForces.distanceRcdToAs;
+
+        this.asEstimated = this.calculate_Asestimated()
+        const bf = this.section.inputs.bf || this.section.inputs.base
+        this.asMin = this.minimumSteel({bf})
+        this.asEffective = this.minimumSteel({bf})
     }
 
     calculate_ds1({h, dl}: {h: Distance, dl: Distance}): Distance {

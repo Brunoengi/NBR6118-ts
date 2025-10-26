@@ -205,4 +205,13 @@ describe('ReinforcingSteelLower', () => {
         expect(asMin.unit).toBe('cm²');
         expect(asMin.value).toBeCloseTo(10.8, 1);
     });
+
+    it('should calculate the minimum steel area correctly', () => {
+        // Asmin_est = 9.76 cm²
+        // Asmin_constructive = Ac * 0.15/100 = 7200 * 0.0015 = 10.8 cm²
+        // The final result should be the max of the two.
+        const asMin = reinforcingSteel.asEffective;
+        expect(asMin.unit).toBe('cm²');
+        expect(asMin.value).toBeCloseTo(10.8, 1);
+    });
 });

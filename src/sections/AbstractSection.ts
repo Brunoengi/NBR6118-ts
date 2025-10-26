@@ -6,10 +6,15 @@ import { Distance } from "types/index.js"
 abstract class AbstractSection {
     public readonly props: GeometricPropsWithUnitsType
     public readonly points: IBidimensionalPoint[]
+    public readonly inputs: {
+        [key: string]: Distance
 
-    constructor(points: IBidimensionalPoint[]) {
+    }
+
+    constructor(points: IBidimensionalPoint[], inputs) {
         this.points = points
         this.props = { ...this.setProperties(new GeometricProps(points)), perimeter: this.calculatePerimeter() }
+        this.inputs = inputs
     }
 
     setProperties(geometricPropClass: GeometricPropsType): Omit<GeometricPropsWithUnitsType, 'perimeter'> {

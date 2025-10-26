@@ -14,7 +14,7 @@ class T extends AbstractSection {
             { 'x': -bf.value / 2, 'y': h.value - hf.value },            
             { 'x': -bw.value / 2, 'y': h.value - hf.value },             
             { 'x': -bw.value / 2, 'y': 0 }                                     
-        ])
+        ], { bf, hf, bw, h })
     }
 }
 

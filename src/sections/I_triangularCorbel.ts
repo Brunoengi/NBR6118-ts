@@ -4,7 +4,7 @@ import { IBidimensionalPoint } from "geometric-props";
 
 class I_triangularCorbel extends AbstractSection {
 
-    constructor ({ bf, hf, bw, h, bi, hi, bmissup, hmissup, bmisinf, hmisinf}: { bf: Distance, hf: Distance, bw: Distance, h: Distance, bi: Distance, hi: Distance, bmissup: Distance, hmissup: Distance, bmisinf: Distance, hmisinf: Distance}) {
+    constructor({ bf, hf, bw, h, bi, hi, bmissup, hmissup, bmisinf, hmisinf }: { bf: Distance, hf: Distance, bw: Distance, h: Distance, bi: Distance, hi: Distance, bmissup: Distance, hmissup: Distance, bmisinf: Distance, hmisinf: Distance }) {
         const points: IBidimensionalPoint[] = [];
 
         // Bottom-left corner
@@ -54,7 +54,7 @@ class I_triangularCorbel extends AbstractSection {
         points.push({ x: -bi.value / 2, y: hi.value });
         points.push({ x: -bi.value / 2, y: 0 });
 
-        super(points);
+        super(points, { bf, hf, bw, h, bi, hi, bmissup, hmissup, bmisinf, hmisinf });
 
     }
 }
