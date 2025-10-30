@@ -21,7 +21,7 @@ Here you can create your material and verify your properties
 #### `1.1 Concrete`
 
 ```typescript
-import Concrete from './src/structuralElements/Concrete.js'
+import { Concrete } from 'nbr6118-ts'
 
 // 1. Define Materials and Geometry
 const concrete = new Concrete({
@@ -60,7 +60,7 @@ Used internally by the `Concrete` class.
 #### `1.2 Steel`
 
 ```typescript
-import Steel from './src/structuralElements/Steel.js'
+import { Steel } from 'nbr6118-ts'
 
 // 1. Define Materials and Geometry
 const steel = new Steel('CA 50')
@@ -76,7 +76,7 @@ Property | Acronym | Unit |
 #### `1.3 Aggregate`
 
 ```typescript
-import Aggregate from './src/structuralElements/Aggregate.js';
+import { Aggregate } from 'nbr6118-ts';
 
 const aggregate = new Aggregate('granite');
 ```
@@ -109,6 +109,50 @@ Provides properties for different types of prestressing steel based on their lab
 | Nominal Diameter                    | &Phi;               | mm   |
 | Minimum Area of a Single Cord       | A<sub>p,min</sub>   | cm²  |
 
+
+### Module 2: Combinations
+
+This module provides classes to calculate load combinations for Serviceability Limit States (SLS) and Ultimate Limit States (ULS) based on NBR 6118. It calculates the maximum bending moment for a simply supported beam under given distributed loads.
+
+The main `Combinations` class aggregates four types of combinations:
+- **Quasi-Permanent (SLS):** Used for long-term effects.
+- **Frequent (SLS):** Used for verifying cracking and vibrations.
+- **Rare (SLS):** Used for verifying cracking formation.
+- **Last (ULS):** Used for ultimate strength design (Ultimate Limit State).
+
+```typescript
+import { Combinations, Qsi1, Qsi2 } from 'nbr6118-ts';
+
+// 1. Define distributed loads and beam span
+const g1 = { value: 0.08, unit: 'kN/cm' }; // Permanent load 1
+const g2 = { value: 0.16, unit: 'kN/cm' }; // Permanent load 2
+const q = { value: 0.24, unit: 'kN/cm' };  // Variable load
+const width = { value: 1000, unit: 'cm' }; // 10m span
+
+// 2. Define combination factors
+const qsi1 = new Qsi1(0.7); // Factor for frequent combination
+const qsi2 = new Qsi2(0.6); // Factor for quasi-permanent combination
+
+// 3. Create the Combinations instance
+const combinations = new Combinations({
+    g1, g2, q, width,
+    qsi1,
+    qsi2,
+    gamma_g1: 1.4, // ULS safety factor for g1
+    gamma_g2: 1.4, // ULS safety factor for g2
+    gamma_q: 1.4   // ULS safety factor for q
+});
+
+// 4. Access the calculated moments for each combination
+console.log('Quasi-Permanent Moment:', combinations.quasiPermanent.moment);
+// Expected: { value: 48000, unit: 'kN*cm' }
+console.log('Frequent Moment:', combinations.frequent.moment);
+// Expected: { value: 51000, unit: 'kN*cm' }
+console.log('Rare Moment:', combinations.rare.moment);
+// Expected: { value: 60000, unit: 'kN*cm' }
+console.log('Last (ULS) Moment:', combinations.last.moment);
+// Expected: { value: 84000, unit: 'kN*cm' }
+```
 
 ### Module 3: Prestressing Design
 
