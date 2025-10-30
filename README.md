@@ -91,11 +91,11 @@ Provides properties for different types of concrete aggregates.
 #### `1.4 PrestressingSteel`
 
 ```typescript
-import PrestressingSteel from './src/structuralElements/PrestressingSteel.js'
+import { PrestressingSteel } from 'nbr6118-ts'
 
 const prestressingSteel = new PrestressingSteel({ label: 'CP 190 RB 12.7' })
 
-console.log(prepressingSteel)
+console.log(prestressingSteel)
 ```
 
 Provides properties for different types of prestressing steel based on their label.
