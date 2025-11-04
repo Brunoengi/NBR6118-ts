@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 
-import Rectangular from "../../src/sections/Rectangular.js"
+import Rectangular from "../../src/utils/sections/Rectangular.js"
 
 describe('Rectangular Section', () => {
     const base = { value: 20, unit: 'cm' }

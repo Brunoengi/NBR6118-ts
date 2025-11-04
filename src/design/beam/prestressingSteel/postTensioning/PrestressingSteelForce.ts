@@ -1,4 +1,4 @@
-import  CableGeometry from "./CableGeometry.js";
+import  CableGeometry from "../postTensioning/CableGeometry.js";
 import { ValuesUnit } from "types/index.js";
 
 class PrestressingSteelForce {

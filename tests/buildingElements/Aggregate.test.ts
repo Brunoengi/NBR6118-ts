@@ -1,5 +1,4 @@
-import AggregateConcrete from "../../src/structuralElements/Aggregate.js"
-
+import AggregateConcrete from "../../src/utils/elements/Aggregate.js"
 
 describe('AggregateConcrete', () => {
     it('should correctly calculate alpha_e for basalt', () => {

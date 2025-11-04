@@ -1,4 +1,4 @@
-import { ValueUnit } from "../types/index.js";
+import { ValueUnit } from "types/index.js";
 
 const options = [{
     label: 'CA 50',

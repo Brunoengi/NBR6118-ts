@@ -1,5 +1,5 @@
 import { ValuesUnit, ValueUnit, Verification } from "types/index.js"
-import Concrete from "../../../structuralElements/Concrete.js"
+import Concrete from "../../../../../utils/elements/concrete/Concrete.js"
 
 class ELUAP {
     public readonly P0: ValuesUnit

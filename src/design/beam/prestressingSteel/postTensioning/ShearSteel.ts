@@ -1,12 +1,10 @@
 import PrestressingSteelForce from "./PrestressingSteelForce.js";
-import Concrete from "../../structuralElements/Concrete.js";
-import { Combinations } from "../../combinationLoads/Load.js";
-import { ValuesUnit, ValueUnit } from "../../types/index.js";
+import Concrete from "../../../../utils/elements/concrete/Concrete.js";
+import { Combinations } from "../../../../utils/loads/Load.js";
+import { ValuesUnit, ValueUnit } from "types/index.js";
 import CableGeometry from "./CableGeometry.js";
 import CompressionStruts from "./StrutVerification.js";
-import Steel from "../../structuralElements/Steel.js";
-import {A} from "../../types/sectionsType.js";
-
+import Steel from "../../../../utils/elements/Steel.js";
 
 class ShearSteel {
 

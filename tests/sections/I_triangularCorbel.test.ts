@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 
-import I_triangularCorbel from "../../src/sections/I_triangularCorbel.js";
+import I_triangularCorbel from "../../src/utils/sections/I_triangularCorbel.js";
 
 describe('I_triangularCorbel Section', () => {
     // Using symmetric dimensions for easier verification of centroid

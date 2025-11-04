@@ -1,5 +1,5 @@
-import { ValuesUnit, ValueUnit, Distance, Moment, Moments, Distances, DistributedLoad } from "../types/index.js"
-import { IQsi1, IQsi2, IQuasiPermanent, IFrequent, ILast, ICombinations, IRare } from "../types/combinationsType.js"
+import { ValuesUnit, ValueUnit, Distance, Moment, Moments, Distances, DistributedLoad } from "types/index.js"
+import { IQsi1, IQsi2, IQuasiPermanent, IFrequent, ILast, ICombinations, IRare } from "types/combinationsType.js"
 
 
 

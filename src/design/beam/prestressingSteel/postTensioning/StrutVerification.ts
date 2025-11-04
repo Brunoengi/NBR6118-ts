@@ -1,8 +1,8 @@
-import { Combinations } from "combinationLoads/Load.js";
+import { Combinations } from "../../../../utils/loads/Load.js";
 import { ValueUnit, ValuesUnit, Distance, Verification } from "types/index.js";
 import CableGeometry from "./CableGeometry.js";
 import PrestressingSteelForce from "./PrestressingSteelForce.js";
-import Concrete from "../../structuralElements/Concrete.js";
+import Concrete from "../../../../utils/elements/concrete/Concrete.js";
 
 class StrutVerification {
     Vsd: ValuesUnit
@@ -16,7 +16,6 @@ class StrutVerification {
     bw: Distance
     h: Distance
     dl: Distance
-
 
     constructor({combinations, cableGeometry, prestressSteelForce, sum_phi_b, bw, concrete, h, dl}: {combinations: Combinations, cableGeometry: CableGeometry, prestressSteelForce: PrestressingSteelForce, sum_phi_b: Distance, bw: Distance, concrete: Concrete, h: Distance, dl: Distance} ) {
 

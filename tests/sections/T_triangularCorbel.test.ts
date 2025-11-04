@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 
-import T_triangularCorbel from "../../src/sections/T_triangularCorbel.js";
+import T_triangularCorbel from "../../src/utils/sections/T_triangularCorbel.js";
 
 describe('T_triangularCorbel Section', () => {
     const bf = { value: 40, unit: 'cm' };

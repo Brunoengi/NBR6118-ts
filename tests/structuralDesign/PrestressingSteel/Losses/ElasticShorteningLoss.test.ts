@@ -1,4 +1,5 @@
-import { ElasticShorteningLoss, ValueUnit, Distances } from "../../../../src/index.js";
+import { ElasticShorteningLoss, ValueUnit } from "../../../../src/index.js";
+import {Distances} from '../../../../src/types/index.js'
 
 describe('ElasticShorteningLoss', () => {
     let elasticLoss: ElasticShorteningLoss;
@@ -296,7 +297,7 @@ describe('ElasticShorteningLoss - T-Beam', () => {
         const expectedSigmacp_half = [-0.4839, -0.811, -1.5233, -2.2937, -2.877, -3.1157];
         const expectedSigmacp = [...expectedSigmacp_half, ...expectedSigmacp_half.slice(0, -1).reverse()];
 
-        sigmacp.values.forEach((val, i) => {
+        sigmacp.values.forEach((val: any, i: any) => {
             expect(val).toBeCloseTo(expectedSigmacp[i], 3);
         });
     });
@@ -308,7 +309,7 @@ describe('ElasticShorteningLoss - T-Beam', () => {
         const expectedSigmacg = [...expectedSigmacg_half, ...expectedSigmacg_half.slice(0, -1).reverse()];
 
         expect(sigmacg.values.length).toBe(expectedSigmacg.length);
-        sigmacg.values.forEach((val, i) => {
+        sigmacg.values.forEach((val: any, i: any) => {
             expect(val).toBeCloseTo(expectedSigmacg[i], 4);
         });
     });
@@ -323,7 +324,7 @@ describe('ElasticShorteningLoss - T-Beam', () => {
         };
 
         expect(sigmac.unit).toBe(expectedSigmac.unit);
-        sigmac.values.forEach((calculatedValue, i) => {
+        sigmac.values.forEach((calculatedValue: any, i: any) => {
             expect(calculatedValue).toBeCloseTo(expectedSigmac.values[i], 2);
         });
     });
@@ -331,14 +332,14 @@ describe('ElasticShorteningLoss - T-Beam', () => {
     it('should calculate elastic shortening force loss (deltaP_el) correctly', () => {
         const deltaSigmaP = elasticLoss.calculateDeltaSigmaP();
         const Ap = elasticLoss.Ap.value;
-        const deltaP_el = deltaSigmaP.values.map(stress_loss => stress_loss * Ap);
+        const deltaP_el = deltaSigmaP.values.map((stress_loss: any) => stress_loss * Ap);
 
         const expected_deltaP_el_half = [-71.0, -92.1, -138.3, -189.7, -230.4, -249.1];
         const expected_deltaP_el = [...expected_deltaP_el_half, ...expected_deltaP_el_half.slice(0, -1).reverse()];
 
         expect(deltaP_el.length).toBe(expected_deltaP_el.length);
 
-        deltaP_el.forEach((force_loss, i) => {
+        deltaP_el.forEach((force_loss: any, i: any) => {
             // The loss is a reduction in tension, so the value is negative
             expect(force_loss).toBeCloseTo(expected_deltaP_el[i], 0);
         });
@@ -373,7 +374,7 @@ describe('ElasticShorteningLoss - T-Beam', () => {
         expect(p0.values[5]).toBeCloseTo(p0_mid, 1);
 
         // Check all values
-        p0.values.forEach((force, i) => {
+        p0.values.forEach((force: any, i: any) => {
             expect(force).toBeCloseTo(expectedP0[i], 0);
         });
     });

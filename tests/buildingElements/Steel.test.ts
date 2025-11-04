@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import Steel from '../../src/structuralElements/Steel.js';
+import Steel from '../../src/utils/elements/Steel.js';
 
 describe('Steel', () => {
     it('should create an instance for CA 50 steel correctly', () => {

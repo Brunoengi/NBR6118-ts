@@ -1,13 +1,13 @@
 import { ValueUnit, ValuesUnit, Distance, VerificationOneValue } from "types/index.js";
-import  CableGeometry from "structuralDesign/prestressingSteel/CableGeometry.js";
-import AbstractSection from "sections/AbstractSection.js";
-import Concrete from "structuralElements/Concrete.js";
-import PrestressingSteel from "structuralElements/PrestressingSteel.js";
+import  CableGeometry from "./CableGeometry.js";
+import AbstractSection from "../../../../utils/sections/AbstractSection.js";
+import Concrete from "../../../../utils/elements/concrete/Concrete.js";
+import PrestressingSteel from "../../../../utils/elements/PrestressingSteel.js";
 import { AbstractPrestressingSteelDesign } from "./PrestressingSteelEstimated.js";
-import { Combinations } from "combinationLoads/Load.js";
-import {GeometricPropsWithUnitsType, GeometricPropsWithoutPerimeterType} from "types/sectionsType.js";
-import Steel from "structuralElements/Steel.js";
-import {A} from "types/sectionsType.js";
+import { Combinations } from "../../../../utils/loads/Load.js";
+import {GeometricPropsWithoutPerimeterType} from "../../../../types/sectionsType.js";
+import Steel from "../../../../utils/elements/Steel.js";
+import {A} from "../../../../types/sectionsType.js";
 
 
 class ReinforcingSteelAs {

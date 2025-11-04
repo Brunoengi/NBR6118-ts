@@ -1,7 +1,6 @@
-import AggregateConcrete from "../structuralElements/Aggregate.js";
-import { ValueUnit, Stress, ModulusOfElasticity } from "../types/index.js";
-import { ConcreteSectionType } from "../types/concreteType.js";
-import { ConcreteOptions } from "types/concreteType.js";
+import AggregateConcrete from "../../elements/Aggregate.js";
+import { ValueUnit, Stress, ModulusOfElasticity } from "types/index.js";
+import { ConcreteSectionType, ConcreteOptions } from "types/concreteType.js";
 
 class Concrete {
   public readonly fck: Stress;

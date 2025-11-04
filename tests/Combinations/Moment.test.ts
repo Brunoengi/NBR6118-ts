@@ -91,7 +91,7 @@ describe('Combinations.calculateMoments', () => {
         const expectedMoments = [0, 750, 1000, 750, 0];
 
         expect(result.values.length).toBe(expectedMoments.length);
-        result.values.forEach((value, index) => {
+        result.values.forEach((value: any, index: any) => {
             expect(value).toBeCloseTo(expectedMoments[index]);
         });
 

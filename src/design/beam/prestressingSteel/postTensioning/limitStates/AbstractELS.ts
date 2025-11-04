@@ -1,4 +1,4 @@
-import Concrete from "../../../structuralElements/Concrete.js";
+import Concrete from "../../../../../utils/elements/concrete/Concrete.js";
 import { ValuesUnit, ValueUnit, VerificationResult } from "types/index.js";
 
 /**

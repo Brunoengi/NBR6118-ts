@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 
-import T from "../../src/sections/T.js";
+import T from "../../src/utils/sections/T.js";
 
 describe('T Section', () => {
     const bf = { value: 40, unit: 'cm' }

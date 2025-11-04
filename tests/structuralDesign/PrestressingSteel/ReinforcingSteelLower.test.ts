@@ -12,7 +12,7 @@ import {
     Distance,
     ValueUnit
 } from "../../../src/index.js";
-import Rectangular from "../../../src/sections/Rectangular.js";
+import Rectangular from "../../../src/utils/sections/Rectangular.js";
 
 describe('ReinforcingSteelLower', () => {
     let reinforcingSteel: ReinforcingSteelLower;

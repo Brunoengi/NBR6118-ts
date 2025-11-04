@@ -1,5 +1,5 @@
-import Losses from "../../../../src/structuralDesign/prestressingSteel/losses/index.js";
-import CableGeometry from "../../../../src/structuralDesign/prestressingSteel/CableGeometry.js";
+import Losses from "../../../../src/design/beam/prestressingSteel/postTensioning/losses/index.js";
+import CableGeometry from "../../../../src/design/beam/prestressingSteel/postTensioning/CableGeometry.js";
 import { ValueUnit, ValuesUnit, Distances } from "../../../../src/types/index.js";
 import { AnchoringType } from "../../../../src/types/prestressSteelType.js";
 
@@ -103,7 +103,7 @@ describe('Losses Integration Test', () => {
         ];
 
         expect(P0.unit).toBe('kN');
-        P0.values.forEach((force, i) => {
+        P0.values.forEach((force: any, i: any) => {
             expect(force).toBeCloseTo(expectedP0[i], 0);
         });
 
@@ -127,7 +127,7 @@ describe('Losses Integration Test', () => {
         expect(finalForce.unit).toBe('kN');
         expect(finalForce.values.length).toBe(expectedFinalForce.length);
 
-        finalForce.values.forEach((calculatedForce, index) => {
+        finalForce.values.forEach((calculatedForce: any, index: any) => {
             expect(calculatedForce).toBeCloseTo(expectedFinalForce[index], -1);
         });
 
@@ -243,7 +243,7 @@ describe('Losses Integration Test - T-Beam', () => {
         const expectedSigmacg = [...expectedSigmacg_half, ...expectedSigmacg_half.slice(0, -1).reverse()];
 
         expect(sigmacg.values.length).toBe(expectedSigmacg.length);
-        sigmacg.values.forEach((val, i) => {
+        sigmacg.values.forEach((val: any, i: any) => {
             expect(val).toBeCloseTo(expectedSigmacg[i], 4);
         });
     });
@@ -257,7 +257,7 @@ describe('Losses Integration Test - T-Beam', () => {
         };
 
         expect(sigmac.unit).toBe(expectedSigmac.unit);
-        sigmac.values.forEach((calculatedValue, i) => {
+        sigmac.values.forEach((calculatedValue: any, i: any) => {
             expect(calculatedValue).toBeCloseTo(expectedSigmac.values[i], 2);
         });
     });
@@ -271,7 +271,7 @@ describe('Losses Integration Test - T-Beam', () => {
         const expected_deltaSigmaP = [...expected_deltaSigmaP_half, ...expected_deltaSigmaP_half.slice(0, -1).reverse()];
 
         expect(deltaSigmaP.unit).toBe('kN/cm²');
-        deltaSigmaP.values.forEach((stress_loss, i) => {
+        deltaSigmaP.values.forEach((stress_loss: any, i: any) => {
             expect(stress_loss).toBeCloseTo(expected_deltaSigmaP[i], 2);
         });
     });
@@ -279,7 +279,7 @@ describe('Losses Integration Test - T-Beam', () => {
     it('should calculate elastic shortening force loss (deltaP_el) correctly', () => {
         const deltaSigmaP = losses.elasticShorteningLoss.calculateDeltaSigmaP();
         const Ap = losses.elasticShorteningLoss.Ap.value;
-        const deltaP_el = deltaSigmaP.values.map(stress_loss => stress_loss * Ap);
+        const deltaP_el = deltaSigmaP.values.map((stress_loss: any) => stress_loss * Ap);
 
         // Values from ElasticShorteningLoss.test.ts
         const expected_deltaP_el_half = [-71.0, -92.1, -138.3, -189.7, -230.4, -249.1];
@@ -287,7 +287,7 @@ describe('Losses Integration Test - T-Beam', () => {
 
         expect(deltaP_el.length).toBe(expected_deltaP_el.length);
 
-        deltaP_el.forEach((force_loss, i) => {
+        deltaP_el.forEach((force_loss: any, i: any) => {
             expect(force_loss).toBeCloseTo(expected_deltaP_el[i], 0);
         });
     });
@@ -300,7 +300,7 @@ describe('Losses Integration Test - T-Beam', () => {
         ];
 
         expect(P0.unit).toBe('kN');
-        P0.values.forEach((force, i) => {
+        P0.values.forEach((force: any, i: any) => {
             expect(force).toBeCloseTo(expectedP0[i], -1);
         });
     });
