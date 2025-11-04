@@ -1,5 +1,5 @@
-import Losses from "../../../../src/design/beam/prestressingSteel/postTensioning/losses/index.js";
-import CableGeometry from "../../../../src/design/beam/prestressingSteel/postTensioning/CableGeometry.js";
+import Losses from "../../../../src/design/beam/prestressingConcrete/postTensioning/losses/index.js";
+import CableGeometry from "../../../../src/design/beam/prestressingConcrete/postTensioning/CableGeometry.js";
 import { ValueUnit, ValuesUnit, Distances } from "../../../../src/types/index.js";
 import { AnchoringType } from "../../../../src/types/prestressSteelType.js";
 

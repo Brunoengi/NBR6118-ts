@@ -1,4 +1,4 @@
-import timeDependentLoss from "../../../../src/design/beam/prestressingSteel/postTensioning/losses/TimeDependentLoss.js";
+import timeDependentLoss from "../../../../src/design/beam/prestressingConcrete/postTensioning/losses/TimeDependentLoss.js";
 import { ValueUnit, ValuesUnit } from "../../../../src/types/index.js";
 
 describe('TimeDependentLoss', () => {
