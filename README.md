@@ -63,7 +63,7 @@ Used internally by the `Concrete` class.
 import { Steel } from 'nbr6118-ts'
 
 // 1. Define Materials and Geometry
-const steel = new Steel('CA 50')
+const steel = new Steel('CA-50')
 
 console.log(steel)
 ```

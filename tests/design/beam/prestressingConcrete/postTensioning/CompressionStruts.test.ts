@@ -10,7 +10,7 @@ import {
     ValuesUnit,
     Distance,
     Concrete
-} from "../../../src/index.js";
+} from "../../../../../src/index.js";
 
 
 describe('Stirrups', () => {

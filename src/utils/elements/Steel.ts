@@ -1,18 +1,13 @@
-import { ValueUnit } from "types/index.js";
+import { ValueUnit, Steel as SteelInterface } from "types/index.js";
 
-const options = [{
-    label: 'CA 50',
-    fyk: {
-        value: 50,
-        unit: 'kN/cm²'
-    }
-}, { 
-    label: 'CA 60',
-    fyk: {
-        value: 60,
-        unit: 'kN/cm²'
-    }
-}] as const; // Use 'as const' for stricter typing and immutability
+
+export const options: readonly {
+  label: SteelInterface['name'];
+  fyk: { value: number; unit: string };
+}[] = [
+  { label: 'CA-50', fyk: { value: 50, unit: 'kN/cm²' } },
+  { label: 'CA-60', fyk: { value: 60, unit: 'kN/cm²' } }
+];
 
 // Automatically generate the label type from the options array.
 // This ensures that if 'options' is updated, this type updates automatically.

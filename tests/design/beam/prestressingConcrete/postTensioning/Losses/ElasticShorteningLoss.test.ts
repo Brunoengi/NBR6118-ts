@@ -1,5 +1,5 @@
-import { ElasticShorteningLoss, ValueUnit } from "../../../../src/index.js";
-import {Distances} from '../../../../src/types/index.js'
+import { ElasticShorteningLoss, ValueUnit } from "../../../../../../src/index.js";
+import {Distances} from '../../../../../../src/types/index.js'
 
 describe('ElasticShorteningLoss', () => {
     let elasticLoss: ElasticShorteningLoss;

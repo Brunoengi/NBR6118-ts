@@ -11,8 +11,8 @@ import {
     Steel,
     Distance,
     ValueUnit
-} from "../../../src/index.js";
-import Rectangular from "../../../src/utils/sections/Rectangular.js";
+} from "../../../../../src/index.js";
+import Rectangular from "../../../../../src/utils/sections/Rectangular.js";
 
 describe('ReinforcingSteelLower', () => {
     let reinforcingSteel: ReinforcingSteelLower;
@@ -27,7 +27,7 @@ describe('ReinforcingSteelLower', () => {
         h = { value: 120, unit: 'cm' };
         dl = { value: 5, unit: 'cm' };
         dpl = { value: 12, unit: 'cm' };
-        const steel = new Steel('CA 50');
+        const steel = new Steel('CA-50');
 
         // --- 2. Instantiate dependencies ---
         const concrete = new Concrete({

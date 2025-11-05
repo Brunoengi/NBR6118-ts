@@ -1,17 +1,16 @@
 
-import { fck, rhomin, steel } from "types/index.js";
-
+import { Stress, Adimensional } from "types/index.js";
+import Steel from "utils/elements/Steel.js";
 
 class Flexural {
     
-    rhomin: rhomin
+    rhomin: Adimensional
 
-    constructor({fck, steel} : {fck: fck, steel: steel}){
-
+    constructor({fck, steel} : {fck: Stress, steel: Steel}){
         this.rhomin = this.calculate_rhomin({fck, steel})
     }
 
-    calculate_rhomin({ fck, steel}: {fck: fck, steel: steel}): rhomin {
+    calculate_rhomin({ fck, steel}: {fck: Stress, steel: Steel}): Adimensional {
 
         const steel_50: Record<number, number> = {
             20: 0.15/100,
@@ -46,9 +45,9 @@ class Flexural {
         const fck_MPa = fck.value * 10;
         let rho_value: number;
 
-        if (steel.name === 'CA-50') {
+        if (steel.label === 'CA-50') {
             rho_value = steel_50[fck_MPa];
-        } else if (steel.name === 'CA-60') {
+        } else if (steel.label === 'CA-60') {
             rho_value = steel_60[fck_MPa];
         } else {
             throw new Error('Invalid steel name');

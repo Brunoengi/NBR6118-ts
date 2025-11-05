@@ -56,16 +56,7 @@ export interface VerificationOneValue {
   value: ValueUnit
 }
 
-export interface fck {
-  value: 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5 | 5.5 | 6 | 6.5 | 7 | 7.5 | 8 | 8.5 | 9 
-  unit: 'kN/cm²'
-}
-
-export interface steel {
-  name: 'CA-50' | 'CA-60'
-}
-
-export interface rhomin {
+export interface Adimensional {
   value: number
   unit: 'adimensional'
 }

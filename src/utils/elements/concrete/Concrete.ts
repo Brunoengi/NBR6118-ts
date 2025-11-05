@@ -1,5 +1,5 @@
 import AggregateConcrete from "../../elements/Aggregate.js";
-import { ValueUnit, Stress, ModulusOfElasticity } from "types/index.js";
+import { ValueUnit, Stress, ModulusOfElasticity, Adimensional } from "types/index.js";
 import { ConcreteSectionType, ConcreteOptions } from "types/concreteType.js";
 
 class Concrete {
@@ -18,7 +18,7 @@ class Concrete {
   public readonly fcd: Stress;
   public readonly nc: number;
   public readonly alphac: number;
-  public readonly lambda: number;
+  public readonly lambda: Adimensional;
   public readonly maxStress_rectangularDiagram: Stress;
   public readonly sigmacd: Stress;
 
@@ -61,26 +61,29 @@ class Concrete {
     return {
       value: is_section_reduced ? 0.9 * this.alphac * this.nc * this.fcd.value : this.alphac * this.nc * this.fcd.value,
       unit: this.fcd.unit
-    } 
+    }
   }
 
-  private calculate_lambda(fck_kNCm2: number): number {
+  private calculate_lambda(fck_kNCm2: number): Adimensional {
     const fck_MPa = fck_kNCm2 * 10;
-    return fck_MPa <= 50 ? 0.8 : 0.8 - ((fck_MPa - 50)/400)
+    return {
+      value: fck_MPa <= 50 ? 0.8 : 0.8 - ((fck_MPa - 50) / 400),
+      unit: 'adimensional'
+    }
   }
 
   private calculate_nc(fck_kNCm2: number): number {
     const fck_MPa = fck_kNCm2 * 10;
-    return fck_MPa <=40 ? 1 : (40 / fck_MPa) ** (1 / 3)
+    return fck_MPa <= 40 ? 1 : (40 / fck_MPa) ** (1 / 3)
   }
 
   private calculate_sigmacd(fcd_kNCm2: number): Stress {
-    return { value: 0.85* fcd_kNCm2 * this.nc, unit: "kN/cm²" }
+    return { value: 0.85 * fcd_kNCm2 * this.nc, unit: "kN/cm²" }
   }
 
   private calculate_alphac(fck_kNCm2: number): number {
     const fck_MPa = fck_kNCm2 * 10;
-    return fck_MPa <= 50 ? 0.85 : 0.85 * (1 - ((fck_MPa - 50)/200))
+    return fck_MPa <= 50 ? 0.85 : 0.85 * (1 - ((fck_MPa - 50) / 200))
   }
 
   private calculate_fcm(fck_kNCm2: number): Stress {
@@ -88,7 +91,7 @@ class Concrete {
     return { value: (fck_MPa + 12.5) / 10, unit: "kN/cm²" };
   }
 
-  private calculate_fcd(fck_kNCm2: number) : Stress {
+  private calculate_fcd(fck_kNCm2: number): Stress {
     const fck_MPa = fck_kNCm2 * 10;
     return {
       value: (fck_MPa / 1.4) / 10,
@@ -99,15 +102,15 @@ class Concrete {
   calculate_fckj(j: number): Stress {
     const fck = this.fck.value * 10; // Convert back to MPa for calculation
     const fckj = fck * (Math.E ** ((0.2) * (1 - Math.sqrt(28 / j))))
-    
+
     return { value: fckj / 10, unit: "kN/cm²" }
   }
 
   calculate_fctmj(j: number): Stress {
     const fckj = this.calculate_fckj(j)
     const fctmj = this.calculate_fctm(fckj.value)
-    
-    return {value: fctmj.value, unit: "kN/cm²"};
+
+    return { value: fctmj.value, unit: "kN/cm²" };
   }
 
   private calculate_Ec(fck_kNCm2: number, alpha_e: number): ModulusOfElasticity {
@@ -187,7 +190,7 @@ class ConcreteSection {
       case 'doubleT':
         return { value: 1.2 * fctkinf.value, unit: "kN/cm²" };
       case 'I':
-        return { value: 1.3 * fctkinf.value, unit: "kN/cm²" }; 
+        return { value: 1.3 * fctkinf.value, unit: "kN/cm²" };
       case 'invertedT':
         return { value: 1.3 * fctkinf.value, unit: "kN/cm²" };
       case 'rectangular':

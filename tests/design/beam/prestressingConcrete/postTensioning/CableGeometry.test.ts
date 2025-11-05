@@ -1,4 +1,4 @@
-import { CableGeometry, ValueUnit, Distance } from "../../../src/index.js";
+import { CableGeometry, ValueUnit, Distance } from "../../../../../src/index.js";
 import { describe, it, expect } from '@jest/globals';
 
 describe('CableGeometry', () => {

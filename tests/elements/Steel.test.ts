@@ -3,10 +3,10 @@ import Steel from '../../src/utils/elements/Steel.js';
 
 describe('Steel', () => {
     it('should create an instance for CA 50 steel correctly', () => {
-        const steel = new Steel('CA 50');
+        const steel = new Steel('CA-50');
 
         expect(steel).toBeInstanceOf(Steel);
-        expect(steel.label).toBe('CA 50');
+        expect(steel.label).toBe('CA-50');
         
         expect(steel.fyk.value).toBe(50);
         expect(steel.fyk.unit).toBe('kN/cm²');
@@ -16,10 +16,10 @@ describe('Steel', () => {
     });
 
     it('should create an instance for CA 60 steel correctly', () => {
-        const steel = new Steel('CA 60');
+        const steel = new Steel('CA-60');
 
         expect(steel).toBeInstanceOf(Steel);
-        expect(steel.label).toBe('CA 60');
+        expect(steel.label).toBe('CA-60');
 
         expect(steel.fyk.value).toBe(60);
         expect(steel.fyk.unit).toBe('kN/cm²');

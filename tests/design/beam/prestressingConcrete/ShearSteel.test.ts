@@ -12,7 +12,7 @@ import {
     ValueUnit,
     ValuesUnit,
     Distance
-} from "../../../src/index.js";
+} from "../../../../src/index.js";
 
 describe('ShearSteel', () => {
     let shearSteel: ShearSteel;
@@ -38,7 +38,7 @@ describe('ShearSteel', () => {
         // 1. Setup dependencies from bottom up
         cableGeometry = new CableGeometry({ width, epmax, numPoints });
         concrete = new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' }, aggregate: 'granite', section: { type: 'rectangular' } });
-        steel = new Steel('CA 50');
+        steel = new Steel('CA-50');
 
         combinations = new Combinations({
             g1: { value: 0.18, unit: 'kN/cm' },

@@ -1,7 +1,7 @@
-import AnchorageLoss, { AnchoringType } from "../../../../src/design/beam/prestressingConcrete/postTensioning/losses/AnchorageLoss.js";
-import { ValueUnit, Forces } from "../../../../src/types/index.js";
-import CableGeometry from "../../../../src/design/beam/prestressingConcrete/postTensioning/CableGeometry.js";
-import FrictionLoss from "../../../../src/design/beam/prestressingConcrete/postTensioning/losses/FrictionLoss.js";
+import AnchorageLoss, { AnchoringType } from "../../../../../../src/design/beam/prestressingConcrete/postTensioning/losses/AnchorageLoss.js";
+import { ValueUnit, Forces } from "../../../../../../src/types/index.js";
+import CableGeometry from "../../../../../../src/design/beam/prestressingConcrete/postTensioning/CableGeometry.js";
+import FrictionLoss from "../../../../../../src/design/beam/prestressingConcrete/postTensioning/losses/FrictionLoss.js";
 
 describe('AnchorageLoss', () => {
     // --- Base Test Data ---
@@ -259,7 +259,6 @@ describe('AnchorageLoss', () => {
             // less negative (i.e., a greater numerical value).
             expect(Panc_large_return.values[0]).toBeGreaterThan(Panc_small_return.values[0]);
             expect(Panc_large_return.values[5]).toBeGreaterThan(Panc_small_return.values[5]); // Mid-span
-            console.log('tem que ser diferente', Panc_large_return, Panc_small_return)
         });
     });
 });

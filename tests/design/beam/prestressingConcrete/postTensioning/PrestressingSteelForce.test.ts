@@ -1,5 +1,5 @@
 import { jest, describe, it, expect, beforeAll } from '@jest/globals';
-import { PrestressingSteelForce, CableGeometry, ValueUnit, ValuesUnit } from "../../../src/index.js";
+import { PrestressingSteelForce, CableGeometry, ValueUnit, ValuesUnit } from "../../../../../src/index.js";
 
 describe('PrestressingSteelForce', () => {
     let prestressForce: PrestressingSteelForce;

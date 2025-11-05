@@ -1,4 +1,4 @@
-import { ELUAP, Concrete, CableGeometry, ValueUnit } from "../../../src/index.js";
+import { ELUAP, Concrete, CableGeometry, ValueUnit } from "../../../../../src/index.js";
 
 describe('ELU - Case 1', () => {
     let elu: ELUAP;

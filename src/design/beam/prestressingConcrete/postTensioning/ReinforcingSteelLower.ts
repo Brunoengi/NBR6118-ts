@@ -85,7 +85,7 @@ class ReinforcingSteelAs {
 
     calculate_lambdax ({x}: {x: Distance}): Distance {
         return {
-            value: this.concrete.lambda * x.value,
+            value: this.concrete.lambda.value * x.value,
             unit: x.unit
         }
     }
@@ -227,7 +227,7 @@ class ReinforcingSteelAs {
         const mi = this.calculate_mi({bf})
         const criticalSection = bf.value
         const qsi = 1.25 * (1 - Math.sqrt(1 - 2 * mi))
-        const Asmin_estimated = this.concrete.lambda * qsi * criticalSection * this.ds1.value * (this.concrete.sigmacd.value / this.steel.fyd.value)
+        const Asmin_estimated = this.concrete.lambda.value * qsi * criticalSection * this.ds1.value * (this.concrete.sigmacd.value / this.steel.fyd.value)
         return { value: Asmin_estimated, unit: 'cm²' }
     }
 

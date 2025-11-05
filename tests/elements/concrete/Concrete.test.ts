@@ -1,4 +1,4 @@
-import Concrete from "../../src/utils/elements/concrete/Concrete.js";
+import Concrete from "../../../src/utils/elements/concrete/Concrete.js";
 
 describe('Concrete with granite aggregate', () => {
 
@@ -238,7 +238,7 @@ describe('Concrete rectangular diagram properties', () => {
     const concrete = new Concrete({ fck: { value: 3.5, unit: 'kN/cm²' } }); // 35 MPa
 
     // For fck <= 50 MPa: lambda = 0.8
-    expect(concrete.lambda).toBe(0.8);
+    expect(concrete.lambda.value).toBe(0.8);
 
     // For fck <= 50 MPa: alphac = 0.85
     expect(concrete.alphac).toBe(0.85);
@@ -252,7 +252,7 @@ describe('Concrete rectangular diagram properties', () => {
 
     // For fck > 50 MPa: lambda = 0.8 - (fck - 50) / 400
     const expectedLambda = 0.8 - (60 - 50) / 400; // 0.775
-    expect(concrete.lambda).toBeCloseTo(expectedLambda);
+    expect(concrete.lambda.value).toBeCloseTo(expectedLambda);
 
     // For fck > 50 MPa: alphac = 0.85 * (1 - (fck - 50) / 200)
     const expectedAlphac = 0.85 * (1 - (60 - 50) / 200); // 0.8075

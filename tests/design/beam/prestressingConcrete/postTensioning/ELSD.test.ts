@@ -8,7 +8,7 @@ import {
     ValueUnit,
     ValuesUnit,
     TimeDependentLoss
-} from "../../../src/index.js";
+} from "../../../../../src/index.js";
 import { describe, it, expect, beforeAll, jest } from '@jest/globals';
 
 describe('ELSD - Limited Prestressing', () => {
