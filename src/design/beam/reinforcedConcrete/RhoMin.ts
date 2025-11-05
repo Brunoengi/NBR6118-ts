@@ -2,6 +2,9 @@
 import { Stress, Adimensional } from "types/index.js";
 import Steel from "utils/elements/Steel.js";
 
+/**
+* Taxa mínima de armadura baseado na NBR 6118
+*/
 class Flexural {
     
     rhomin: Adimensional

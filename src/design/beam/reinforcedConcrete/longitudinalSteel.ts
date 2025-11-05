@@ -3,14 +3,16 @@ import Steel from '../../../utils/elements/Steel.js'
 import AbstractSection from '../../../utils/sections/AbstractSection.js'
 import { Adimensional, Moment, Distance } from 'types/index.js'
 import { A } from 'types/sectionsType.js'
-import Flexural from './reinforcementMinimalRatio.js'
+import Flexural from './RhoMin.js'
 
-
+/**
+* Baseado na NBR 6118/2014
+*/
 class LongitudinalSteelRectangularSection {
 
     params: {
         mu: Adimensional,
-        epsilon: Adimensional,
+        xi: Adimensional,
         rhomin: Flexural['rhomin'],
         Md: Moment
     }
@@ -26,14 +28,14 @@ class LongitudinalSteelRectangularSection {
         const Md = { ...Mk, value: Mk.value * gamma_f }
         const mu = this.calculate_mu({ Md, section, concrete, d })
         const rhomin = new Flexural({ fck: concrete.fck, steel: steel }).rhomin
-        const epsilon = this.calculate_epsilon(mu, concrete.lambda)
+        const xi = this.calculate_xi(mu, concrete.lambda)
         const Asmin = this.calculate_Asmin({ section, rhomin })
-        const Asc = this.calculate_Asc({ concrete, steel, lambda: concrete.lambda, epsilon, b: section.inputs.b, d })
+        const Asc = this.calculate_Asc({ concrete, steel, lambda: concrete.lambda, xi, b: section.inputs.base, d })
         const Ase = this.calculate_Ase({Asc, Asmin})
 
         this.params = {
             mu,
-            epsilon,
+            xi,
             rhomin,
             Md
         }
@@ -41,7 +43,7 @@ class LongitudinalSteelRectangularSection {
         this.steel = {
             Asmin,
             Asc,
-            Ase,
+            Ase
         }
     }
 
@@ -51,10 +53,10 @@ class LongitudinalSteelRectangularSection {
      * @returns {adimensional} O valor do momento fletor reduzido (μ) com unidade adimensional.
      */
     calculate_mu({ Md, section, concrete, d }: { Md: Moment, section: AbstractSection, concrete: Concrete, d: Distance }): Adimensional {
-        const b = section.inputs.b
+        const b = section.inputs.base
 
         return {
-            value: Md.value / (b.value * d.value ** 2 * concrete.fcd.value),
+            value: Md.value / (b.value * d.value ** 2 * concrete.sigmacd.value),
             unit: 'adimensional'
         }
     }
@@ -75,7 +77,7 @@ class LongitudinalSteelRectangularSection {
      * Cálculo da posição relativa da linha netura definida como x/d
      * @returns {Adimensional}
      */
-    calculate_epsilon(mu: Adimensional, lambda: Adimensional): Adimensional {
+    calculate_xi(mu: Adimensional, lambda: Adimensional): Adimensional {
         return {
             value: (1 - Math.sqrt(1 - 2 * mu.value)) / lambda.value,
             unit: 'adimensional'
@@ -86,9 +88,9 @@ class LongitudinalSteelRectangularSection {
      * Armadura de cálculo da seção inferior quando a armadura é dimensionada como armadura simples para momentos positos.
      * @returns {A}  A área de armadura em cm².
      */
-    calculate_Asc({ concrete, steel, lambda, epsilon, b, d }: { concrete: Concrete, steel: Steel, lambda: Adimensional, epsilon: Adimensional, b: Distance, d: Distance }): A {
+    calculate_Asc({ concrete, steel, lambda, xi, b, d }: { concrete: Concrete, steel: Steel, lambda: Adimensional, xi: Adimensional, b: Distance, d: Distance }): A {
         return {
-            value: lambda.value * epsilon.value * b.value * d.value * concrete.sigmacd.value / steel.fyd.value,
+            value: lambda.value * xi.value * b.value * d.value * concrete.sigmacd.value / steel.fyd.value,
             unit: 'cm²'
         }
     }
