@@ -1,13 +1,13 @@
-import { ValueUnit, Steel as SteelInterface } from "types/index.js";
+import { ValueUnit, Steel as SteelInterface, Stress, Steel as ISteel } from "types/index.js";
 
 
 export const options: readonly {
-  label: SteelInterface['name'];
-  fyk: { value: number; unit: string };
+    label: SteelInterface['name'];
+    fyk: Stress
 }[] = [
-  { label: 'CA-50', fyk: { value: 50, unit: 'kN/cm²' } },
-  { label: 'CA-60', fyk: { value: 60, unit: 'kN/cm²' } }
-];
+        { label: 'CA-50', fyk: { value: 50, unit: 'kN/cm²' } },
+        { label: 'CA-60', fyk: { value: 60, unit: 'kN/cm²' } }
+    ];
 
 // Automatically generate the label type from the options array.
 // This ensures that if 'options' is updated, this type updates automatically.
@@ -15,10 +15,11 @@ export type SteelLabel = typeof options[number]['label'];
 
 class Steel {
     public readonly label: SteelLabel;
-    public readonly fyk: ValueUnit;
-    public readonly fyd: ValueUnit;
+    public readonly fyk: Stress;
+    public readonly fyd: Stress;
+    public readonly E: Stress;
 
-    constructor(label: SteelLabel) {
+    constructor(label: ISteel['name']) {
         this.label = label;
         const selectedOption = options.find(option => option.label === label);
 
@@ -32,6 +33,14 @@ class Steel {
         } else {
             // This error is now theoretically unreachable if using the SteelLabel type.
             throw new Error("Invalid steel label");
+        }
+        this.E = this.calculate_E()
+    }
+
+    calculate_E(E: Stress = { value: 20000, unit: 'kN/cm²' }): Stress {
+        return {
+            value: E.value,
+            unit: E.unit
         }
     }
 }

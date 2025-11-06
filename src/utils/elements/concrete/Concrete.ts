@@ -1,5 +1,5 @@
 import AggregateConcrete from "../../elements/Aggregate.js";
-import { ValueUnit, Stress, ModulusOfElasticity, Adimensional } from "types/index.js";
+import { ValueUnit, Stress, ModulusOfElasticity, Adimensional, Deformation } from "types/index.js";
 import { ConcreteSectionType, ConcreteOptions } from "types/concreteType.js";
 
 class Concrete {
@@ -7,8 +7,8 @@ class Concrete {
   public readonly fcm: Stress;
   public readonly Ec: ModulusOfElasticity;
   public readonly Ecs: ModulusOfElasticity;
-  public readonly e0: ValueUnit;
-  public readonly eu: ValueUnit;
+  public readonly e0: Deformation;
+  public readonly eu: Deformation;
   public readonly fctm: Stress;
   public readonly fctk_inf: Stress;
   public readonly fctk_sup: Stress;
@@ -132,7 +132,7 @@ class Concrete {
     return { value: (alpha_i * Ec_MPa) / 10, unit: "kN/cm²" };
   }
 
-  private calculate_e0(fck_kNCm2: number): ValueUnit {
+  private calculate_e0(fck_kNCm2: number): Deformation {
     const fck_MPa = fck_kNCm2 * 10;
     let e0: number;
     if (fck_MPa <= 50) {
@@ -143,7 +143,7 @@ class Concrete {
     return { value: e0, unit: "‰" };
   }
 
-  private calculate_eu(fck_kNCm2: number): ValueUnit {
+  private calculate_eu(fck_kNCm2: number): Deformation {
     const fck_MPa = fck_kNCm2 * 10;
     let eu: number;
     if (fck_MPa <= 50) {

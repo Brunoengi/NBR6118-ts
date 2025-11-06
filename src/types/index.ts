@@ -93,3 +93,17 @@ export interface Force {
   value: number
   unit: 'kN'
 }
+
+export interface Deformation {
+  value: number
+  unit: '‰'
+}
+
+export interface Deformations {
+  values: number[]
+  unit: '‰'
+}
+
+export interface Steel {
+  name: 'CA-50' | 'CA-60'
+}

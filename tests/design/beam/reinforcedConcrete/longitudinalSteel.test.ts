@@ -175,3 +175,130 @@ describe('Longitudinal Steel Rectangular Section - C40', () => {
         expect(Ase.value).toBeCloseTo(7.10, 2);
     });
 });
+
+describe('Longitudinal Steel Rectangular Section - C20 (Example 2)', () => {
+    let longitudinalSteel: LongitudinalSteelRectangularSection;
+    let concrete: Concrete;
+    let steel: Steel;
+    let section: Rectangular;
+    let d: Distance;
+    let Mk: Moment;
+
+    beforeAll(() => {
+        concrete = new Concrete({
+            fck: { value: 2.0, unit: 'kN/cm²' }, // C60
+            aggregate: 'granite',
+            section: { type: 'rectangular' }
+        });
+ 
+        steel = new Steel('CA-50');
+
+        section = new Rectangular({
+            base: { value: 15, unit: 'cm' },
+            height: { value: 40, unit: 'cm' }
+        });
+
+        d = { value: 36, unit: 'cm' };
+        Mk = { value: 7000, unit: 'kN*cm' };
+ 
+        longitudinalSteel = new LongitudinalSteelRectangularSection({
+            concrete,
+            steel,
+            Mk,
+            section,
+            d
+        });
+    });
+
+    it('should calculate design moment (Md) correctly', () => {
+        // Md = 7000 * 1.4 = 9800 kN*cm
+        expect(longitudinalSteel.params.Md.value).toBe(9800);
+    });
+
+    it('should calculate a reduced bending moment (mu) that is greater than mu_limit', () => {
+        // Para C20, sigmacd = 0.85 * (2.0 / 1.4) = 1.2143 kN/cm²
+        // mu = 9800 / (15 * 36^2 * 1.21428...) = 0.4152
+        const mu = longitudinalSteel.params.mu;
+        expect(mu.value).toBeCloseTo(0.4152, 4);
+
+        // Para C20, mu_limit = 0.2952
+        const mu_limit = 0.2952;
+        expect(longitudinalSteel.params.mu_limit.value).toBeCloseTo(mu_limit, 4);
+        expect(mu.value).toBeGreaterThan(longitudinalSteel.params.mu_limit.value);
+    });
+
+    it('should calculate double reinforcement steel areas (Asc and Aslc) correctly', () => {
+        // Como mu > mu_limit, o cálculo é de armadura dupla.
+        const { Ase, Asc, Aslc } = longitudinalSteel.steel;
+
+        expect(Asc.value).toBeCloseTo(7.47, 1);
+        expect(Aslc.value).toBeCloseTo(2.11, 0);
+        expect(Ase.value).toBeCloseTo(7.47, 1);
+    });
+});
+
+describe('Longitudinal Steel - Varying fck, d, and Mk', () => {
+    const section = new Rectangular({
+        base: { value: 15, unit: 'cm' },
+        height: { value: 40, unit: 'cm' }
+    });
+    const steel = new Steel('CA-50');
+
+    // Combined test cases for both low and high moments
+    const testCases = [
+        // Low Moment (Mk = 3000 kN*cm) -> Single Reinforcement
+        { Mk_val: 3000, fck: 2.0, d: 36,   expectedAsc: 3.00, expectedAslc: undefined },
+        { Mk_val: 3000, fck: 2.5, d: 35.5, expectedAsc: 2.96, expectedAslc: undefined },
+        { Mk_val: 3000, fck: 3.0, d: 34.5, expectedAsc: 3.01, expectedAslc: undefined },
+        { Mk_val: 3000, fck: 4.0, d: 33.5, expectedAsc: 3.05, expectedAslc: undefined },
+
+        // High Moment (Mk = 7000 kN*cm)
+        { Mk_val: 7000, fck: 2.0, d: 36,   expectedAsc: 7.52, expectedAslc: 2.04 },
+        { Mk_val: 7000, fck: 2.5, d: 35.5, expectedAsc: 7.68, expectedAslc: 0.99 },
+        { Mk_val: 7000, fck: 3.0, d: 34.5, expectedAsc: 7.96, expectedAslc: 0.16 },
+        { Mk_val: 7000, fck: 4.0, d: 33.5, expectedAsc: 7.82, expectedAslc: undefined }, // single reinforcement
+    ];
+
+    test.each(testCases)(
+        'should calculate steel area correctly for Mk=$Mk_val, fck=$fck, d=$d',
+        ({ Mk_val, fck, d, expectedAsc, expectedAslc }) => {
+            // Arrange
+            const concrete = new Concrete({
+                fck: { value: fck, unit: 'kN/cm²' },
+                aggregate: 'granite',
+                section: { type: 'rectangular' }
+            });
+
+            const Mk: Moment = { value: Mk_val, unit: 'kN*cm' };
+            const d_distance: Distance = { value: d, unit: 'cm' };
+
+            // Act
+            const longitudinalSteel = new LongitudinalSteelRectangularSection({
+                concrete,
+                steel,
+                Mk,
+                section,
+                d: d_distance
+            });
+
+            const { mu, mu_limit } = longitudinalSteel.params;
+            const { Ase, Asc, Aslc } = longitudinalSteel.steel;
+
+            // Assert
+            expect(longitudinalSteel.params.Md.value).toBe(Mk_val * 1.4);
+
+            if (expectedAslc !== undefined) {
+                // Double Reinforcement Case
+                expect(mu.value).toBeGreaterThan(mu_limit.value);
+                expect(Aslc).toBeDefined();
+                expect(Aslc?.value).toBeCloseTo(expectedAslc, 0);
+                expect(Asc.value).toBeCloseTo(expectedAsc, 0);
+            } else {
+                // Single Reinforcement Case
+                expect(mu.value).toBeLessThanOrEqual(mu_limit.value);
+                expect(Aslc).toBeUndefined();
+                expect(Ase.value).toBeCloseTo(expectedAsc, 0);
+            }
+        }
+    );
+});

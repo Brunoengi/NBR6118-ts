@@ -1,6 +1,6 @@
 {
   "name": "nbr6118-ts",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "A software package to computationally implementing NBR6118/2023",
   "license": "ISC",
   "author": "Bruno Santos",
@@ -21,7 +21,7 @@
     "url": "https://github.com/Brunoengi/NBR6118-ts.git"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test-c": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "build": "tsc"
   },
