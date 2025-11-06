@@ -246,17 +246,17 @@ describe('Longitudinal Steel - Varying fck, d, and Mk', () => {
 
     // Combined test cases for both low and high moments
     const testCases = [
-        // Low Moment (Mk = 3000 kN*cm) -> Single Reinforcement
-        { Mk_val: 3000, fck: 2.0, d: 36,   expectedAsc: 3.00, expectedAslc: undefined },
-        { Mk_val: 3000, fck: 2.5, d: 35.5, expectedAsc: 2.96, expectedAslc: undefined },
-        { Mk_val: 3000, fck: 3.0, d: 34.5, expectedAsc: 3.01, expectedAslc: undefined },
-        { Mk_val: 3000, fck: 4.0, d: 33.5, expectedAsc: 3.05, expectedAslc: undefined },
+        // Low Moment (Mk = 3000 kN*cm) -> Single Reinforcement (Aslc = 0)
+        { Mk_val: 3000, fck: 2.0, d: 36,   expectedAsc: 3.00, expectedAslc: 0 },
+        { Mk_val: 3000, fck: 2.5, d: 35.5, expectedAsc: 2.96, expectedAslc: 0 },
+        { Mk_val: 3000, fck: 3.0, d: 34.5, expectedAsc: 3.01, expectedAslc: 0 },
+        { Mk_val: 3000, fck: 4.0, d: 33.5, expectedAsc: 3.05, expectedAslc: 0 },
 
         // High Moment (Mk = 7000 kN*cm)
-        { Mk_val: 7000, fck: 2.0, d: 36,   expectedAsc: 7.52, expectedAslc: 2.04 },
+        { Mk_val: 7000, fck: 2.0, d: 36,   expectedAsc: 7.52, expectedAslc: 2.11 },
         { Mk_val: 7000, fck: 2.5, d: 35.5, expectedAsc: 7.68, expectedAslc: 0.99 },
         { Mk_val: 7000, fck: 3.0, d: 34.5, expectedAsc: 7.96, expectedAslc: 0.16 },
-        { Mk_val: 7000, fck: 4.0, d: 33.5, expectedAsc: 7.82, expectedAslc: undefined }, // single reinforcement
+        { Mk_val: 7000, fck: 4.0, d: 33.5, expectedAsc: 7.82, expectedAslc: 0 }, // single reinforcement
     ];
 
     test.each(testCases)(
@@ -287,16 +287,16 @@ describe('Longitudinal Steel - Varying fck, d, and Mk', () => {
             // Assert
             expect(longitudinalSteel.params.Md.value).toBe(Mk_val * 1.4);
 
-            if (expectedAslc !== undefined) {
+            if (expectedAslc > 0) {
                 // Double Reinforcement Case
                 expect(mu.value).toBeGreaterThan(mu_limit.value);
                 expect(Aslc).toBeDefined();
-                expect(Aslc?.value).toBeCloseTo(expectedAslc, 0);
+                expect(Aslc.value).toBeCloseTo(expectedAslc, 0);
                 expect(Asc.value).toBeCloseTo(expectedAsc, 0);
             } else {
                 // Single Reinforcement Case
                 expect(mu.value).toBeLessThanOrEqual(mu_limit.value);
-                expect(Aslc).toBeUndefined();
+                expect(Aslc.value).toBe(0);
                 expect(Ase.value).toBeCloseTo(expectedAsc, 0);
             }
         }

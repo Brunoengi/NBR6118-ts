@@ -24,7 +24,7 @@ class LongitudinalSteelRectangularSection {
         Asmin: A,
         Asc: A,
         Ase: A,
-        Aslc?: A
+        Aslc: A
     }
 
     constructor({ concrete, steel, Mk, section, d }: { concrete: Concrete, steel: Steel, Mk: Moment, section: AbstractSection, d: Distance }) {
@@ -45,6 +45,10 @@ class LongitudinalSteelRectangularSection {
             xi = this.calculate_xi(mu, concrete.lambda)
             Asc = this.calculate_Asc({ concrete, steel, lambda: concrete.lambda, xi, b: section.inputs.base, d })
             Ase = this.calculate_Ase({Asc, Asmin})
+            Aslc = {
+                value: 0,
+                unit: 'cm²'
+            }
 
         
         } else if (mu.value > mu_limit.value) {
