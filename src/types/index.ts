@@ -104,6 +104,11 @@ export interface Deformations {
   unit: '‰'
 }
 
+export interface AreaPerMeter {
+  value: number
+  unit: 'cm²/m'
+}
+
 export interface Steel {
   name: 'CA-50' | 'CA-60'
 }

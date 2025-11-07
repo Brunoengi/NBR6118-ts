@@ -1,4 +1,4 @@
-import { PrestressingDesignType } from "types/prestressSteelType.js";
+import { PrestressingDesignType } from "types/materials/prestressSteelType.js";
 import { AbstractELS, IELS } from "./AbstractELS.js";
 import { ValueUnit, VerificationResult } from "types/index.js";
 

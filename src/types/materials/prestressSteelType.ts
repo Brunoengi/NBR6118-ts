@@ -1,4 +1,4 @@
-import { ValueUnit } from "./index.js";
+import { ValueUnit } from "../index.js";
 
 export type PrestressingDesignType = "Limited" | "Complete" 
 

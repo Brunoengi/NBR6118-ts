@@ -1,5 +1,5 @@
 import { ValueUnit } from "types/index.js"
-import { IPrestressingSteelOption } from "types/prestressSteelType.js"
+import { IPrestressingSteelOption } from "types/materials/prestressSteelType.js"
 
 const options: IPrestressingSteelOption[] = [{
         label: 'CP 190 RB 9.5',

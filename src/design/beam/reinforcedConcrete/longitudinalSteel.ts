@@ -3,7 +3,7 @@ import Steel from '../../../utils/elements/Steel.js'
 import AbstractSection from '../../../utils/sections/AbstractSection.js'
 import { Adimensional, Moment, Distance, Deformation, Stress } from 'types/index.js'
 import { A } from 'types/sectionsType.js'
-import Flexural from './RhoMin.js'
+import { FlexuralRhoMin } from './RhoMin.js'
 import ReducedLimitingMoment from './MuLimit.js'
 import RelativeNeutralLineLimit from './XiLimit.js'
 
@@ -14,7 +14,7 @@ class LongitudinalSteelRectangularSection {
 
     params: {
         mu: Adimensional,
-        rhomin: Flexural['rhomin'],
+        rhomin: FlexuralRhoMin['rho_min'],
         Md: Moment,
         mu_limit: Adimensional,
         xi?: Adimensional
@@ -33,7 +33,7 @@ class LongitudinalSteelRectangularSection {
 
         const mu = this.calculate_mu({ Md, section, concrete, d })
         const mu_limit = new ReducedLimitingMoment({concrete}).mu_limit
-        const rhomin = new Flexural({ fck: concrete.fck, steel: steel }).rhomin
+        const rhomin = new FlexuralRhoMin({ fck: concrete.fck, steel: steel }).rho_min
         const dl = this.calculate_dl({h: section.inputs.height, d})
         const Asmin = this.calculate_Asmin({ section, rhomin })
 
@@ -147,7 +147,7 @@ class LongitudinalSteelRectangularSection {
      * Calcula a área mínima de aço no concreto baseado na taxa mínima de armadura, segundo a NBR 6118/2024
      * @returns {A} A área de armadura em cm².
      */
-    calculate_Asmin({ section, rhomin }: { section: AbstractSection, rhomin: Flexural['rhomin'] }): A {
+    calculate_Asmin({ section, rhomin }: { section: AbstractSection, rhomin: FlexuralRhoMin['rho_min'] }): A {
 
         return {
             value: rhomin.value * section.props.A.value,

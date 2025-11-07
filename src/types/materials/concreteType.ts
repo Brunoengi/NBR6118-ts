@@ -1,5 +1,5 @@
-import { Stress } from "./index.js";
-import { AggregateType } from "./aggregateType.js"; 
+import { Stress } from "../index.js";
+import { AggregateType } from "../materials/aggregateType.js"; 
 
 
 export type ConcreteSectionType = 'T' | 'doubleT' | 'I' | 'invertedT' | 'rectangular'

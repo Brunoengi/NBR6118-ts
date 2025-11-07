@@ -5,12 +5,12 @@ import Steel from "utils/elements/Steel.js";
 /**
 * Taxa mínima de armadura baseado na NBR 6118
 */
-class Flexural {
+class FlexuralRhoMin {
     
-    rhomin: Adimensional
+    rho_min: Adimensional
 
     constructor({fck, steel} : {fck: Stress, steel: Steel}){
-        this.rhomin = this.calculate_rhomin({fck, steel})
+        this.rho_min = this.calculate_rhomin({fck, steel})
     }
 
     calculate_rhomin({ fck, steel}: {fck: Stress, steel: Steel}): Adimensional {
@@ -60,4 +60,35 @@ class Flexural {
     }
 }
 
-export default Flexural
+class AxialRhoMin {
+    rho_w_min: Adimensional
+
+    constructor({ fck }: { fck: Stress }) {
+        this.rho_w_min = this.calculate_rho_w_min({fck})
+    }
+
+    calculate_rho_w_min({ fck }: { fck: Stress }): Adimensional {
+
+        const fck_rho_w_min: Record<number, number> = {
+            2.0: 0.09/100,
+            2.5: 0.10/100,
+            3.0: 0.12/100,
+            3.5: 0.13/100,
+            4.0: 0.14/100,
+            4.5: 0.15/100,
+            5.0: 0.16/100,
+            5.5: 0.17/100,
+            6.0: 0.17/100,
+            7.0: 0.18/100,
+            8.0: 0.19/100,
+            9.0: 0.20/100,
+        }
+
+        return {
+            value: fck_rho_w_min[fck.value],
+            unit: 'adimensional'
+        }
+    }
+}
+
+export {FlexuralRhoMin, AxialRhoMin}

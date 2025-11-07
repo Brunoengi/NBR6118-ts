@@ -46,9 +46,9 @@ export { default as CreepConcrete, type CreepConcreteType } from './utils/elemen
 // types
 export type { ValueUnit, ValuesUnit, Distance, Angles, Verification, VerificationOneValue, VerificationResult } from './types/index.js';
 
-export type { IGeometricProperties } from './types/combinationsType.js';
+export type { IGeometricProperties } from './types/materials/combinationsType.js';
 
-export type { ICombinations } from './types/combinationsType.js'
+export type { ICombinations } from './types/materials/combinationsType.js'
 
 //Longitudinal Steel in Reinforcing Steel
 export type {ReinforcingSteelAsType} from './design/beam/prestressingConcrete/postTensioning/ReinforcingSteelLower.js'
@@ -62,8 +62,8 @@ export type { StrutVerificationType } from './design/beam/prestressingConcrete/p
 
 
 
-export type { PrestressingDesignType } from './types/prestressSteelType.js';
+export type { PrestressingDesignType } from './types/materials/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';
-export type { IPrestressingSteelOption } from './types/prestressSteelType.js'
-export type { AggregateType } from './types/aggregateType.js'
-export type { AnchoringType } from './types/prestressSteelType.js'
+export type { IPrestressingSteelOption } from './types/materials/prestressSteelType.js'
+export type { AggregateType } from './types/materials/aggregateType.js'
+export type { AnchoringType } from './types/materials/prestressSteelType.js'
