@@ -1,5 +1,5 @@
 import Concrete from '../../../utils/elements/concrete/Concrete.js' 
-import Steel from '../../../utils/elements/Steel.js'
+import Steel from '../../../utils/elements/steel/Steel.js'
 import { Force, Adimensional, Distance, Stress, AreaPerMeter, VerificationOneValue } from '../../../types/index.js'
 import AbstractSection from 'utils/sections/AbstractSection.js'
 import { AxialRhoMin } from './RhoMin.js'

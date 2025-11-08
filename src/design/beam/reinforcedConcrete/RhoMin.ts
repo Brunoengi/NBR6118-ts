@@ -1,6 +1,6 @@
 
 import { Stress, Adimensional } from "types/index.js";
-import Steel from "utils/elements/Steel.js";
+import Steel from "utils/elements/steel/Steel.js";
 
 /**
 * Taxa mínima de armadura baseado na NBR 6118

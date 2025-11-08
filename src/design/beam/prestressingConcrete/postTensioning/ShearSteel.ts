@@ -4,7 +4,7 @@ import { Combinations } from "../../../../utils/loads/Load.js";
 import { ValuesUnit, ValueUnit } from "types/index.js";
 import CableGeometry from "./CableGeometry.js";
 import CompressionStruts from "./StrutVerification.js";
-import Steel from "../../../../utils/elements/Steel.js";
+import Steel from "../../../../utils/elements/steel/Steel.js";
 
 class ShearSteel {
 

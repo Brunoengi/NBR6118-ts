@@ -1,5 +1,5 @@
 import Concrete from '../../../utils/elements/concrete/Concrete.js'
-import Steel from '../../../utils/elements/Steel.js'
+import Steel from '../../../utils/elements/steel/Steel.js'
 import AbstractSection from '../../../utils/sections/AbstractSection.js'
 import { Adimensional, Moment, Distance, Deformation, Stress } from 'types/index.js'
 import { A } from 'types/sectionsType.js'

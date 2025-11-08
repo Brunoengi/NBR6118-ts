@@ -10,7 +10,7 @@ export {default as T_triangularCorbel} from './utils/sections/T_triangularCorbel
 // structuralElements
 export { default as Concrete } from './utils/elements/concrete/Concrete.js';
 export { default as PrestressingSteel } from './utils/elements/PrestressingSteel.js';
-export { default as Steel } from './utils/elements/Steel.js';
+export { default as Steel } from './utils/elements/steel/Steel.js';
 export type { IPrestressingSteel, PrestressingSteelLabel, RelaxationType } from './utils/elements/PrestressingSteel.js';
 
 // combinations

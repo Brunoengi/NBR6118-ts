@@ -6,7 +6,7 @@ import PrestressingSteel from "../../../../utils/elements/PrestressingSteel.js";
 import { AbstractPrestressingSteelDesign } from "./PrestressingSteelEstimated.js";
 import { Combinations } from "../../../../utils/loads/Load.js";
 import {GeometricPropsWithoutPerimeterType} from "../../../../types/sectionsType.js";
-import Steel from "../../../../utils/elements/Steel.js";
+import Steel from "../../../../utils/elements/steel/Steel.js";
 import {A} from "../../../../types/sectionsType.js";
 
 
