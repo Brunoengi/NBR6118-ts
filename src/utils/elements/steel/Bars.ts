@@ -1,3 +1,5 @@
+import { A } from 'types/sectionsType.js'
+
 export interface BarsProperties {
     diameter: {
         value: number,
@@ -19,7 +21,7 @@ export interface BarsProperties {
 
 class Bars {
 
-    static readonly posibleBar: Record<string, BarsProperties> = {
+    static readonly possibleBar: Record<string, BarsProperties> = {
         '5': {
             diameter: {
                 value: 5,
@@ -219,9 +221,17 @@ class Bars {
             }
         }
     }
+    readonly necessaryBars: Record<string, number>
 
-    constructor() {
+    constructor({As}: {As: A}) {
+        this.necessaryBars = this.calculateNecessaryBars(As);
+    }
 
+    calculateNecessaryBars(As: A){
+        const areas = Object.values(Bars.possibleBar).map(bar => bar.sectionArea.value)
+        const diameter = Object.values(Bars.possibleBar).map(bar => bar.diameter.value)
+        const barNumber = areas.map(area => Math.ceil(As.value / area))
+        return Object.fromEntries(diameter.map((diameter, index) => [diameter, barNumber[index]]))
     }
 }
 
