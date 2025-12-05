@@ -222,9 +222,11 @@ class Bars {
         }
     }
     readonly necessaryBars: Record<string, number>
+    Aseffetive: A 
 
-    constructor({As}: {As: A}) {
+    constructor({As, barDiamenter}: {As: A, barDiamenter: BarsProperties['diameter']}) {
         this.necessaryBars = this.calculateNecessaryBars(As);
+        this.Aseffetive = this.calculateAseffetive({barDiamenter})
     }
 
     calculateNecessaryBars(As: A){
@@ -232,6 +234,16 @@ class Bars {
         const diameter = Object.values(Bars.possibleBar).map(bar => bar.diameter.value)
         const barNumber = areas.map(area => Math.ceil(As.value / area))
         return Object.fromEntries(diameter.map((diameter, index) => [diameter, barNumber[index]]))
+    }
+    
+    calculateAseffetive({barDiamenter}: {barDiamenter: BarsProperties['diameter']}): A{
+        const barNumber = this.necessaryBars[barDiamenter.value]
+        const areaPerBar = Bars.possibleBar[barDiamenter.value].sectionArea.value
+        
+        return {
+            value: barNumber * areaPerBar,
+            unit: 'cm²'
+        }
     }
 }
 
