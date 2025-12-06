@@ -64,9 +64,9 @@ describe('Bars', () => {
 
     it('Verify Aseffetive in greater then As = 5 cm², all diameter', () => {
       const As: A = { value: 5, unit: 'cm²' }
-      const diameters: BarsProperties['diameter'][] = [{ value: 5, unit: 'mm' }, { value: 6.3, unit: 'mm' }, { value: 8, unit: 'mm' }, { value: 10, unit: 'mm' }, { value: 12.5, unit: 'mm' }, { value: 16, unit: 'mm' }, { value: 20, unit: 'mm' }, { value: 22, unit: 'mm' }, { value: 25, unit: 'mm' }, { value: 32, unit: 'mm' }, { value: 40, unit: 'mm' }]
+      const diameters: BarPropertie['diameter'][] = [{ value: 5, unit: 'mm' }, { value: 6.3, unit: 'mm' }, { value: 8, unit: 'mm' }, { value: 10, unit: 'mm' }, { value: 12.5, unit: 'mm' }, { value: 16, unit: 'mm' }, { value: 20, unit: 'mm' }, { value: 22, unit: 'mm' }, { value: 25, unit: 'mm' }, { value: 32, unit: 'mm' }, { value: 40, unit: 'mm' }]
 
-      diameters.forEach((diameter: BarsProperties['diameter']) => {
+      diameters.forEach((diameter: BarPropertie['diameter']) => {
         const bars = new Bars({ As, barDiamenter: diameter })
         expect(bars.steel.effective.value).toBeGreaterThanOrEqual(5)
         expect(bars.steel.effective.unit).toBe('cm²')
@@ -75,9 +75,9 @@ describe('Bars', () => {
 
     it('Verify Aseffetive in greater then As = 10 cm², all diameter', () => {
       const As: A = { value: 10, unit: 'cm²' }
-      const diameters: BarsProperties['diameter'][] = [{ value: 5, unit: 'mm' }, { value: 6.3, unit: 'mm' }, { value: 8, unit: 'mm' }, { value: 10, unit: 'mm' }, { value: 12.5, unit: 'mm' }, { value: 16, unit: 'mm' }, { value: 20, unit: 'mm' }, { value: 22, unit: 'mm' }, { value: 25, unit: 'mm' }, { value: 32, unit: 'mm' }, { value: 40, unit: 'mm' }]
+      const diameters: BarPropertie['diameter'][] = [{ value: 5, unit: 'mm' }, { value: 6.3, unit: 'mm' }, { value: 8, unit: 'mm' }, { value: 10, unit: 'mm' }, { value: 12.5, unit: 'mm' }, { value: 16, unit: 'mm' }, { value: 20, unit: 'mm' }, { value: 22, unit: 'mm' }, { value: 25, unit: 'mm' }, { value: 32, unit: 'mm' }, { value: 40, unit: 'mm' }]
 
-      diameters.forEach((diameter: BarsProperties['diameter']) => {
+      diameters.forEach((diameter: BarPropertie['diameter']) => {
         const bars = new Bars({ As, barDiamenter: diameter })
         expect(bars.steel.effective.value).toBeGreaterThanOrEqual(10)
         expect(bars.steel.effective.unit).toBe('cm²')
