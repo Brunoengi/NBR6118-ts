@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from '@jest/globals';
-import ShearSteel from '../../../../src/design/beam/reinforcedConcrete/ShearSteel.js';
+import ShearSteel from '../../../../src/design/beam/reinforcedConcrete/steel/ShearSteel.js';
 import Concrete from '../../../../src/utils/elements/concrete/Concrete.js';
 import Steel from '../../../../src/utils/elements/steel/Steel.js';
 import Rectangular from '../../../../src/utils/sections/Rectangular.js';

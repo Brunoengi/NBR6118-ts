@@ -1,5 +1,9 @@
-import Bars, { BarsProperties } from '../../../src/utils/elements/steel/Bars'
+import Bars from '../../../src/utils/elements/steel/Bars'
 import { A } from '../../../src/types/sectionsType'
+import {BarPropertie } from '../../../src/types/materials/barsType'
+
+
+
 
 
 
@@ -8,7 +12,7 @@ describe('Bars', () => {
     it('should calculate the correct number of necessary bars for a given steel area', () => {
       // Área de aço necessária
       const As: A = { value: 5, unit: 'cm²' }
-      const barDiamenter: BarsProperties['diameter'] = { value: 10, unit: 'mm' }
+      const barDiamenter: BarPropertie['diameter'] = { value: 10, unit: 'mm' }
 
       // Instancia a classe Bars
       const bars = new Bars({ As, barDiamenter })
@@ -64,8 +68,8 @@ describe('Bars', () => {
 
       diameters.forEach((diameter: BarsProperties['diameter']) => {
         const bars = new Bars({ As, barDiamenter: diameter })
-        expect(bars.Aseffetive.value).toBeGreaterThanOrEqual(5)
-        expect(bars.Aseffetive.unit).toBe('cm²')
+        expect(bars.steel.effective.value).toBeGreaterThanOrEqual(5)
+        expect(bars.steel.effective.unit).toBe('cm²')
       })
     })
 
@@ -75,8 +79,8 @@ describe('Bars', () => {
 
       diameters.forEach((diameter: BarsProperties['diameter']) => {
         const bars = new Bars({ As, barDiamenter: diameter })
-        expect(bars.Aseffetive.value).toBeGreaterThanOrEqual(10)
-        expect(bars.Aseffetive.unit).toBe('cm²')
+        expect(bars.steel.effective.value).toBeGreaterThanOrEqual(10)
+        expect(bars.steel.effective.unit).toBe('cm²')
       })
     })
   })

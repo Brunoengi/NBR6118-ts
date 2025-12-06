@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import RelativeNeutralLineLimit from '../../../../src/design/beam/reinforcedConcrete/XiLimit.js';
+import RelativeNeutralLineLimit from '../../../../src/design/beam/reinforcedConcrete/steel/XiLimit.js';
 import { Stress } from '../../../../src/types/index.js';
 
 describe('RelativeNeutralLineLimit', () => {

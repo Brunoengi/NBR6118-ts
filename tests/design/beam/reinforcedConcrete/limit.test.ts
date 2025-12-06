@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import ReducedLimitingMoment from '../../../../src/design/beam/reinforcedConcrete/MuLimit.js';
+import ReducedLimitingMoment from '../../../../src/design/beam/reinforcedConcrete/steel/MuLimit.js';
 import Concrete from '../../../../src/utils/elements/concrete/Concrete.js';
 
 describe('Reduced Limiting Moment', () => {
