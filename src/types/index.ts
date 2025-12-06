@@ -110,5 +110,15 @@ export interface AreaPerMeter {
 }
 
 export interface Steel {
-  name: 'CA-50' | 'CA-60'
+  name: 'CA-25' | 'CA-50' | 'CA-60' 
+}
+
+export interface Diameter {
+  value: number
+  unit: 'mm'
+}
+
+export interface Diameters {
+  values: number[]
+  unit: 'mm'
 }
