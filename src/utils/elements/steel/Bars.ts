@@ -1,27 +1,9 @@
 import { A } from 'types/sectionsType.js'
-
-export interface BarsProperties {
-    diameter: {
-        value: number,
-        unit: 'mm'
-    },
-    sectionArea: {
-        value: number,
-        unit: 'cm²'
-    },
-    linearMass: {
-        value: number,
-        unit: 'kg/m'
-    },
-    perimeter: {
-        value: number,
-        unit: 'cm'
-    }
-}
+import { SteelBarKeyValue, BarPropertie } from '../../../types/materials/barsType.js'
 
 class Bars {
 
-    static readonly possibleBar: Record<string, BarsProperties> = {
+    static readonly possibleBar: Record<SteelBarKeyValue, BarPropertie> = {
         '5': {
             diameter: {
                 value: 5,
@@ -222,29 +204,40 @@ class Bars {
         }
     }
     readonly necessaryBars: Record<string, number>
-    Aseffetive: A 
-
-    constructor({As, barDiamenter}: {As: A, barDiamenter: BarsProperties['diameter']}) {
-        this.necessaryBars = this.calculateNecessaryBars(As);
-        this.Aseffetive = this.calculateAseffetive({barDiamenter})
+    readonly steel: {
+        calculated: A,
+        effective: A
     }
 
-    calculateNecessaryBars(As: A){
+    constructor({ As, barDiamenter }: { As: A, barDiamenter: BarPropertie['diameter'] }) {
+        this.necessaryBars = this.calculateNecessaryBars(As);
+        this.steel = {
+            calculated: As,
+            effective: this.calculateAseffetive({ barDiamenter })
+        }
+    }
+
+    calculateNecessaryBars(As: A) {
         const areas = Object.values(Bars.possibleBar).map(bar => bar.sectionArea.value)
         const diameter = Object.values(Bars.possibleBar).map(bar => bar.diameter.value)
         const barNumber = areas.map(area => Math.ceil(As.value / area))
         return Object.fromEntries(diameter.map((diameter, index) => [diameter, barNumber[index]]))
     }
-    
-    calculateAseffetive({barDiamenter}: {barDiamenter: BarsProperties['diameter']}): A{
+
+    calculateAseffetive({ barDiamenter }: { barDiamenter: BarPropertie['diameter'] }): A {
         const barNumber = this.necessaryBars[barDiamenter.value]
         const areaPerBar = Bars.possibleBar[barDiamenter.value].sectionArea.value
-        
+
         return {
             value: barNumber * areaPerBar,
             unit: 'cm²'
         }
     }
+
+    barProps({ barDiamenter }: { barDiamenter: BarPropertie['diameter'] }): BarPropertie {
+        return Bars.possibleBar[barDiamenter.value]
+    }
 }
+
 
 export default Bars;
