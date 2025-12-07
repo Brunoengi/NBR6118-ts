@@ -9,10 +9,10 @@ import { Distance, Stress, Diameter } from "../../../../types/index.js"
 
 /**
  * @remarks
- * Referencia Bibliográfica: ARAÚJO, José Milton de. Curso de concreto armado. v. 1. 5. ed. Rio Grande, RS: Dunas, 2023. p. 285-286.
- */
+ * Bibliographic Reference: ARAÚJO, José Milton de. Curso de concreto armado. v. 1. 5. ed. Rio Grande, RS: Dunas, 2023. p. 285-286.
+*/
 
-class StraightAnchorageLength {
+class StraightLength {
 
     lb_nec: Distance
     lb_min: Distance
@@ -58,4 +58,4 @@ class StraightAnchorageLength {
 
 }
 
-export default StraightAnchorageLength;
+export default StraightLength;
