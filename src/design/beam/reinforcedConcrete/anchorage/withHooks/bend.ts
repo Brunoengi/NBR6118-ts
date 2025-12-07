@@ -21,7 +21,8 @@ class Bend {
 
 
     constructor({ hookType, diameter, steel }: { hookType: HookType, diameter: BarPropertie['diameter'], steel: Steel['name'] }) {
-        const { minHookBasedOnDiameterMultiplier, minimalBendBasedonDiameterMultiplier } = Bend.PossibleBend[hookType];
+        this.minimalBendDiameter = this.calculateMinimalBendDiameter({ diameter, steel });
+        this.minimalHookLength = this.calculateMinimalHookLength({ hookType, diameter, steel });
 
     }
 
