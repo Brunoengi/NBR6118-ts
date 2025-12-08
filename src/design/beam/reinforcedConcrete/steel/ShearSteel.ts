@@ -3,9 +3,12 @@ import Steel from '../../../../utils/elements/steel/Steel.js'
 import { Force, Adimensional, Distance, Stress, AreaPerMeter, VerificationOneValue } from '../../../../types/index.js'
 import AbstractSection from 'utils/sections/AbstractSection.js'
 import { AxialRhoMin } from './RhoMin.js'
+import { CASteelType } from 'types/materials/steel/index.js'
 
 
 class ShearSteel {
+
+    static SteelType: CASteelType = "shear"
     
     steel: {
         Asw_min: AreaPerMeter

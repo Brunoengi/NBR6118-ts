@@ -6,11 +6,15 @@ import { A } from 'types/sectionsType.js'
 import { FlexuralRhoMin } from './RhoMin.js'
 import ReducedLimitingMoment from './MuLimit.js'
 import RelativeNeutralLineLimit from './XiLimit.js'
+import { CASteelType } from 'types/materials/steel/index.js'
+
 
 /**
 * Baseado na NBR 6118/2014
 */
 class LongitudinalSteelRectangularSection {
+
+    static steelType: CASteelType = "longitudinal"
 
     params: {
         mu: Adimensional,
