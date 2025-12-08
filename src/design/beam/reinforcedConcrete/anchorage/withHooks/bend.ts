@@ -1,6 +1,7 @@
-import { HooksDatabase, SteelBar } from "types/materials/barsType.js";
-import { Steel, Distance } from "types/index.js";
-import { BarPropertie, HookType } from "types/materials/barsType.js";
+import { HooksDatabase, SteelBar } from "types/materials/steel/barsType.js";
+import { Steel } from "types/materials/steel/index.js";
+import { Distance } from "types/index.js";
+import { BarPropertie, HookType } from "types/materials/steel/barsType.js";
 
 
 class Bend {

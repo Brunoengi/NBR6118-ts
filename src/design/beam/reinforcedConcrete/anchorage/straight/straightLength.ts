@@ -1,11 +1,11 @@
 import BondStressUltimate from "../bondStressUltimate.js"
-import Bars from "../../../../../utils/elements/steel/Bars.js"
-import Concrete from "../../../../../utils/elements/concrete/Concrete.js"
-import { A } from "../../../../../types/sectionsType.js"
-import { BarPropertie } from "../../../../../types/materials/barsType.js"
-import  Steel  from "../../../../../utils/elements/steel/Steel.js"
+import Bars from "utils/elements/steel/Bars.js"
+import Concrete from "utils/elements/concrete/Concrete.js"
+import { A } from "types/sectionsType.js"
+import { BarPropertie } from "types/materials/steel/barsType.js"
+import  Steel  from "utils/elements/steel/Steel.js"
 import { Grip } from "../bondStressUltimate.js"
-import { Distance, Stress, Diameter } from "../../../../../types/index.js"
+import { Distance, Stress, Diameter } from "types/index.js"
 import BasicLength from "../basicLength.js"
 
 
