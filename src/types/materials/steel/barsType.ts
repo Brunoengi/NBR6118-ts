@@ -1,4 +1,4 @@
-import {Steel} from 'types/index.js'
+import {Steel} from 'types/materials/steel/index.js'
 
 
 export type SteelBarKeyValue = '5' | '6.3' | '8' | '10' | '12.5' | '16' | '20' | '22' | '25' | '32' | '40'

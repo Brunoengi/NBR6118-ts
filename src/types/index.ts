@@ -109,10 +109,6 @@ export interface AreaPerMeter {
   unit: 'cm²/m'
 }
 
-export interface Steel {
-  name: 'CA-25' | 'CA-50' | 'CA-60' 
-}
-
 export interface Diameter {
   value: number
   unit: 'mm'
