@@ -1,5 +1,5 @@
 import { A } from 'types/sectionsType.js'
-import { SteelBarKeyValue, BarPropertie } from '../../../types/materials/barsType.js'
+import { SteelBarKeyValue, BarPropertie } from '../../../types/materials/steel/barsType.js'
 
 class Bars {
 

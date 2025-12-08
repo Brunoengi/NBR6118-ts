@@ -1,4 +1,4 @@
-import { AggregateType } from 'types/materials/aggregateType.js'
+import { AggregateType } from 'types/materials/concrete/aggregateType.js'
 
 export interface IAgregateConcrete {
   type: AggregateType;
