@@ -62,8 +62,8 @@ export type { StrutVerificationType } from './design/beam/prestressingConcrete/p
 
 
 
-export type { PrestressingDesignType } from './types/materials/prestressSteelType.js';
+export type { PrestressingDesignType } from './types/materials/steel/prestressSteelType.js';
 export type { GeometricPropsWithUnitsType } from './types/sectionsType.js';
-export type { IPrestressingSteelOption } from './types/materials/prestressSteelType.js'
-export type { AggregateType } from './types/materials/aggregateType.js'
-export type { AnchoringType } from './types/materials/prestressSteelType.js'
+export type { IPrestressingSteelOption } from './types/materials/steel/prestressSteelType.js'
+export type { AggregateType } from './types/materials/concrete/aggregateType.js'
+export type { AnchoringType } from './types/materials/steel/prestressSteelType.js'
