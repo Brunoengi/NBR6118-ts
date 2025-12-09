@@ -45,11 +45,10 @@ class endSupport extends BasicLength {
     */
 
     calculate_lb_min({ BendDiameter, barDiameter }: { BendDiameter: Distance, barDiameter: Diameter }): Distance {
-        const diameter_cm = barDiameter.value * 10;
         const bendRadius_cm = BendDiameter.value / 2;
 
         return {
-            value: Math.max(diameter_cm * 5.5 + bendRadius_cm, 6),
+            value: Math.max(barDiameter.value * 5.5 + bendRadius_cm, 6),
             unit: 'cm'
         }
     }
