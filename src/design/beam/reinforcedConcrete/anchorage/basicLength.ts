@@ -1,10 +1,10 @@
 import { Distance, Stress, Diameter } from "../../../../types/index.js"
 
 abstract class BasicLength {
-    calculate_lb({fyd, fbd, phi}: {fyd: Stress, fbd: Stress, phi: Diameter}): Distance {
+    calculate_lb({fyd, fbd, barDiameter}: {fyd: Stress, fbd: Stress, barDiameter: Diameter}): Distance {
 
         return {
-            value: Math.max((phi.value/10) * (fyd.value/fbd.value), phi.value * (25/10)),
+            value: Math.max((barDiameter.value/10) * (fyd.value/fbd.value), barDiameter.value * (25/10)),
             unit: 'cm'
         }
     }

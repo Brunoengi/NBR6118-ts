@@ -19,38 +19,44 @@ class StraightLength extends BasicLength {
     lb_nec: Distance
     lb_min: Distance
     lb: Distance
+    lb_adopted: Distance
     
-    constructor({steel, As, barDiamenter, concrete, grip} : {steel: Steel, As: A, barDiamenter: BarPropertie['diameter'], concrete: Concrete, grip: Grip} ){
+    constructor({steel, As, barDiameter, concrete, grip} : {steel: Steel, As: A, barDiameter: BarPropertie['diameter'], concrete: Concrete, grip: Grip} ){
         super();
         const bondStressUltimate = new BondStressUltimate({concrete, steel, grip})
-        const bars = new Bars({As, barDiamenter})
+        const bars = new Bars({As, barDiameter})
 
-        this.lb = this.calculate_lb({fyd: steel.fyd, fbd: bondStressUltimate.fbd, phi: barDiamenter})
-        this.lb_min = this.calculate_lb_min({fyd: steel.fyd, fbd: bondStressUltimate.fbd, phi: barDiamenter})
-        this.lb_nec = this.calculate_lb_nec({fyd: steel.fyd, fbd: bondStressUltimate.fbd, phi: barDiamenter, bars})
+        this.lb = this.calculate_lb({fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter})
+        this.lb_min = this.calculate_lb_min({fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter})
+        this.lb_nec = this.calculate_lb_nec({fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter, bars})
+        this.lb_adopted = this.calculate_lb_adopted({lb_nec: this.lb_nec, lb_min: this.lb_min})
     }
 
-    calculate_lb_min({fyd, fbd, phi}: {fyd: Stress, fbd: Stress, phi: Diameter}) : Distance {
-        const lb = this.calculate_lb({fyd, fbd, phi})
+    calculate_lb_min({fyd, fbd, barDiameter}: {fyd: Stress, fbd: Stress, barDiameter: Diameter}) : Distance {
+        const lb = this.calculate_lb({fyd, fbd, barDiameter})
         return {
-            value: Math.max(lb.value * 0.3, 10 * phi.value / 10, 10),
+            value: Math.max(lb.value * 0.3, 10 * barDiameter.value / 10, 10),
             unit: 'cm'
         }
     }
 
-    calculate_lb_nec({fyd, fbd, phi, bars}: {fyd: Stress, fbd: Stress, phi: Diameter, bars: Bars}): Distance {
-        const lb_min = this.calculate_lb_min({fyd, fbd, phi})
+    calculate_lb_nec({fyd, fbd, barDiameter, bars}: {fyd: Stress, fbd: Stress, barDiameter: Diameter, bars: Bars}): Distance {
         const As_calculated = bars.steel.calculated
         const As_effective = bars.steel.effective
-        const lb = this.calculate_lb({fyd, fbd, phi})
+        const lb = this.calculate_lb({fyd, fbd, barDiameter})
 
         return {
-            value: Math.max(lb.value * (As_calculated.value/As_effective.value), lb_min.value),
+            value: Math.max(lb.value * (As_calculated.value/As_effective.value)),
             unit: 'cm'
         }
-
     }
 
+    calculate_lb_adopted({lb_nec, lb_min}: {lb_nec: Distance, lb_min: Distance}): Distance {
+        return {
+            value: Math.max(lb_nec.value, lb_min.value),
+            unit: 'cm'
+        }
+    }
 }
 
 export default StraightLength;
