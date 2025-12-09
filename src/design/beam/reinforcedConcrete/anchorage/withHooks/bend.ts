@@ -21,22 +21,22 @@ class Bend {
     public minimalBendDiameter: Distance
 
 
-    constructor({ hookType, diameter, steel }: { hookType: HookType, diameter: BarPropertie['diameter'], steel: Steel['name'] }) {
-        this.minimalBendDiameter = this.calculateMinimalBendDiameter({ diameter, steel });
-        this.minimalHookLength = this.calculateMinimalHookLength({ hookType, diameter, steel });
+    constructor({ hookType, barDiameter, steel }: { hookType: HookType, barDiameter: BarPropertie['diameter'], steel: Steel['name'] }) {
+        this.minimalBendDiameter = this.calculateMinimalBendDiameter({ barDiameter, steel });
+        this.minimalHookLength = this.calculateMinimalHookLength({ hookType, barDiameter, steel });
 
     }
 
-    calculateMinimalHookLength({hookType, diameter}: {hookType: HookType, diameter: BarPropertie['diameter'], steel: Steel['name']}): Distance {
-        const BarDiameter_cm = diameter.value * 10;
+    calculateMinimalHookLength({hookType, barDiameter}: {hookType: HookType, barDiameter: BarPropertie['diameter'], steel: Steel['name']}): Distance {
+        const BarDiameter_cm = barDiameter.value * 10;
         return {
             value: BarDiameter_cm * Bend.PossibleBend[hookType].minHookBasedOnDiameterMultiplier,
             unit: 'cm'
         }
     }
 
-    calculateMinimalBendDiameter({diameter, steel}: { diameter: BarPropertie['diameter'], steel: Steel['name'] }): Distance {
-        const BarDiameter_cm = diameter.value * 10;
+    calculateMinimalBendDiameter({barDiameter, steel}: { barDiameter: BarPropertie['diameter'], steel: Steel['name'] }): Distance {
+        const BarDiameter_cm = barDiameter.value * 10;
         const minimalBendDiameterMultipliers = Bend.minimalBendDiameterMultipliers[steel];
 
         if(BarDiameter_cm < 20) {
