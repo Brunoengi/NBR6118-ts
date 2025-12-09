@@ -1,17 +1,19 @@
-import { ValueUnit, Steel as SteelInterface, Stress, Steel as ISteel } from "types/index.js";
+import { Stress } from "types/index.js";
+import { Steel as ISteel } from "types/materials/steel/index.js";
 
 
 export const options: readonly {
-    label: SteelInterface['name'];
+    label: ISteel['name'];
     fyk: Stress
 }[] = [
+        { label: 'CA-25', fyk: { value: 25, unit: 'kN/cm²' } },
         { label: 'CA-50', fyk: { value: 50, unit: 'kN/cm²' } },
         { label: 'CA-60', fyk: { value: 60, unit: 'kN/cm²' } }
     ];
 
 // Automatically generate the label type from the options array.
 // This ensures that if 'options' is updated, this type updates automatically.
-export type SteelLabel = typeof options[number]['label'];
+export type SteelLabel = ISteel['name'];
 
 class Steel {
     public readonly label: SteelLabel;

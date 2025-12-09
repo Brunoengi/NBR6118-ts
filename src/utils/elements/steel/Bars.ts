@@ -209,11 +209,11 @@ class Bars {
         effective: A
     }
 
-    constructor({ As, barDiamenter }: { As: A, barDiamenter: BarPropertie['diameter'] }) {
+    constructor({ As, barDiameter }: { As: A, barDiameter: BarPropertie['diameter'] }) {
         this.necessaryBars = this.calculateNecessaryBars(As);
         this.steel = {
             calculated: As,
-            effective: this.calculateAseffetive({ barDiamenter })
+            effective: this.calculateAseffetive({ barDiameter })
         }
     }
 
@@ -224,9 +224,9 @@ class Bars {
         return Object.fromEntries(diameter.map((diameter, index) => [diameter, barNumber[index]]))
     }
 
-    calculateAseffetive({ barDiamenter }: { barDiamenter: BarPropertie['diameter'] }): A {
-        const barNumber = this.necessaryBars[barDiamenter.value]
-        const areaPerBar = Bars.possibleBar[barDiamenter.value].sectionArea.value
+    calculateAseffetive({ barDiameter }: { barDiameter: BarPropertie['diameter'] }): A {
+        const barNumber = this.necessaryBars[barDiameter.value]
+        const areaPerBar = Bars.possibleBar[barDiameter.value].sectionArea.value
 
         return {
             value: barNumber * areaPerBar,
