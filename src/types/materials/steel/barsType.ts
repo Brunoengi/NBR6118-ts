@@ -49,3 +49,5 @@ export interface HookProperties {
 export type HooksDatabase = {
     [type in HookType]: HookProperties;
 }
+
+export type Alpha1 = 1 | 0.7
