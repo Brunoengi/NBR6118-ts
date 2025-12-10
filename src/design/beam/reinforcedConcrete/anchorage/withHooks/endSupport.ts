@@ -23,7 +23,6 @@ class endSupport extends BasicLength {
     lb: Distance
     lb_adopted: Distance
 
-
     constructor({ alpha1, concrete, steel, grip, hookType, barDiameter, As }: { hookType: HookType, barDiameter: BarPropertie['diameter'], steel: Steel, grip: Grip, concrete: Concrete, As: A, alpha1: Alpha1 }) {
         super();
         const bondStressUltimate = new BondStressUltimate({ concrete, steel, grip })

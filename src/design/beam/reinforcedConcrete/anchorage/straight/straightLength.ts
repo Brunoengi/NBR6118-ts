@@ -8,7 +8,6 @@ import { Grip } from "../bondStressUltimate.js"
 import { Distance, Stress, Diameter } from "types/index.js"
 import BasicLength from "../basicLength.js"
 
-
 /**
  * @remarks
  * Bibliographic Reference: ARAÚJO, José Milton de. Curso de concreto armado. v. 1. 5. ed. Rio Grande, RS: Dunas, 2023. p. 285-286.
