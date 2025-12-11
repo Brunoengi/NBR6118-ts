@@ -24,21 +24,26 @@ class endSupport extends BasicLength {
     lb_adopted: Distance
     lb_disponible: Distance
 
-    constructor({ alpha1, concrete, steel, grip, hookType, barDiameter, Ase, Vd, lb_disponible }: { hookType: HookType, barDiameter: BarPropertie['diameter'], steel: Steel, grip: Grip, concrete: Concrete, Ase: A, alpha1: Alpha1, Vd: Force, lb_disponible: Distance}) {
+    bend: Bend
+    bondStressUltimate: BondStressUltimate
+
+
+
+    constructor({ concrete, steel, grip, hookType, barDiameter, Ase, Vd, lb_disponible }: { hookType: HookType, barDiameter: BarPropertie['diameter'], steel: Steel, grip: Grip, concrete: Concrete, Ase: A, Vd: Force, lb_disponible: Distance}) {
         super();
-        const bondStressUltimate = new BondStressUltimate({ concrete, steel, grip })
-        const bend = new Bend({ hookType, barDiameter, steel: steel.label });
+        const alpha1: Alpha1 = 0.7
+        this.bondStressUltimate = new BondStressUltimate({ concrete, steel, grip })
+        this.bend = new Bend({ hookType, barDiameter, steel: steel.label });
 
-        this.lb = this.calculate_lb({ fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter })
+        this.lb = this.calculate_lb({ fyd: steel.fyd, fbd: this.bondStressUltimate.fbd, barDiameter })
 
-        this.lb_min = this.calculate_lb_min({ BendDiameter: bend.minimalBendDiameter, barDiameter })
+        this.lb_min = this.calculate_lb_min({ BendDiameter: this.bend.minimalBendDiameter, barDiameter })
 
-        this.lb_nec = this.calculate_lb_nec({ alpha1, fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter, Vd, Ase})
+        this.lb_nec = this.calculate_lb_nec({ alpha1, fyd: steel.fyd, fbd: this.bondStressUltimate.fbd, barDiameter, Vd, Ase})
 
         this.lb_adopted = this.calculate_lb_adopted({ lb_nec: this.lb_nec, lb_min: this.lb_min })
 
         this.lb_disponible = lb_disponible
-
     }
 
     /**
