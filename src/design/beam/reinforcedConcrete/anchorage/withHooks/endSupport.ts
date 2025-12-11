@@ -9,7 +9,7 @@ import { Grip } from "../bondStressUltimate.js"
 import Concrete from "utils/elements/concrete/Concrete.js"
 import { A } from "types/sectionsType.js"
 import Bars from "utils/elements/steel/Bars.js"
-import { Stress, Diameter } from "types/index.js"
+import { Stress, Diameter, Force } from "types/index.js"
 
 
 /**
@@ -22,20 +22,23 @@ class endSupport extends BasicLength {
     lb_min: Distance
     lb: Distance
     lb_adopted: Distance
+    lb_disponible: Distance
 
-    constructor({ alpha1, concrete, steel, grip, hookType, barDiameter, As }: { hookType: HookType, barDiameter: BarPropertie['diameter'], steel: Steel, grip: Grip, concrete: Concrete, As: A, alpha1: Alpha1 }) {
+    constructor({ alpha1, concrete, steel, grip, hookType, barDiameter, Ase, Vd, lb_disponible }: { hookType: HookType, barDiameter: BarPropertie['diameter'], steel: Steel, grip: Grip, concrete: Concrete, Ase: A, alpha1: Alpha1, Vd: Force, lb_disponible: Distance}) {
         super();
         const bondStressUltimate = new BondStressUltimate({ concrete, steel, grip })
         const bend = new Bend({ hookType, barDiameter, steel: steel.label });
-        const bars = new Bars({ As, barDiameter })
 
         this.lb = this.calculate_lb({ fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter })
 
         this.lb_min = this.calculate_lb_min({ BendDiameter: bend.minimalBendDiameter, barDiameter })
 
-        this.lb_nec = this.calculate_lb_nec({ alpha1, fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter, bars })
+        this.lb_nec = this.calculate_lb_nec({ alpha1, fyd: steel.fyd, fbd: bondStressUltimate.fbd, barDiameter, Vd, Ase})
 
         this.lb_adopted = this.calculate_lb_adopted({ lb_nec: this.lb_nec, lb_min: this.lb_min })
+
+        this.lb_disponible = lb_disponible
+
     }
 
     /**
@@ -52,13 +55,13 @@ class endSupport extends BasicLength {
         }
     }
 
-    calculate_lb_nec({ alpha1, fyd, fbd, barDiameter, bars }: { fyd: Stress, fbd: Stress, barDiameter: Diameter, bars: Bars, alpha1: Alpha1 }): Distance {
-        const As_calculated = bars.steel.calculated
-        const As_effective = bars.steel.effective
-        const lb = this.calculate_lb({ fyd, fbd, barDiameter })
+    calculate_lb_nec({ alpha1, fyd, fbd, barDiameter, Vd, Ase }: { fyd: Stress, fbd: Stress, barDiameter: Diameter, alpha1: Alpha1, Vd: Force, Ase: A }): Distance {
 
+        const lb = this.calculate_lb({ fyd, fbd, barDiameter })
+        const As_calculated: A = {value: Vd.value / fyd.value, unit: 'cm²'}
+        
         return {
-            value: alpha1 * lb.value * (As_calculated.value / As_effective.value),
+            value: alpha1 * lb.value * (As_calculated.value / Ase.value),
             unit: 'cm'
         }
     }
