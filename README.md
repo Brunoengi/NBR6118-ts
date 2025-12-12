@@ -16,7 +16,7 @@ npm install
 
 ### Module 1: Materials
 
-Here you can create your material and verify your properties
+The library presents 4 construction materials in the Materials module: Concrete, CA Steel, CP Steel, and Aggregate. Here you can create your material and verify your properties
 
 #### `1.1 Concrete`
 
