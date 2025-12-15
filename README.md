@@ -48,16 +48,22 @@ Calculates properties of concrete based on its characteristic.
 | Characteristic Upper Bound Tensile Strength | f<sub>ctk,sup</sub>   | kN/cm² |
 | Flexural Tensile Strength                   | f<sub>ct,f</sub>      | kN/cm² |
 
-### `AggregateConcrete`
+#### `1.2 Aggregate`
 
-Used internally by the `Concrete` class.
+```typescript
+import { Aggregate } from 'nbr6118-ts';
 
-| Property                                                                   | Acronym       | Unit |
-| :------------------------------------------------------------------------- | :-----------: | :--: |
-| Parameter depending on the type of aggregate that influences the modulus of elasticity | α<sub>E</sub> | -    |
+const aggregate = new Aggregate('granite');
+```
+
+Provides properties for different types of concrete aggregates.
+
+| Property                                                                             | Acronym       | Unit |
+| :----------------------------------------------------------------------------------- | :-----------: | :--: |
+| Parameter that influences the modulus of elasticity, based on the aggregate's origin | α<sub>E</sub> | -    |
 
 
-#### `1.2 Steel`
+#### `1.3 Steel`
 
 ```typescript
 import { Steel } from 'nbr6118-ts'
@@ -73,22 +79,9 @@ Property | Acronym | Unit |
 | Characteristic Yield Strength | fyk| kN/cm² | 
 | Design Yield Strength | fyd| kN/cm² | 
  
-#### `1.3 Aggregate`
-
-```typescript
-import { Aggregate } from 'nbr6118-ts';
-
-const aggregate = new Aggregate('granite');
-```
-
-Provides properties for different types of concrete aggregates.
-
-| Property                                                                             | Acronym       | Unit |
-| :----------------------------------------------------------------------------------- | :-----------: | :--: |
-| Parameter that influences the modulus of elasticity, based on the aggregate's origin | α<sub>E</sub> | -    |
 
 
-#### `1.4 PrestressingSteel`
+#### `1.4 Prestressing Steel`
 
 ```typescript
 import { PrestressingSteel } from 'nbr6118-ts'
